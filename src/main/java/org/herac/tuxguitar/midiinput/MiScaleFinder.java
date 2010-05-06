@@ -8,183 +8,163 @@ import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.tools.scale.ScaleManager;
 import org.herac.tuxguitar.util.TGSynchronizer;
 
-class MiScaleFinder
-{
-	static class TestScale
-	{
-		int		f_Key;
-		int		f_ScaleSize;
-		int[]	f_Sequence;
-	}
+class MiScaleFinder {
+  static class TestScale {
+    int f_Key;
+    int f_ScaleSize;
+    int[] f_Sequence;
+  }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MiScaleFinder.class);
 
-	static private int[]	scaleDefToModel(String inScaleDefinition)
-	{
-	String[]	keys	= inScaleDefinition.split(",");
-	int[]		model	= new int[keys.length];
+  static private TestScale[] buildReferenceSequences(int inLoPitch,
+      int inHiPitch, int inScaleIndex) {
+    ScaleManager scaleMgr = TuxGuitar.instance().getScaleManager();
+    int[] model = scaleDefToModel(scaleMgr.getScaleKeys(inScaleIndex));
+    int[] intervals = scaleModelToIntervals(model);
+    TestScale[] sequences = new TestScale[12];
 
-	for(int i = 0; i < keys.length; i++)
-		model[i] = (Integer.parseInt(keys[i]) - 1);
+    // LOG.debug();
+    // LOG.debug("Scale: " + scaleMgr.getScaleName(inScaleIndex));
+    // LOG.debug("Lowest Pitch: " + inLoPitch);
+    // LOG.debug("Highest Pitch: " + inHiPitch);
+    // LOG.debug("Model: " + Arrays.toString(model));
+    // LOG.debug("Intervals: " + Arrays.toString(intervals));
 
-	return(model);
-	}
+    // build sequences, backwards, one per key
+    for (int key = 0; key < 12; key++) {
+      // compute sequence length
+      int sequenceLength = 0;
 
+      for (int pitch = inLoPitch - key, intervalsIndex = 0; pitch <= inHiPitch;) {
+        sequenceLength++;
+        pitch += intervals[intervalsIndex];
+        intervalsIndex = (intervalsIndex + 1 >= intervals.length ? 0
+            : intervalsIndex + 1);
+      }
 
-	static private int[]	scaleModelToIntervals(int[] inModel)
-	{
-	int[]		intervals = new int[inModel.length];
+      // initialize sequence
+      sequences[key] = new TestScale();
+      sequences[key].f_Key = (inLoPitch - key) % 12;
+      sequences[key].f_ScaleSize = model.length;
+      sequences[key].f_Sequence = new int[sequenceLength];
 
-	for(int i = 1; i < inModel.length; i++)
-		intervals[i - 1] = inModel[i] - inModel[i - 1];
+      // fill sequence
+      for (int pitch = inLoPitch - key, intervalsIndex = 0, i = 0; pitch <= inHiPitch;) {
+        sequences[key].f_Sequence[i++] = pitch;
+        pitch += intervals[intervalsIndex];
+        intervalsIndex = (intervalsIndex + 1 >= intervals.length ? 0
+            : intervalsIndex + 1);
+      }
 
-	intervals[inModel.length - 1] = 12 - inModel[inModel.length - 1];
+      // LOG.debug("key: " + key + ", sequence: " +
+      // Arrays.toString(sequences[key].f_Sequence));
+    }
 
-	return(intervals);
-	}
+    return (sequences);
+  }
 
+  static private int countMatches(TreeSet inScale, int[] inRefSequence) {
+    int count = 0;
+    Iterator it = inScale.iterator();
 
-	static private TestScale[]	buildReferenceSequences(int inLoPitch, int inHiPitch, int inScaleIndex)
-	{
-	ScaleManager	scaleMgr	= TuxGuitar.instance().getScaleManager();
-	int[]			model		= scaleDefToModel(scaleMgr.getScaleKeys(inScaleIndex));
-	int[]			intervals	= scaleModelToIntervals(model);
-	TestScale[]		sequences	= new TestScale[12];
+    while (it.hasNext()) {
+      int pitch = ((Byte) it.next()).intValue();
+      boolean found = false;
 
-	//LOG.debug();
-	//LOG.debug("Scale: "			+ scaleMgr.getScaleName(inScaleIndex));
-	//LOG.debug("Lowest Pitch: "	+ inLoPitch);
-	//LOG.debug("Highest Pitch: "	+ inHiPitch);
-	//LOG.debug("Model: "			+ Arrays.toString(model));
-	//LOG.debug("Intervals: "		+ Arrays.toString(intervals));
+      for (int i = 0; i < inRefSequence.length && !found; i++)
+        if (pitch == inRefSequence[i])
+          found = true;
 
-	// build sequences, backwards, one per key
-	for(int key = 0; key < 12; key++)
-		{
-		// compute sequence length
-		int			sequenceLength = 0;
+      if (!found)
+        return (0);
+      else
+        count++;
+    }
 
-		for(int pitch = inLoPitch - key, intervalsIndex = 0; pitch <= inHiPitch;)
-			{
-			sequenceLength++;
-			pitch += intervals[intervalsIndex];
-			intervalsIndex = (intervalsIndex + 1 >= intervals.length ? 0 : intervalsIndex + 1);
-			}
+    return (count);
+  }
 
-		// initialize sequence
-		sequences[key]				= new TestScale();
-		sequences[key].f_Key		= (inLoPitch - key) % 12;
-		sequences[key].f_ScaleSize	= model.length;
-		sequences[key].f_Sequence	= new int[sequenceLength];
+  static public int findMatchingScale(TreeSet inScale) {
+    ScaleManager scaleMgr = TuxGuitar.instance().getScaleManager();
+    int scalesCount = scaleMgr.countScales(), minScaleSize = 12, maxMatches = 0, scaleIndex = ScaleManager.NONE_SELECTION, scaleKey = 0;
 
-		// fill sequence
-		for(int pitch = inLoPitch - key, intervalsIndex = 0, i = 0; pitch <= inHiPitch;)
-			{
-			sequences[key].f_Sequence[i++] = pitch;
-			pitch += intervals[intervalsIndex];
-			intervalsIndex = (intervalsIndex + 1 >= intervals.length ? 0 : intervalsIndex + 1);
-			}
+    if (!inScale.isEmpty()) {
+      int loPitch = ((Byte) inScale.first()).intValue(), hiPitch = ((Byte) inScale
+          .last()).intValue();
 
-		//LOG.debug("key: " + key + ", sequence: " + Arrays.toString(sequences[key].f_Sequence));
-		}
+      // LOG.debug("Input: " + inScale);
+      // LOG.debug("loPitch: " + loPitch);
+      // LOG.debug("hiPitch: " + hiPitch);
 
-	return(sequences);
-	}
+      for (int s = 0; s < scalesCount; s++) {
+        TestScale[] refSequences = buildReferenceSequences(loPitch, hiPitch, s);
 
+        for (int key = 0; key < 12; key++) {
+          int matches = countMatches(inScale, refSequences[key].f_Sequence);
 
-	static private int		countMatches(TreeSet inScale, int[] inRefSequence)
-	{
-	int			count	= 0;
-	Iterator	it		= inScale.iterator();
+          if (matches > maxMatches) {
+            maxMatches = matches;
+            scaleIndex = s;
+            scaleKey = refSequences[key].f_Key;
+            minScaleSize = refSequences[key].f_ScaleSize;
 
-	while(it.hasNext())
-		{
-		int		pitch = ((Byte)it.next()).intValue();
-		boolean	found = false;
+            // LOG.debug();
+            // LOG.debug("more matches: " + scaleMgr.getScaleName(scaleIndex));
+            // LOG.debug("maxMatches: " + maxMatches + " minScaleSize: " +
+            // minScaleSize);
+          } else if (maxMatches > 0 && matches == maxMatches
+              && refSequences[key].f_ScaleSize < minScaleSize) {
+            maxMatches = matches;
+            scaleIndex = s;
+            scaleKey = refSequences[key].f_Key;
+            minScaleSize = refSequences[key].f_ScaleSize;
 
-		for(int i = 0; i < inRefSequence.length && !found; i++)
-			if(pitch == inRefSequence[i])
-				found = true;
+            // LOG.debug("");
+            // LOG.debug("smaller scale: " + scaleMgr.getScaleName(scaleIndex));
+            // LOG.debug("maxMatches: " + maxMatches + " minScaleSize: " +
+            // minScaleSize);
+          }
+        }
+      }
+    }
 
-		if(!found)
-			return(0);
-		else
-			count++;
-		}
+    selectScale(scaleIndex, scaleKey);
+    return (scaleIndex);
+  }
 
-	return(count);
-	}
+  static private int[] scaleDefToModel(String inScaleDefinition) {
+    String[] keys = inScaleDefinition.split(",");
+    int[] model = new int[keys.length];
 
+    for (int i = 0; i < keys.length; i++)
+      model[i] = (Integer.parseInt(keys[i]) - 1);
 
-	static public int		findMatchingScale(TreeSet inScale)
-	{
-	ScaleManager	scaleMgr		= TuxGuitar.instance().getScaleManager();
-	int				scalesCount		= scaleMgr.countScales(),
-					minScaleSize	= 12,
-					maxMatches		= 0,
-					scaleIndex		= ScaleManager.NONE_SELECTION,
-					scaleKey		= 0;
+    return (model);
+  }
 
-	if(!inScale.isEmpty())
-		{
-		int		loPitch	= ((Byte)inScale.first()).intValue(),
-				hiPitch	= ((Byte)inScale.last()).intValue();
+  static private int[] scaleModelToIntervals(int[] inModel) {
+    int[] intervals = new int[inModel.length];
 
-		//LOG.debug("Input: "	+ inScale);
-		//LOG.debug("loPitch: "	+ loPitch);
-		//LOG.debug("hiPitch: "	+ hiPitch);
+    for (int i = 1; i < inModel.length; i++)
+      intervals[i - 1] = inModel[i] - inModel[i - 1];
 
-		for(int s = 0; s < scalesCount; s++)
-			{
-			TestScale[]	refSequences = buildReferenceSequences(loPitch, hiPitch, s);
+    intervals[inModel.length - 1] = 12 - inModel[inModel.length - 1];
 
-			for(int key = 0; key < 12; key++)
-				{
-				int		matches = countMatches(inScale, refSequences[key].f_Sequence);
+    return (intervals);
+  }
 
-				if(	matches > maxMatches)
-					{
-					maxMatches		= matches;
-					scaleIndex		= s;
-					scaleKey		= refSequences[key].f_Key;
-					minScaleSize	= refSequences[key].f_ScaleSize;
-
-					//LOG.debug();
-					//LOG.debug("more matches: " + scaleMgr.getScaleName(scaleIndex));
-					//LOG.debug("maxMatches: " + maxMatches + " minScaleSize: " + minScaleSize);
-					}
-				else if(maxMatches > 0 && matches == maxMatches && refSequences[key].f_ScaleSize < minScaleSize)
-					{
-					maxMatches		= matches;
-					scaleIndex		= s;
-					scaleKey		= refSequences[key].f_Key;
-					minScaleSize	= refSequences[key].f_ScaleSize;
-
-					//LOG.debug("");
-					//LOG.debug("smaller scale: " + scaleMgr.getScaleName(scaleIndex));
-					//LOG.debug("maxMatches: " + maxMatches + " minScaleSize: " + minScaleSize);
-					}
-				}
-			}
-		}
-
-	selectScale(scaleIndex, scaleKey);
-	return(scaleIndex);
-	}
-
-	/** The Logger for this class. */
-	public static final transient Logger LOG = Logger.getLogger(MiScaleFinder.class);
-
-	static public void		selectScale(final int inIndex, final int inKey)
-	{
-	try	{
-		TGSynchronizer.instance().addRunnable( new TGSynchronizer.TGRunnable() {
-			public void run() throws Throwable {
-				TuxGuitar.instance().getScaleManager().selectScale(inIndex, inKey);
-			}
-		});
-		}
-	catch(Throwable e) {
-		e.printStackTrace();
-		}
-	}
+  static public void selectScale(final int inIndex, final int inKey) {
+    try {
+      TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
+        public void run() throws Throwable {
+          TuxGuitar.instance().getScaleManager().selectScale(inIndex, inKey);
+        }
+      });
+    } catch (Throwable e) {
+      e.printStackTrace();
+    }
+  }
 }

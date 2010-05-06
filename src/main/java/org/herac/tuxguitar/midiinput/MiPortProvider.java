@@ -11,80 +11,64 @@ import javax.sound.midi.Sequencer;
 
 import org.herac.tuxguitar.gui.TuxGuitar;
 
-public class MiPortProvider
-{	
-	public static List listPortsNames() throws MiException
-	{
-	try {
-		ArrayList			portsNames	= new ArrayList();
-		MidiDevice.Info[]	infos		= MidiSystem.getMidiDeviceInfo();
-		
-		for(int i = 0; i < infos.length; i++)
-			{
-			try {
-				Iterator	it		= portsNames.iterator();
-				boolean		exists	= false;
-				
-				while(it.hasNext())
-					{
-					if(((String)it.next()).equals(infos[i].getName()))
-						{
-						exists = true;
-						break;
-						}
-					}
+public class MiPortProvider {
+  public static MidiDevice getDevice(String inDeviceName) throws MiException {
+    MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
 
-				if(!exists)
-					{
-					MidiDevice	device = MidiSystem.getMidiDevice(infos[i]);
+    for (int i = 0; i < infos.length; i++) {
+      if (infos[i].getName().equals(inDeviceName)) {
+        try {
+          MidiDevice device = MidiSystem.getMidiDevice(infos[i]);
 
-					if(	device.getMaxTransmitters() == 0 ||
-						device instanceof Sequencer)
-						continue;
+          if (device.getMaxTransmitters() == 0 || device instanceof Sequencer)
+            continue;
 
-					portsNames.add(infos[i].getName());
-					}
+          return (device);
+        } catch (MidiUnavailableException mue) {
+          throw new MiException(TuxGuitar
+              .getProperty("midiinput.error.midi.unavailable"), mue);
+        }
+      }
+    }
 
-				}
-			catch (MidiUnavailableException mue)
-				{
-				throw new MiException(TuxGuitar.getProperty("midiinput.error.midi.unavailable"), mue);
-				}
-			}
-		
-		return portsNames;
-		}
-	catch(Throwable t)
-		{
-		throw new MiException(TuxGuitar.getProperty("midiinput.error.unknown"), t);
-		}
-	}
+    return (null);
+  }
 
+  public static List listPortsNames() throws MiException {
+    try {
+      ArrayList portsNames = new ArrayList();
+      MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
 
-	public static MidiDevice getDevice(String inDeviceName) throws MiException
-	{
-	MidiDevice.Info[]	infos = MidiSystem.getMidiDeviceInfo();
+      for (int i = 0; i < infos.length; i++) {
+        try {
+          Iterator it = portsNames.iterator();
+          boolean exists = false;
 
-	for(int i = 0; i < infos.length; i++)
-		{
-		if(infos[i].getName().equals(inDeviceName))
-			{
-			try {
-				MidiDevice device = MidiSystem.getMidiDevice(infos[i]);
+          while (it.hasNext()) {
+            if (((String) it.next()).equals(infos[i].getName())) {
+              exists = true;
+              break;
+            }
+          }
 
-				if(	device.getMaxTransmitters() == 0 ||
-					device instanceof Sequencer)
-					continue;
+          if (!exists) {
+            MidiDevice device = MidiSystem.getMidiDevice(infos[i]);
 
-				return(device);
-				}
-			catch(MidiUnavailableException mue)
-				{
-				throw new MiException(TuxGuitar.getProperty("midiinput.error.midi.unavailable"), mue);
-				}
-			}
-		}
+            if (device.getMaxTransmitters() == 0 || device instanceof Sequencer)
+              continue;
 
-	return(null);
-	}
+            portsNames.add(infos[i].getName());
+          }
+
+        } catch (MidiUnavailableException mue) {
+          throw new MiException(TuxGuitar
+              .getProperty("midiinput.error.midi.unavailable"), mue);
+        }
+      }
+
+      return portsNames;
+    } catch (Throwable t) {
+      throw new MiException(TuxGuitar.getProperty("midiinput.error.unknown"), t);
+    }
+  }
 }

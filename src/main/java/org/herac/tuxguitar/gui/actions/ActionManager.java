@@ -1,8 +1,8 @@
 /*
  * Created on 18-dic-2005
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ * TODO To change the template for this generated file go to Window -
+ * Preferences - Java - Code Style - Code Templates
  */
 package org.herac.tuxguitar.gui.actions;
 
@@ -154,217 +154,217 @@ import org.herac.tuxguitar.gui.actions.view.ShowTransportAction;
 
 /**
  * @author julian
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Style - Code Templates
  */
 public class ActionManager {
-	
-	private Map actions;
-	
-	public ActionManager(){
-		this.actions = new HashMap();
-		this.init();
-	}
-	
-	public void init(){
-		//file actions
-		addAction(new NewFileAction());
-		addAction(new OpenFileAction());
-		addAction(new SaveFileAction());
-		addAction(new SaveAsFileAction());
-		addAction(new ImportSongAction());
-		addAction(new ExportSongAction());
-		addAction(new PrintAction());
-		addAction(new PrintPreviewAction());
-		addAction(new OpenURLAction());
-		addAction(new ExitAction());
-		
-		//edit actions
-		addAction(new UndoAction());
-		addAction(new RedoAction());
-		addAction(new SetMouseModeSelectionAction());
-		addAction(new SetMouseModeEditionAction());
-		addAction(new SetNaturalKeyAction());
-		addAction(new SetVoice1Action());
-		addAction(new SetVoice2Action());
-		
-		//layout actions
-		addAction(new SetPageLayoutAction());
-		addAction(new SetLinearLayoutAction());
-		addAction(new SetMultitrackViewAction());
-		addAction(new SetScoreEnabledAction());
-		addAction(new SetTablatureEnabledAction());
-		addAction(new SetCompactViewAction());
-		addAction(new SetChordNameEnabledAction());
-		addAction(new SetChordDiagramEnabledAction());
-		
-		//view actions
-		addAction(new ShowToolbarsAction());
-		addAction(new ShowFretBoardAction());
-		addAction(new ShowPianoAction());
-		addAction(new ShowMixerAction());
-		addAction(new ShowTransportAction());
-		addAction(new ShowMatrixAction());
-		
-		//composition actions
-		addAction(new ChangeTimeSignatureAction());
-		addAction(new ChangeTempoAction());
-		addAction(new ChangeClefAction());
-		addAction(new ChangeKeySignatureAction());
-		addAction(new ChangeTripletFeelAction());
-		addAction(new ChangeInfoAction());
-		
-		//track actions
-		addAction(new AddTrackAction());
-		addAction(new RemoveTrackAction());
-		addAction(new CloneTrackAction());
-		addAction(new GoFirstTrackAction());
-		addAction(new GoLastTrackAction());
-		addAction(new GoNextTrackAction());
-		addAction(new GoToTrackAction());
-		addAction(new GoPreviousTrackAction());
-		addAction(new MoveTrackUpAction());
-		addAction(new MoveTrackDownAction());
-		addAction(new EditLyricsAction());
-		addAction(new TrackPropertiesAction());
-		
-		//measure actions
-		addAction(new AddMeasureAction());
-		addAction(new RemoveMeasureAction());
-		addAction(new CopyMeasureAction());
-		addAction(new PasteMeasureAction());
-		addAction(new GoFirstMeasureAction());
-		addAction(new GoLastMeasureAction());
-		addAction(new GoNextMeasureAction());
-		addAction(new GoPreviousMeasureAction());
-		addAction(new CleanMeasureAction());
-		
-		//note actions
-		addAction(new ChangeNoteAction());
-		addAction(new InsertNoteAction());
-		addAction(new RemoveNoteAction());
-		addAction(new RemoveUnusedVoiceAction());
-		addAction(new CleanBeatAction());
-		addAction(new ChangeTiedNoteAction());
-		addAction(new ChangeVelocityAction());
-		addAction(new ShiftNoteUpAction());
-		addAction(new ShiftNoteDownAction());
-		addAction(new IncrementNoteSemitoneAction());
-		addAction(new DecrementNoteSemitoneAction());
-		addAction(new SetStrokeUpAction());
-		addAction(new SetStrokeDownAction());
-		addAction(new MoveBeatsRightAction());
-		addAction(new MoveBeatsLeftAction());
-		addAction(new MoveBeatsCustomAction());
-		
-		//duration actions
-		addAction(new SetWholeDurationAction());
-		addAction(new SetHalfDurationAction());
-		addAction(new SetQuarterDurationAction());
-		addAction(new SetEighthDurationAction());
-		addAction(new SetSixteenthDurationAction());
-		addAction(new SetThirtySecondDurationAction());
-		addAction(new SetSixtyFourthDurationAction());
-		addAction(new ChangeDottedDurationAction());
-		addAction(new ChangeDoubleDottedDurationAction());
-		addAction(new ChangeDivisionTypeAction());
-		addAction(new IncrementDurationAction());
-		addAction(new DecrementDurationAction());
-		
-		//insert actions
-		addAction(new RepeatOpenAction());
-		addAction(new RepeatCloseAction());
-		addAction(new RepeatAlternativeAction());
-		addAction(new InsertChordAction());
-		addAction(new InsertTextAction());
-		
-		//note effects action
-		addAction(new ChangeVibratoNoteAction());
-		addAction(new ChangeBendNoteAction());
-		addAction(new ChangeDeadNoteAction());
-		addAction(new ChangeSlideNoteAction());
-		addAction(new ChangeHammerNoteAction());
-		addAction(new ChangeGhostNoteAction());
-		addAction(new ChangeAccentuatedNoteAction());
-		addAction(new ChangeHeavyAccentuatedNoteAction());
-		addAction(new ChangeHarmonicNoteAction());
-		addAction(new ChangeGraceNoteAction());
-		addAction(new ChangeTrillNoteAction());
-		addAction(new ChangeTremoloPickingAction());
-		addAction(new ChangePalmMuteAction());
-		addAction(new ChangeLetRingAction());
-		addAction(new ChangeStaccatoAction());
-		addAction(new ChangeTappingAction());
-		addAction(new ChangeSlappingAction());
-		addAction(new ChangePoppingAction());
-		addAction(new ChangeTremoloBarAction());
-		addAction(new ChangeFadeInAction());
-		addAction(new SetVoiceAutoAction());
-		addAction(new SetVoiceUpAction());
-		addAction(new SetVoiceDownAction());
-		
-		//marker actions
-		addAction(new AddMarkerAction());
-		addAction(new ListMarkersAction());
-		addAction(new GoPreviousMarkerAction());
-		addAction(new GoNextMarkerAction());
-		addAction(new GoFirstMarkerAction());
-		addAction(new GoLastMarkerAction());
-		
-		//player actions
-		addAction(new TransportPlayAction());
-		addAction(new TransportStopAction());
-		addAction(new TransportMetronomeAction());
-		addAction(new TransportModeAction());
-		addAction(new TransportSetLoopSHeaderAction());
-		addAction(new TransportSetLoopEHeaderAction());
-		
-		//setting actions
-		addAction(new EditPluginsAction());
-		addAction(new EditConfigAction()); 
-		addAction(new EditKeyBindingsAction()); 
-		
-		//caret actions
-		addAction(new GoRightAction());
-		addAction(new GoLeftAction());
-		addAction(new GoUpAction());
-		addAction(new GoDownAction());
-		
-		//help actions
-		addAction(new ShowDocAction());
-		addAction(new ShowAboutAction());
-		
-		//tools
-		addAction(new TransposeAction() );
-		addAction(new ScaleAction());
-		addAction(new TGBrowserAction());
-		
-		//exit
-		addAction(new DisposeAction());
-	}
-	
-	public void addAction(Action action){
-		this.actions.put(action.getName(),action);
-	}
-	
-	public void removeAction(String name){
-		this.actions.remove(name);
-	}
-	
-	public Action getAction(String name){
-		return (Action)this.actions.get(name);
-	}
-	
-	public List getAvailableKeyBindingActions(){
-		List availableKeyBindingActions = new ArrayList();
-		Iterator it = this.actions.keySet().iterator();
-		while(it.hasNext()){
-			String actionName = (String)it.next();
-			if(getAction(actionName).isKeyBindingAvailable()){
-				availableKeyBindingActions.add(actionName);
-			}
-		}
-		return availableKeyBindingActions;
-	}
+
+  private Map actions;
+
+  public ActionManager() {
+    this.actions = new HashMap();
+    this.init();
+  }
+
+  public void addAction(Action action) {
+    this.actions.put(action.getName(), action);
+  }
+
+  public Action getAction(String name) {
+    return (Action) this.actions.get(name);
+  }
+
+  public List getAvailableKeyBindingActions() {
+    List availableKeyBindingActions = new ArrayList();
+    Iterator it = this.actions.keySet().iterator();
+    while (it.hasNext()) {
+      String actionName = (String) it.next();
+      if (getAction(actionName).isKeyBindingAvailable()) {
+        availableKeyBindingActions.add(actionName);
+      }
+    }
+    return availableKeyBindingActions;
+  }
+
+  public void init() {
+    // file actions
+    addAction(new NewFileAction());
+    addAction(new OpenFileAction());
+    addAction(new SaveFileAction());
+    addAction(new SaveAsFileAction());
+    addAction(new ImportSongAction());
+    addAction(new ExportSongAction());
+    addAction(new PrintAction());
+    addAction(new PrintPreviewAction());
+    addAction(new OpenURLAction());
+    addAction(new ExitAction());
+
+    // edit actions
+    addAction(new UndoAction());
+    addAction(new RedoAction());
+    addAction(new SetMouseModeSelectionAction());
+    addAction(new SetMouseModeEditionAction());
+    addAction(new SetNaturalKeyAction());
+    addAction(new SetVoice1Action());
+    addAction(new SetVoice2Action());
+
+    // layout actions
+    addAction(new SetPageLayoutAction());
+    addAction(new SetLinearLayoutAction());
+    addAction(new SetMultitrackViewAction());
+    addAction(new SetScoreEnabledAction());
+    addAction(new SetTablatureEnabledAction());
+    addAction(new SetCompactViewAction());
+    addAction(new SetChordNameEnabledAction());
+    addAction(new SetChordDiagramEnabledAction());
+
+    // view actions
+    addAction(new ShowToolbarsAction());
+    addAction(new ShowFretBoardAction());
+    addAction(new ShowPianoAction());
+    addAction(new ShowMixerAction());
+    addAction(new ShowTransportAction());
+    addAction(new ShowMatrixAction());
+
+    // composition actions
+    addAction(new ChangeTimeSignatureAction());
+    addAction(new ChangeTempoAction());
+    addAction(new ChangeClefAction());
+    addAction(new ChangeKeySignatureAction());
+    addAction(new ChangeTripletFeelAction());
+    addAction(new ChangeInfoAction());
+
+    // track actions
+    addAction(new AddTrackAction());
+    addAction(new RemoveTrackAction());
+    addAction(new CloneTrackAction());
+    addAction(new GoFirstTrackAction());
+    addAction(new GoLastTrackAction());
+    addAction(new GoNextTrackAction());
+    addAction(new GoToTrackAction());
+    addAction(new GoPreviousTrackAction());
+    addAction(new MoveTrackUpAction());
+    addAction(new MoveTrackDownAction());
+    addAction(new EditLyricsAction());
+    addAction(new TrackPropertiesAction());
+
+    // measure actions
+    addAction(new AddMeasureAction());
+    addAction(new RemoveMeasureAction());
+    addAction(new CopyMeasureAction());
+    addAction(new PasteMeasureAction());
+    addAction(new GoFirstMeasureAction());
+    addAction(new GoLastMeasureAction());
+    addAction(new GoNextMeasureAction());
+    addAction(new GoPreviousMeasureAction());
+    addAction(new CleanMeasureAction());
+
+    // note actions
+    addAction(new ChangeNoteAction());
+    addAction(new InsertNoteAction());
+    addAction(new RemoveNoteAction());
+    addAction(new RemoveUnusedVoiceAction());
+    addAction(new CleanBeatAction());
+    addAction(new ChangeTiedNoteAction());
+    addAction(new ChangeVelocityAction());
+    addAction(new ShiftNoteUpAction());
+    addAction(new ShiftNoteDownAction());
+    addAction(new IncrementNoteSemitoneAction());
+    addAction(new DecrementNoteSemitoneAction());
+    addAction(new SetStrokeUpAction());
+    addAction(new SetStrokeDownAction());
+    addAction(new MoveBeatsRightAction());
+    addAction(new MoveBeatsLeftAction());
+    addAction(new MoveBeatsCustomAction());
+
+    // duration actions
+    addAction(new SetWholeDurationAction());
+    addAction(new SetHalfDurationAction());
+    addAction(new SetQuarterDurationAction());
+    addAction(new SetEighthDurationAction());
+    addAction(new SetSixteenthDurationAction());
+    addAction(new SetThirtySecondDurationAction());
+    addAction(new SetSixtyFourthDurationAction());
+    addAction(new ChangeDottedDurationAction());
+    addAction(new ChangeDoubleDottedDurationAction());
+    addAction(new ChangeDivisionTypeAction());
+    addAction(new IncrementDurationAction());
+    addAction(new DecrementDurationAction());
+
+    // insert actions
+    addAction(new RepeatOpenAction());
+    addAction(new RepeatCloseAction());
+    addAction(new RepeatAlternativeAction());
+    addAction(new InsertChordAction());
+    addAction(new InsertTextAction());
+
+    // note effects action
+    addAction(new ChangeVibratoNoteAction());
+    addAction(new ChangeBendNoteAction());
+    addAction(new ChangeDeadNoteAction());
+    addAction(new ChangeSlideNoteAction());
+    addAction(new ChangeHammerNoteAction());
+    addAction(new ChangeGhostNoteAction());
+    addAction(new ChangeAccentuatedNoteAction());
+    addAction(new ChangeHeavyAccentuatedNoteAction());
+    addAction(new ChangeHarmonicNoteAction());
+    addAction(new ChangeGraceNoteAction());
+    addAction(new ChangeTrillNoteAction());
+    addAction(new ChangeTremoloPickingAction());
+    addAction(new ChangePalmMuteAction());
+    addAction(new ChangeLetRingAction());
+    addAction(new ChangeStaccatoAction());
+    addAction(new ChangeTappingAction());
+    addAction(new ChangeSlappingAction());
+    addAction(new ChangePoppingAction());
+    addAction(new ChangeTremoloBarAction());
+    addAction(new ChangeFadeInAction());
+    addAction(new SetVoiceAutoAction());
+    addAction(new SetVoiceUpAction());
+    addAction(new SetVoiceDownAction());
+
+    // marker actions
+    addAction(new AddMarkerAction());
+    addAction(new ListMarkersAction());
+    addAction(new GoPreviousMarkerAction());
+    addAction(new GoNextMarkerAction());
+    addAction(new GoFirstMarkerAction());
+    addAction(new GoLastMarkerAction());
+
+    // player actions
+    addAction(new TransportPlayAction());
+    addAction(new TransportStopAction());
+    addAction(new TransportMetronomeAction());
+    addAction(new TransportModeAction());
+    addAction(new TransportSetLoopSHeaderAction());
+    addAction(new TransportSetLoopEHeaderAction());
+
+    // setting actions
+    addAction(new EditPluginsAction());
+    addAction(new EditConfigAction());
+    addAction(new EditKeyBindingsAction());
+
+    // caret actions
+    addAction(new GoRightAction());
+    addAction(new GoLeftAction());
+    addAction(new GoUpAction());
+    addAction(new GoDownAction());
+
+    // help actions
+    addAction(new ShowDocAction());
+    addAction(new ShowAboutAction());
+
+    // tools
+    addAction(new TransposeAction());
+    addAction(new ScaleAction());
+    addAction(new TGBrowserAction());
+
+    // exit
+    addAction(new DisposeAction());
+  }
+
+  public void removeAction(String name) {
+    this.actions.remove(name);
+  }
 }

@@ -5,32 +5,32 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TGCustomToolManager {
-	
-	private static TGCustomToolManager instance;
-	
-	private List tools;
-	
-	public TGCustomToolManager(){
-		this.tools = new ArrayList();
-	}
-	
-	public static TGCustomToolManager instance(){
-		if(instance == null){
-			instance = new TGCustomToolManager();
-		}
-		return instance;
-	}
-	
-	public void addCustomTool(TGCustomTool tool){
-		this.tools.add(tool);
-	}
-	
-	public void removeCustomTool(TGCustomTool tool){
-		this.tools.remove(tool);
-	}
-	
-	public Iterator getCustomTools(){
-		return this.tools.iterator();
-	}
-	
+
+  private static TGCustomToolManager instance;
+
+  public static TGCustomToolManager instance() {
+    if (instance == null) {
+      instance = new TGCustomToolManager();
+    }
+    return instance;
+  }
+
+  private List tools;
+
+  public TGCustomToolManager() {
+    this.tools = new ArrayList();
+  }
+
+  public void addCustomTool(TGCustomTool tool) {
+    this.tools.add(tool);
+  }
+
+  public Iterator getCustomTools() {
+    return this.tools.iterator();
+  }
+
+  public void removeCustomTool(TGCustomTool tool) {
+    this.tools.remove(tool);
+  }
+
 }

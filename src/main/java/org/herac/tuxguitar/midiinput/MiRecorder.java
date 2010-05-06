@@ -10,112 +10,102 @@ import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGTempo;
 import org.herac.tuxguitar.song.models.TGTrack;
 
-class MiRecorder
-{
-static	private	MiRecorder	s_Instance;
-		private	boolean		f_IsRecording;
-		private	boolean		f_SavedMetronomeStatus;
-		private	TGTrack		f_TempTrack;				// temporary track
-		private	int			f_Tempo;					// recording tempo [bpm]
-		private	long		f_StartPosition;			// recording start position [ticks]
-		private	MiBuffer	f_Buffer = new MiBuffer();	// input notes buffer
+class MiRecorder {
+  static private MiRecorder s_Instance;
 
-		private	boolean		s_TESTING = true;
+  static public MiRecorder instance() {
+    if (s_Instance == null)
+      s_Instance = new MiRecorder();
 
+    return s_Instance;
+  }
 
-	private MiRecorder()
-	{
-	}
+  private MiBuffer f_Buffer = new MiBuffer(); // input notes buffer
+  private boolean f_IsRecording;
+  private boolean f_SavedMetronomeStatus;
+  private long f_StartPosition; // recording start position [ticks]
+  private int f_Tempo; // recording tempo [bpm]
 
+  private TGTrack f_TempTrack; // temporary track
 
-	int	getTempo()	// just for DEBUG
-	{
-		return(f_Tempo);
-	}
+  private boolean s_TESTING = true;
 
+  private MiRecorder() {
+  }
 
-	static public MiRecorder instance()
-	{
-	if(s_Instance == null)
-		s_Instance = new MiRecorder();
+  public void addNote(byte inString, byte inFret, byte inPitch,
+      byte inVelocity, long inTimeStamp) {
+    f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
+  }
 
-	return s_Instance;
-	}
+  int getTempo() // just for DEBUG
+  {
+    return (f_Tempo);
+  }
 
+  public boolean isRecording() {
+    return (f_IsRecording);
+  }
 
-	public boolean	isRecording()	{ return(f_IsRecording); }
+  public void start() {
+    TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
 
+    if (s_TESTING) {
+      TGTempo tempo = tgSongMgr.getFactory().newTempo();
 
-	public void		addNote(byte inString, byte inFret, byte inPitch, byte inVelocity, long inTimeStamp)
-	{
-	f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
-	}
+      tempo.setValue(80);
+      tgSongMgr.changeTempos(TGDuration.QUARTER_TIME, tempo, true);
+    }
 
+    f_SavedMetronomeStatus = TuxGuitar.instance().getPlayer()
+        .isMetronomeEnabled();
+    TuxGuitar.instance().getPlayer().setMetronomeEnabled(true);
 
-	public void		start()
-	{
-	TGSongManager	tgSongMgr = TuxGuitar.instance().getSongManager();
+    TablatureEditor editor = TuxGuitar.instance().getTablatureEditor();
+    Caret caret = editor.getTablature().getCaret();
 
-	if(s_TESTING)
-		{
-		TGTempo	tempo = tgSongMgr.getFactory().newTempo();
+    f_Tempo = caret.getMeasure().getTempo().getValue();
+    f_StartPosition = caret.getMeasure().getStart();
 
-		tempo.setValue(80);
-		tgSongMgr.changeTempos(TGDuration.QUARTER_TIME, tempo, true);
-		}
+    f_TempTrack = tgSongMgr.createTrack();
 
-	f_SavedMetronomeStatus = TuxGuitar.instance().getPlayer().isMetronomeEnabled();
-	TuxGuitar.instance().getPlayer().setMetronomeEnabled(true);
+    f_TempTrack.setName("Traccia temporanea input MIDI");
+    /*
+     * // allocate measures int requestedMeasuresCount = 10, currMeasuresCount =
+     * tgSongMgr.getSong().countMeasureHeaders();
+     * 
+     * for(int m = currMeasuresCount + 1; m < requestedMeasuresCount; m++)
+     * tgSongMgr.addNewMeasure(m);
+     * 
+     * TuxGuitar.instance().fireUpdate();
+     * TuxGuitar.instance().getMixer().update();
+     */
+    TuxGuitar.instance().getAction(TransportPlayAction.NAME).process(null);
 
-	TablatureEditor	editor	= TuxGuitar.instance().getTablatureEditor();
-	Caret			caret	= editor.getTablature().getCaret();
+    // come si sincronizza il timestamp iniziale con il playback?
+    f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
+    f_IsRecording = true;
+  }
 
-	f_Tempo			= caret.getMeasure().getTempo().getValue();
-	f_StartPosition = caret.getMeasure().getStart();
+  public void stop() {
+    TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
 
-	f_TempTrack = tgSongMgr.createTrack();
+    f_Buffer.stopRecording(MiPort.getNotesPortTimeStamp());
+    f_IsRecording = false;
 
-	f_TempTrack.setName("Traccia temporanea input MIDI");
-/*
-	// allocate measures
-	int		requestedMeasuresCount = 10,
-			currMeasuresCount = tgSongMgr.getSong().countMeasureHeaders();
+    TuxGuitar.instance().getAction(TransportStopAction.NAME).process(null);
+    TuxGuitar.instance().getPlayer()
+        .setMetronomeEnabled(f_SavedMetronomeStatus);
 
-	for(int m = currMeasuresCount + 1; m < requestedMeasuresCount; m++)
-		tgSongMgr.addNewMeasure(m);
+    // qui deve cancellare la traccia di servizio...
+    tgSongMgr.removeTrack(f_TempTrack);
 
-	TuxGuitar.instance().fireUpdate();
-	TuxGuitar.instance().getMixer().update();
-*/
-	TuxGuitar.instance().getAction(TransportPlayAction.NAME).process(null);
+    if (f_Buffer.finalize((byte) MiConfig.instance().getMinVelocity(),
+        (long) MiConfig.instance().getMinDuration() * 1000) > 0) {
+      f_Buffer.toTrack(f_Tempo, f_StartPosition, "Nuovo input MIDI");
+    }
 
-	// come si sincronizza il timestamp iniziale con il playback?
-	f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
-	f_IsRecording = true;
-	}
-
-
-	public void		stop()
-	{
-	TGSongManager	tgSongMgr = TuxGuitar.instance().getSongManager();
-
-	f_Buffer.stopRecording(MiPort.getNotesPortTimeStamp());
-	f_IsRecording = false;
-
-	TuxGuitar.instance().getAction(TransportStopAction.NAME).process(null);
-	TuxGuitar.instance().getPlayer().setMetronomeEnabled(f_SavedMetronomeStatus);
-	
-	// qui deve cancellare la traccia di servizio...
-	tgSongMgr.removeTrack(f_TempTrack);
-
-	if(f_Buffer.finalize(
-		(byte)MiConfig.instance().getMinVelocity(),
-		(long)MiConfig.instance().getMinDuration() * 1000) > 0)
-		{
-		f_Buffer.toTrack(f_Tempo, f_StartPosition, "Nuovo input MIDI");
-		}
-
-	TuxGuitar.instance().fireUpdate();
-	TuxGuitar.instance().getMixer().update();
-	}
+    TuxGuitar.instance().fireUpdate();
+    TuxGuitar.instance().getMixer().update();
+  }
 }

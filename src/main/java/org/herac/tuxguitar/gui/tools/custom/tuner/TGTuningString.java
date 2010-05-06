@@ -11,42 +11,41 @@ import org.eclipse.swt.widgets.Composite;
 
 /**
  * @author Nikola Kolarovic <johnny47ns@yahoo.com>
- *
+ * 
  */
 public class TGTuningString {
 
-	private int string;
-	private Button stringButton = null;
-	private TGTunerListener listener = null;
-	
-	
-	
-	TGTuningString(int string, Composite parent, TGTunerListener listener) {
-		this.string = string;
-		this.listener = listener;
-		
-		this.stringButton = new Button(parent,SWT.TOGGLE);
-		this.stringButton.setText("--------- "+TGTunerRoughWidget.TONESSTRING[string%12]+(int)Math.floor(string/12)+" ---------");
-	}
+  private TGTunerListener listener = null;
+  private int string;
+  private Button stringButton = null;
 
-	
-	
-	void addListener() {
-		this.stringButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent arg0) {
-					TGTuningString.this.stringButton.setSelection(true);
-					TGTuningString.this.listener.fireCurrentString(TGTuningString.this.string);
-			}
-			
-		});
-	}
-	
-	public int getString() {
-		return this.string;
-	}
-	
-	public Button getStringButton() {
-		return this.stringButton;
-	}
-	
+  TGTuningString(int string, Composite parent, TGTunerListener listener) {
+    this.string = string;
+    this.listener = listener;
+
+    this.stringButton = new Button(parent, SWT.TOGGLE);
+    this.stringButton.setText("--------- "
+        + TGTunerRoughWidget.TONESSTRING[string % 12]
+        + (int) Math.floor(string / 12) + " ---------");
+  }
+
+  void addListener() {
+    this.stringButton.addSelectionListener(new SelectionAdapter() {
+      public void widgetSelected(SelectionEvent arg0) {
+        TGTuningString.this.stringButton.setSelection(true);
+        TGTuningString.this.listener
+            .fireCurrentString(TGTuningString.this.string);
+      }
+
+    });
+  }
+
+  public int getString() {
+    return this.string;
+  }
+
+  public Button getStringButton() {
+    return this.stringButton;
+  }
+
 }

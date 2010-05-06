@@ -14,40 +14,40 @@ import org.herac.tuxguitar.player.impl.jsa.midiport.MidiPortProviderImpl;
 import org.herac.tuxguitar.player.impl.jsa.sequencer.MidiSequencerProviderImpl;
 import org.herac.tuxguitar.player.impl.jsa.utils.MidiConfigUtils;
 
-public class MidiPluginList extends TGPluginList implements TGPluginSetup{
-	
-	protected List getPlugins() {
-		List plugins = new ArrayList();
-		plugins.add(new TGMidiOutputPortProviderPlugin() {
-			protected MidiOutputPortProvider getProvider() {
-				return new MidiPortProviderImpl();
-			}
-		});
-		plugins.add(new TGMidiSequencerProviderPlugin() {
-			protected MidiSequencerProvider getProvider() {
-				return new MidiSequencerProviderImpl();
-			}
-		});
-		return plugins;
-	}
-	
-	public void setupDialog(Shell parent) {
-		MidiConfigUtils.setupDialog(parent);
-	}
-	
-	public String getAuthor() {
-		return "Julian Casadesus <julian@casadesus.com.ar>";
-	}
-	
-	public String getDescription() {
-		return "Java Sound Api plugin";
-	}
-	
-	public String getName() {
-		return "Java Sound Api plugin";
-	}
-	
-	public String getVersion() {
-		return "1.0";
-	}
+public class MidiPluginList extends TGPluginList implements TGPluginSetup {
+
+  public String getAuthor() {
+    return "Julian Casadesus <julian@casadesus.com.ar>";
+  }
+
+  public String getDescription() {
+    return "Java Sound Api plugin";
+  }
+
+  public String getName() {
+    return "Java Sound Api plugin";
+  }
+
+  protected List getPlugins() {
+    List plugins = new ArrayList();
+    plugins.add(new TGMidiOutputPortProviderPlugin() {
+      protected MidiOutputPortProvider getProvider() {
+        return new MidiPortProviderImpl();
+      }
+    });
+    plugins.add(new TGMidiSequencerProviderPlugin() {
+      protected MidiSequencerProvider getProvider() {
+        return new MidiSequencerProviderImpl();
+      }
+    });
+    return plugins;
+  }
+
+  public String getVersion() {
+    return "1.0";
+  }
+
+  public void setupDialog(Shell parent) {
+    MidiConfigUtils.setupDialog(parent);
+  }
 }

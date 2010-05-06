@@ -9,29 +9,29 @@ import org.herac.tuxguitar.player.base.MidiPlayerException;
 import org.herac.tuxguitar.player.base.MidiSequencer;
 import org.herac.tuxguitar.player.base.MidiSequencerProvider;
 
-public class JackSequencerProvider implements MidiSequencerProvider{
-	
-	private List jackSequencerProviders;
-	private JackClient jackClient;
-	
-	public JackSequencerProvider(JackClient jackClient){
-		this.jackClient = jackClient;
-	}
-	
-	public List listSequencers() throws MidiPlayerException {
-		if(this.jackSequencerProviders == null){
-			this.jackSequencerProviders = new ArrayList();
-			this.jackSequencerProviders.add(new JackSequencer(this.jackClient));
-		}
-		return this.jackSequencerProviders;
-	}
-	
-	public void closeAll() throws MidiPlayerException {
-		Iterator it = listSequencers().iterator();
-		while(it.hasNext()){
-			MidiSequencer sequencer = (MidiSequencer)it.next();
-			sequencer.close();
-		}
-	}
-	
+public class JackSequencerProvider implements MidiSequencerProvider {
+
+  private JackClient jackClient;
+  private List jackSequencerProviders;
+
+  public JackSequencerProvider(JackClient jackClient) {
+    this.jackClient = jackClient;
+  }
+
+  public void closeAll() throws MidiPlayerException {
+    Iterator it = listSequencers().iterator();
+    while (it.hasNext()) {
+      MidiSequencer sequencer = (MidiSequencer) it.next();
+      sequencer.close();
+    }
+  }
+
+  public List listSequencers() throws MidiPlayerException {
+    if (this.jackSequencerProviders == null) {
+      this.jackSequencerProviders = new ArrayList();
+      this.jackSequencerProviders.add(new JackSequencer(this.jackClient));
+    }
+    return this.jackSequencerProviders;
+  }
+
 }

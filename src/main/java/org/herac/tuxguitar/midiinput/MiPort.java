@@ -9,166 +9,140 @@ import javax.sound.midi.Transmitter;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.util.TGSynchronizer;
 
-public class MiPort
-	implements Receiver
-{
-	private MidiDevice	f_Device;
-	private Transmitter	f_Transmitter;
-	
-	private static MiPort	s_NotesPort;
-	private static MiPort	s_ControlPort;
+public class MiPort implements Receiver {
+  private static MiPort s_ControlPort;
+  private static MiPort s_NotesPort;
 
+  public static long getNotesPortTimeStamp() {
+    if (s_NotesPort != null)
+      return (s_NotesPort.f_Device.getMicrosecondPosition());
+    else
+      return (-1);
+  }
 
-	private MiPort(MidiDevice inDevice)
-	{
-	f_Device = inDevice;
-	}
+  public static void setControlPort(String inDeviceName) throws MiException {
+    if (s_ControlPort != null)
+      s_ControlPort.closePort();
 
+    MidiDevice device = MiPortProvider.getDevice(inDeviceName);
 
-	public String getName()
-	{
-	return f_Device.getDeviceInfo().getName();
-	}
+    if (device != null) {
+      s_ControlPort = new MiPort(device);
+      s_ControlPort.openPort();
+    }
+  }
 
+  public static void setNotesPort(String inDeviceName) throws MiException {
+    if (s_NotesPort != null)
+      s_NotesPort.closePort();
 
-	protected void connectTransmitter(Transmitter inTransmitter)
-	{
-	f_Transmitter = inTransmitter;
+    MidiDevice device = MiPortProvider.getDevice(inDeviceName);
 
-	if(f_Transmitter != null)
-		f_Transmitter.setReceiver(this);
-	}
+    if (device != null) {
+      s_NotesPort = new MiPort(device);
+      s_NotesPort.openPort();
+    }
+  }
 
+  private MidiDevice f_Device;
 
-	protected synchronized void openPort()
-		throws MiException
-	{
-	try {
-		if(!f_Device.isOpen()) {
-			final MidiDevice device = f_Device;
-			TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
-				public void run() throws Throwable {
-					device.open();
-					}
-				});
-			}
+  private Transmitter f_Transmitter;
 
-		if(f_Transmitter == null) {
-			final MidiDevice device = f_Device;
-			TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
-				public void run() throws Throwable {
-					connectTransmitter(device.getTransmitter());
-					}
-				});
-			}
-		}
-	catch(Throwable t) {
-		throw new MiException(TuxGuitar.getProperty("midiinput.error.midi.port.open"), t);
-		}
-	}
+  private MiPort(MidiDevice inDevice) {
+    f_Device = inDevice;
+  }
 
+  public void close() {
+  }
 
-	protected synchronized void closePort()
-		throws MiException
-	{
-	try {
-		if(f_Transmitter != null) {
-			final Transmitter transmitter = f_Transmitter;
-			TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
-				public void run() throws Throwable {
-					transmitter.close();
-					connectTransmitter(null);
-					}
-				});
-			}
+  /*
+   * Notes port management
+   */
 
-		if(f_Device.isOpen()) {
-			final MidiDevice device = f_Device;
-			TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
-				public void run() throws Throwable {
-					device.close();
-					}
-				});
-			}
-		}
-	catch(Throwable t) {
-		throw new MiException(TuxGuitar.getProperty("midiinput.error.midi.port.close"), t);
-		}
-	}
+  protected synchronized void closePort() throws MiException {
+    try {
+      if (f_Transmitter != null) {
+        final Transmitter transmitter = f_Transmitter;
+        TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
+          public void run() throws Throwable {
+            transmitter.close();
+            connectTransmitter(null);
+          }
+        });
+      }
 
-	/*
-	 *	Notes port management
-	 */
+      if (f_Device.isOpen()) {
+        final MidiDevice device = f_Device;
+        TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
+          public void run() throws Throwable {
+            device.close();
+          }
+        });
+      }
+    } catch (Throwable t) {
+      throw new MiException(TuxGuitar
+          .getProperty("midiinput.error.midi.port.close"), t);
+    }
+  }
 
-	public static void setNotesPort(String inDeviceName)
-		throws MiException
-	{
-	if(s_NotesPort != null)
-		s_NotesPort.closePort();
+  protected void connectTransmitter(Transmitter inTransmitter) {
+    f_Transmitter = inTransmitter;
 
-	MidiDevice	device = MiPortProvider.getDevice(inDeviceName);
+    if (f_Transmitter != null)
+      f_Transmitter.setReceiver(this);
+  }
 
-	if(device != null)
-		{
-		s_NotesPort = new MiPort(device);
-		s_NotesPort.openPort();
-		}
-	}
+  /*
+   * Control port management
+   */
 
+  public String getName() {
+    return f_Device.getDeviceInfo().getName();
+  }
 
-	public static long getNotesPortTimeStamp()
-	{
-	if(s_NotesPort != null)
-		return(s_NotesPort.f_Device.getMicrosecondPosition());
-	else
-		return(-1);
-	}
+  /*
+   * javax.sound.midi.Receiver implementation
+   */
 
-	/*
-	 *	Control port management
-	 */
+  protected synchronized void openPort() throws MiException {
+    try {
+      if (!f_Device.isOpen()) {
+        final MidiDevice device = f_Device;
+        TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
+          public void run() throws Throwable {
+            device.open();
+          }
+        });
+      }
 
-	public static void setControlPort(String inDeviceName)
-		throws MiException
-	{
-	if(s_ControlPort != null)
-		s_ControlPort.closePort();
+      if (f_Transmitter == null) {
+        final MidiDevice device = f_Device;
+        TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
+          public void run() throws Throwable {
+            connectTransmitter(device.getTransmitter());
+          }
+        });
+      }
+    } catch (Throwable t) {
+      throw new MiException(TuxGuitar
+          .getProperty("midiinput.error.midi.port.open"), t);
+    }
+  }
 
-	MidiDevice	device = MiPortProvider.getDevice(inDeviceName);
+  public void send(MidiMessage inMessage, long inTimeStamp) {
+    if (inMessage instanceof ShortMessage) {
+      ShortMessage mm = (ShortMessage) inMessage;
 
-	if(device != null)
-		{
-		s_ControlPort = new MiPort(device);
-		s_ControlPort.openPort();
-		}
-	}
+      switch (mm.getCommand()) {
+      case ShortMessage.NOTE_ON:
+      case ShortMessage.NOTE_OFF:
+        MiProvider.instance().noteReceived(mm, inTimeStamp);
+        break;
 
-	/*
-	 *	javax.sound.midi.Receiver implementation
-	 */
-	
-	public void close()
-	{	
-	}
-
-
-	public void send(MidiMessage inMessage, long inTimeStamp)
-	{
-	if(inMessage instanceof ShortMessage)
-		{
-		ShortMessage	mm = (ShortMessage)inMessage;
-		
-		switch(mm.getCommand())
-			{
-			case ShortMessage.NOTE_ON:
-			case ShortMessage.NOTE_OFF:
-				MiProvider.instance().noteReceived(mm, inTimeStamp);
-				break;
-
-			case ShortMessage.CONTROL_CHANGE:
-				//System.err.println("Control change");
-				break;
-			}
-		}
-	}
+      case ShortMessage.CONTROL_CHANGE:
+        // System.err.println("Control change");
+        break;
+      }
+    }
+  }
 }

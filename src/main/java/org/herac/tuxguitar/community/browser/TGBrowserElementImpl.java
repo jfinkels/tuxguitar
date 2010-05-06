@@ -10,60 +10,60 @@ import org.herac.tuxguitar.gui.tools.browser.TGBrowserException;
 import org.herac.tuxguitar.gui.tools.browser.base.TGBrowserElement;
 
 public class TGBrowserElementImpl extends TGBrowserElement {
-	
-	private TGBrowserElementImpl parent;
-	private Map properties;
-	private String url;
-	
-	public TGBrowserElementImpl(String name) {
-		super(name);
-		this.url = null;
-		this.properties = new HashMap();
-	}
-	
-	public TGBrowserElementImpl getParent() {
-		return this.parent;
-	}
-	
-	public void setParent(TGBrowserElementImpl parent) {
-		this.parent = parent;
-	}
-	
-	public String getUrl() {
-		return this.url;
-	}
-	
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	
-	public void addProperty( String key, String value ){
-		this.properties.put( key, value );
-	}
-	
-	public String getProperty( String key ){
-		return (String)this.properties.get( key );
-	}
-	
-	public Iterator getProperties(){
-		return this.properties.entrySet().iterator();
-	}
-	
-	public boolean isFolder() {
-		return (this.url == null || this.url.length() == 0 );
-	}
-	
-	public InputStream getInputStream() throws TGBrowserException {
-		try {
-			if( ! this.isFolder() ){
-				URL url = new URL( this.url );
-				InputStream stream = url.openStream();
-				
-				return stream;
-			}
-		} catch ( Throwable throwable ){
-			throw new TGBrowserException( throwable );
-		}
-		return null;
-	}
+
+  private TGBrowserElementImpl parent;
+  private Map properties;
+  private String url;
+
+  public TGBrowserElementImpl(String name) {
+    super(name);
+    this.url = null;
+    this.properties = new HashMap();
+  }
+
+  public void addProperty(String key, String value) {
+    this.properties.put(key, value);
+  }
+
+  public InputStream getInputStream() throws TGBrowserException {
+    try {
+      if (!this.isFolder()) {
+        URL url = new URL(this.url);
+        InputStream stream = url.openStream();
+
+        return stream;
+      }
+    } catch (Throwable throwable) {
+      throw new TGBrowserException(throwable);
+    }
+    return null;
+  }
+
+  public TGBrowserElementImpl getParent() {
+    return this.parent;
+  }
+
+  public Iterator getProperties() {
+    return this.properties.entrySet().iterator();
+  }
+
+  public String getProperty(String key) {
+    return (String) this.properties.get(key);
+  }
+
+  public String getUrl() {
+    return this.url;
+  }
+
+  public boolean isFolder() {
+    return (this.url == null || this.url.length() == 0);
+  }
+
+  public void setParent(TGBrowserElementImpl parent) {
+    this.parent = parent;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
 }
