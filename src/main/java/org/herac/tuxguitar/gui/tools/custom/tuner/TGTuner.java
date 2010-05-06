@@ -3,6 +3,8 @@ package org.herac.tuxguitar.gui.tools.custom.tuner;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
+import org.apache.log4j.Logger;
+
 import craigl.spectrumanalyzer.FFT;
 
 
@@ -119,7 +121,7 @@ public class TGTuner extends Thread {
 						
 					}
 					
-					//System.out.println("Max Amplitude: "+maxAmplitude);
+					//LOG.debug("Max Amplitude: "+maxAmplitude);
 					
 					//** buffer the frequency
 					this.queue.add(frequency);
@@ -143,11 +145,12 @@ public class TGTuner extends Thread {
 		
 		
 		this.closeDataLine();
-		System.out.println(" Average FFT time: "+(double)timePassed/(double)cycles);
+		LOG.debug(" Average FFT time: "+(double)timePassed/(double)cycles);
 		
 	}
 	
-	
+  public static final transient Logger LOG = Logger.getLogger(TGTuner.class);
+
 	protected void computeFFTParams() {
 		if (this.settings!=null) {
 			
@@ -225,8 +228,7 @@ public class TGTuner extends Thread {
 				this.dataLine.start();
 				//this.dataLine.open(this.settings.getAudioFormat(), this.settings.getBufferSize());
 			} catch (LineUnavailableException e) {
-				System.out.println("------- TGTuner: openDataLine() exception -------");
-				e.printStackTrace();
+				LOG.error("------- TGTuner: openDataLine() exception -------", e);
 			}
 		}
 	  }

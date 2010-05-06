@@ -3,6 +3,8 @@ package org.herac.tuxguitar.util;
 import java.io.File;
 import java.io.FilenameFilter;
 
+import org.apache.log4j.Logger;
+
 public class TGLibraryLoader {
 	
 	private static TGLibraryLoader instance;
@@ -52,10 +54,13 @@ public class TGLibraryLoader {
 	
 	protected void loadLibrary(File file){
 		try{
-			System.out.println("Loading: " + file.getAbsolutePath());
+			LOG.debug("Loading: " + file.getAbsolutePath());
 			System.load(file.getAbsolutePath());
 		}catch(Throwable throwable){
-			throwable.printStackTrace();
+			LOG.error(throwable);
 		}
 	}
+	 /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGLibraryLoader.class);
+
 }

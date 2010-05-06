@@ -44,7 +44,7 @@ public class SBAssistant {
 			if(TGConfig.SOUNDBANK_URL != null){
 				URL url = new URL(TGConfig.SOUNDBANK_URL);
 				if(isConfirmed()){
-					System.out.println("Try to get soundbank from: " + TGConfig.SOUNDBANK_URL);
+					LOG.debug("Try to get soundbank from: " + TGConfig.SOUNDBANK_URL);
 					this.setSoundbank( MidiSystem.getSoundbank( url.openStream() ) );
 				}
 			}
@@ -52,7 +52,9 @@ public class SBAssistant {
 			throwable.printStackTrace();
 		}
 	}
-	
+	 /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(SBAssistant.class);
+
 	public boolean isConfirmed(){
 		String title = "Soundbank Assistant";
 		String message = "You don't seem to have any soundbank installed.\nDo you want to open one from internet?";

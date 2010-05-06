@@ -3,11 +3,13 @@ package org.herac.tuxguitar.gui.help.about;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.util.TGClassLoader;
 
 public class AboutContentReader {
-	
+  public static final transient Logger LOG = Logger.getLogger(AboutContentReader.class);
+
 	private static final String PREFIX = "about_";
 	private static final String EXTENSION = ".dist";
 	
@@ -28,7 +30,7 @@ public class AboutContentReader {
 		if(is != null){
 			return read(is);
 		}
-		System.out.println(doc + ".txt");
+		LOG.debug(doc + ".txt");
 		
 		return new StringBuffer();
 	}

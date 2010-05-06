@@ -98,14 +98,16 @@ public class MacMenu {
 				case kHIQuitServices:
 					return handleQuitCommand();
 				default:
-					System.out.println(OS.GetEventKind(theEvent));
+					LOG.debug(OS.GetEventKind(theEvent));
 				break;
 			}
 			return OS.eventNotHandledErr;
 		}
 		return OS.noErr;
 	}
-	
+	 /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(MacMenu.class);
+
 	public int handleQuitCommand(){
 		TuxGuitar.instance().getAction(ExitAction.NAME).process(null);
 		return OS.noErr;

@@ -12,15 +12,12 @@ package org.herac.tuxguitar.gui.editors.chord;
 
 import java.util.ArrayList;
 import java.util.Collections;
-
 import java.util.Comparator;
-
 import java.util.Iterator;
-
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
-
 import org.herac.tuxguitar.song.models.TGChord;
 
 /**
@@ -699,7 +696,7 @@ public class ChordCreatorUtil {
 			
 			priority += combinationHasGoodFingering(stringValueCombination);
 			
-			// System.out.println("OVERALL:
+			// LOG.debug("OVERALL:
 			// "+priority+"----------------------------");
 			
 			PriorityItem item = new PriorityItem();
@@ -975,8 +972,8 @@ public class ChordCreatorUtil {
 		//                                           - others are strings
 /*		
 		for (int i=0; i<this.tuning.length; i++)
-			System.out.print(" "+positions[i]);
-		System.out.println("");
+			LOG.debug(" "+positions[i]);
+		LOG.debug("");
 */
 		
 		// if chord is open, then we can have capo only in strings before open string
@@ -1010,10 +1007,10 @@ public class ChordCreatorUtil {
 			}
 		}
 		
-/*		System.out.println("Positions:");
+/*		LOG.debug("Positions:");
 		for (int i=0; i<4; i++) {
 			if (fingers[i].size()>1)
-				System.out.print("G"+(i+1)+"R"+((Integer)fingers[i].get(0)).intValue()+"S"+((Integer)fingers[i].get(1)).intValue()+" ");
+				LOG.debug("G"+(i+1)+"R"+((Integer)fingers[i].get(0)).intValue()+"S"+((Integer)fingers[i].get(1)).intValue()+" ");
 		}
 */		
 		
@@ -1026,7 +1023,9 @@ public class ChordCreatorUtil {
 		return finalGrade;
 		
 	}
-	
+	 /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(ChordCreatorUtil.class);
+
 	/**
 	 * grades the chord semantics, based on theory.
 	 * 

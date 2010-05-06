@@ -1,32 +1,31 @@
 package org.herac.tuxguitar.midiinput;
 
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.TreeSet;
+
 import javax.sound.midi.ShortMessage;
 import javax.swing.Timer;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.ActionLock;
-import org.herac.tuxguitar.gui.editors.fretboard.FretBoard;
 import org.herac.tuxguitar.gui.editors.TablatureEditor;
+import org.herac.tuxguitar.gui.editors.fretboard.FretBoard;
+import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
-import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.tools.scale.ScaleManager;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.gui.util.MessageDialog;
-
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGString;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.TGBeat;
-
 import org.herac.tuxguitar.util.TGSynchronizer;
 
 public class MiProvider
@@ -328,7 +327,7 @@ static private	MiProvider	s_Instance;
 				f_InputTimer = null;
 
 				f_Buffer.stopRecording(MiPort.getNotesPortTimeStamp());
-				//System.out.println("Chord ended");
+				//LOG.debug("Chord ended");
 
 				if(f_Buffer.finalize(f_MinVelocity, f_MinDuration * 1000) > 0)
 					{
@@ -391,7 +390,7 @@ static private	MiProvider	s_Instance;
 		
 		if(inVelocity > 0)
 			{
-			//System.out.println("New chord");
+			//LOG.debug("New chord");
 
 			f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
 			f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
@@ -420,7 +419,7 @@ static private	MiProvider	s_Instance;
 				f_InputTimer = null;
 
 				f_Buffer.stopRecording(MiPort.getNotesPortTimeStamp());
-				//System.out.println("Scale ended");
+				//LOG.debug("Scale ended");
 
 				if(f_Buffer.finalize(f_MinVelocity, f_MinDuration * 1000) > 0)
 					{
@@ -442,7 +441,7 @@ static private	MiProvider	s_Instance;
 
 		if(inVelocity > 0)
 			{
-			//System.out.println("New scale");
+			//LOG.debug("New scale");
 
 			f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
 			f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
@@ -459,4 +458,7 @@ static private	MiProvider	s_Instance;
 			f_InputTimer.restart();
 		}
 	}
+	/** The Logger for this class. */
+	public static final transient Logger LOG = Logger.getLogger(MiProvider.class);
+
 }

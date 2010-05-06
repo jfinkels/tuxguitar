@@ -1,5 +1,7 @@
 package org.herac.tuxguitar.gui.tools.custom.tuner;
 
+import org.apache.log4j.Logger;
+
 /**
  * Class that represents a frequency buffer that eliminates large frequency fluctuations.
  * 
@@ -80,13 +82,13 @@ public class TGTunerQueue {
 		
 /*		
 		int test=(this.head+1)%this.QUEUE_SIZE;
-		System.out.print(Math.floor(queue[head])+ " ");
+		LOG.debug(Math.floor(queue[head])+ " ");
 		while (test!=this.head) {
-			System.out.print(Math.floor(queue[test])+ " ");
+			LOG.debug(Math.floor(queue[test])+ " ");
 			test = (++test)%this.QUEUE_SIZE;
 		
 		}
-		System.out.println(" =  "+queue[maxIndex]%110+" **");
+		LOG.debug(" =  "+queue[maxIndex]%110+" **");
 */
 		
 		return this.queue[maxIndex];
@@ -94,7 +96,9 @@ public class TGTunerQueue {
 		
 	}
 	
-	
+	 /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGTunerQueue.class);
+
 	/** clears the queue data */
 	public void clear() {
 		for (int i=0; i<this.QUEUE_SIZE; i++)

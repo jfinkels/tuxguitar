@@ -2,8 +2,8 @@ package org.herac.tuxguitar.midiinput;
 
 import java.util.Iterator;
 import java.util.TreeSet;
-//import java.util.Arrays;	// just for debugging
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.tools.scale.ScaleManager;
 import org.herac.tuxguitar.util.TGSynchronizer;
@@ -50,12 +50,12 @@ class MiScaleFinder
 	int[]			intervals	= scaleModelToIntervals(model);
 	TestScale[]		sequences	= new TestScale[12];
 
-	//System.out.println();
-	//System.out.println("Scale: "			+ scaleMgr.getScaleName(inScaleIndex));
-	//System.out.println("Lowest Pitch: "	+ inLoPitch);
-	//System.out.println("Highest Pitch: "	+ inHiPitch);
-	//System.out.println("Model: "			+ Arrays.toString(model));
-	//System.out.println("Intervals: "		+ Arrays.toString(intervals));
+	//LOG.debug();
+	//LOG.debug("Scale: "			+ scaleMgr.getScaleName(inScaleIndex));
+	//LOG.debug("Lowest Pitch: "	+ inLoPitch);
+	//LOG.debug("Highest Pitch: "	+ inHiPitch);
+	//LOG.debug("Model: "			+ Arrays.toString(model));
+	//LOG.debug("Intervals: "		+ Arrays.toString(intervals));
 
 	// build sequences, backwards, one per key
 	for(int key = 0; key < 12; key++)
@@ -84,7 +84,7 @@ class MiScaleFinder
 			intervalsIndex = (intervalsIndex + 1 >= intervals.length ? 0 : intervalsIndex + 1);
 			}
 
-		//System.out.println("key: " + key + ", sequence: " + Arrays.toString(sequences[key].f_Sequence));
+		//LOG.debug("key: " + key + ", sequence: " + Arrays.toString(sequences[key].f_Sequence));
 		}
 
 	return(sequences);
@@ -129,9 +129,9 @@ class MiScaleFinder
 		int		loPitch	= ((Byte)inScale.first()).intValue(),
 				hiPitch	= ((Byte)inScale.last()).intValue();
 
-		//System.out.println("Input: "	+ inScale);
-		//System.out.println("loPitch: "	+ loPitch);
-		//System.out.println("hiPitch: "	+ hiPitch);
+		//LOG.debug("Input: "	+ inScale);
+		//LOG.debug("loPitch: "	+ loPitch);
+		//LOG.debug("hiPitch: "	+ hiPitch);
 
 		for(int s = 0; s < scalesCount; s++)
 			{
@@ -148,9 +148,9 @@ class MiScaleFinder
 					scaleKey		= refSequences[key].f_Key;
 					minScaleSize	= refSequences[key].f_ScaleSize;
 
-					//System.out.println();
-					//System.out.println("more matches: " + scaleMgr.getScaleName(scaleIndex));
-					//System.out.println("maxMatches: " + maxMatches + " minScaleSize: " + minScaleSize);
+					//LOG.debug();
+					//LOG.debug("more matches: " + scaleMgr.getScaleName(scaleIndex));
+					//LOG.debug("maxMatches: " + maxMatches + " minScaleSize: " + minScaleSize);
 					}
 				else if(maxMatches > 0 && matches == maxMatches && refSequences[key].f_ScaleSize < minScaleSize)
 					{
@@ -159,9 +159,9 @@ class MiScaleFinder
 					scaleKey		= refSequences[key].f_Key;
 					minScaleSize	= refSequences[key].f_ScaleSize;
 
-					//System.out.println();
-					//System.out.println("smaller scale: " + scaleMgr.getScaleName(scaleIndex));
-					//System.out.println("maxMatches: " + maxMatches + " minScaleSize: " + minScaleSize);
+					//LOG.debug("");
+					//LOG.debug("smaller scale: " + scaleMgr.getScaleName(scaleIndex));
+					//LOG.debug("maxMatches: " + maxMatches + " minScaleSize: " + minScaleSize);
 					}
 				}
 			}
@@ -171,6 +171,8 @@ class MiScaleFinder
 	return(scaleIndex);
 	}
 
+	/** The Logger for this class. */
+	public static final transient Logger LOG = Logger.getLogger(MiScaleFinder.class);
 
 	static public void		selectScale(final int inIndex, final int inKey)
 	{

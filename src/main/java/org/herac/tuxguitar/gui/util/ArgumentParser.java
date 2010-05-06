@@ -6,6 +6,7 @@ import java.net.URL;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.util.TGVersion;
 
+// TODO replace with jopt-simple
 public class ArgumentParser {
 	
 	private static final String TG_DEFAULT_URL = "tuxguitar.default.url";

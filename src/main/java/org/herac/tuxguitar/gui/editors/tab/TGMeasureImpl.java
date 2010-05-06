@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
@@ -26,10 +27,10 @@ import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGColor;
+import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
-import org.herac.tuxguitar.song.models.TGDivisionType;
 
 /**
  * @author julian
@@ -37,7 +38,7 @@ import org.herac.tuxguitar.song.models.TGDivisionType;
  * TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
 public class TGMeasureImpl extends TGMeasure{
-	
+  public static final transient Logger LOG = Logger.getLogger(TGMeasureImpl.class);
 	public static final int NATURAL = 1;
 	public static final int SHARP = 2;
 	public static final int FLAT = 3;
@@ -305,7 +306,7 @@ public class TGMeasureImpl extends TGMeasure{
 				}
 			}
 			if (emptyBeat){
-				System.out.println( "Empty Beat !!!!!! " + beat.getStart() + "  " + i);
+				LOG.debug( "Empty Beat !!!!!! " + beat.getStart() + "  " + i);
 			}
 			
 			makeBeat(layout,beat,previousBeat,chordEnabled);

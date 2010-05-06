@@ -52,10 +52,14 @@ public class TGLibraryLoader {
 	
 	protected void loadLibrary(File file){
 		try{
-			System.out.println("Loading: " + file.getAbsolutePath());
+			LOG.debug("Loading: " + file.getAbsolutePath());
 			System.load(file.getAbsolutePath());
 		}catch(Throwable throwable){
 			throwable.printStackTrace();
 		}
 	}
+	
+	 /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGLibraryLoader.class);
+
 }

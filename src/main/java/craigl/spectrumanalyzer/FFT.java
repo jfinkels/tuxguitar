@@ -4,6 +4,8 @@
 
 package craigl.spectrumanalyzer;
 
+import org.apache.log4j.Logger;
+
 
 /* libfft.c - fast Fourier transform library
 **
@@ -22,7 +24,7 @@ public class FFT {
 	 * This is a Java implementation of the fast Fourier transform
 	 * written by Jef Poskanzer. The copyright appears above.
 	 */
-
+  public static final transient Logger LOG = Logger.getLogger(FFT.class);
 	private static final double TWOPI = 2.0 * Math.PI;
 	
 	// Limits on the number of bits this algorithm can utilize
@@ -41,7 +43,7 @@ public class FFT {
 		this.bits = bits;
 
 		if (bits > LOG2_MAXFFTSIZE) {
-			System.out.println("" + bits + " is too big");
+			LOG.fatal("" + bits + " is too big");
 			System.exit(1);
 		}
 		for (int i = (1 << bits) - 1; i >= 0; --i) {

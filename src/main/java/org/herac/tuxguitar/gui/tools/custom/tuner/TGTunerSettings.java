@@ -5,6 +5,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.TargetDataLine;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.util.MessageDialog;
 
 /**
@@ -159,7 +160,7 @@ try {
   // Assuming getControl call succeeds, 
   // we now have our LINE_IN VOLUME control.
 } catch (Exception e) {
-  System.out.println("Failed trying to find LINE_IN"
+  LOG.debug("Failed trying to find LINE_IN"
     + " VOLUME control: exception = " + e);
 }
 float newValue = 2.0F;
@@ -169,4 +170,6 @@ if (volCtrl != null)
 	 * 
 	 */
 	
+	/** The Logger for this class. */
+	public static final transient Logger LOG = Logger.getLogger(TGTunerSettings.class);
 }

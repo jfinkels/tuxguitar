@@ -64,10 +64,12 @@ public class TGPainter {
 	public void initPath(){
 		this.initPath( PATH_DRAW );
 	}
-	
+	 /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGPainter.class);
+
 	public void closePath(){
 		if(this.pathEmpty){
-			System.out.println("Warning: Empty Path!");
+			LOG.debug("Warning: Empty Path!");
 		}
 		if( (this.style & PATH_DRAW) != 0){
 			//this.gc.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

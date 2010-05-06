@@ -1,19 +1,20 @@
 package org.herac.tuxguitar.midiinput;
 
-import java.util.Iterator;
-import java.util.TreeMap;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.managers.TGTrackManager;
-import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
-import org.herac.tuxguitar.song.models.TGTrack;
+import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGNote;
+import org.herac.tuxguitar.song.models.TGTrack;
 
 
 class MiStaff
@@ -164,16 +165,16 @@ class MiStaff
 	{
 	Iterator	it = f_Events.keySet().iterator();
 
-	System.out.println();
-	System.out.println("MiStaff dump " + inTitle + "...");
-	System.out.println();
+	LOG.debug("");
+	LOG.debug("MiStaff dump " + inTitle + "...");
+	LOG.debug("");
 
 	while(it.hasNext())
 		{
 		Long			time	= (Long)it.next();
 		MiStaffEvent	se		= (MiStaffEvent)f_Events.get(time);
 
-		System.out.print(se);
+		LOG.debug(se);
 		}
 	}
 
@@ -242,7 +243,7 @@ class MiStaff
 
 	if(f_Dump_TrackGeneration)
 		{
-		System.out.println(
+		LOG.debug(
 				"" + inTgBeat.getMeasure().getNumber() + " " + inTgBeat.getStart() +
 				" (" + tgNote.getString() + "," + tgNote.getValue() + "," + tgNote.getVelocity() + ") " +
 				"1/"	+ tgDuration.getValue() +
@@ -266,9 +267,9 @@ class MiStaff
 
 	if(f_Dump_TrackGeneration)
 		{
-		System.out.println();
-		System.out.println("generating track: " + inTrackName + "...");
-		System.out.println();
+		LOG.debug("");
+		LOG.debug("generating track: " + inTrackName + "...");
+		LOG.debug("");
 		}
 
 	tgTrack.setName(inTrackName);
@@ -305,6 +306,8 @@ class MiStaff
 		}
 	}
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(MiStaff.class);
 
 	void	insertNotesIntoTrack(String inTrackName)
 	{

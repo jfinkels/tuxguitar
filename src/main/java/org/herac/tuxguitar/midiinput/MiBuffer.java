@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGBeat;
@@ -50,17 +51,17 @@ class MiBuffer
 	{
 	Iterator	it = inList.iterator();
 
-	System.out.println();
-	System.out.println("dumping " + inTitle + "...");
-	//System.out.println("Started at: " + f_StartTime);
-	//System.out.println("Stopped at: " + f_StopTime);
-	System.out.println();
+	LOG.debug("");
+	LOG.debug("dumping " + inTitle + "...");
+	//LOG.debug("Started at: " + f_StartTime);
+	//LOG.debug("Stopped at: " + f_StopTime);
+	LOG.debug("");
 
 	while(it.hasNext())
 		{
 		MiNote	n = (MiNote)it.next();
 
-		System.out.println(
+		LOG.debug(
 			"str: "		+ n.getString() +
 			", fret: "	+ n.getFret() +
 			", pitch: "	+ n.getPitch() +
@@ -227,7 +228,7 @@ class MiBuffer
 		{
 		MiNote	on = (MiNote)onIt.next();
 /*
-		System.out.println(
+		LOG.debug(
 				"str: "		+ on.getString() +
 				", fret: "	+ on.getFret() +
 				", pitch: "	+ on.getPitch() +
@@ -238,7 +239,7 @@ class MiBuffer
 			on.getDuration() < inMinDuration)
 			{
 /*
-			System.out.println(
+			LOG.debug(
 					"removed "	+
 					"str: "		+ on.getString() +
 					", fret: "	+ on.getFret() +
@@ -253,7 +254,8 @@ class MiBuffer
 	return(f_Notes.size());
 	}
 
-
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(MiBuffer.class);
 	public TGChord	toChord(int inStringsCount)
 	{
 	TGSongManager	tgSongMgr	= TuxGuitar.instance().getSongManager();

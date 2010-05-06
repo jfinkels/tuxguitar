@@ -9,7 +9,7 @@ public class JNILibraryLoader {
 	//private static final String JNI_TMP_PATH = (System.getProperty( "java.io.tmpdir" ) + File.separator);
 	
 	public static void loadLibrary(String libname){
-		System.out.println("trying to load" + libname + " (void loadLibrary)");
+		LOG.debug("trying to load" + libname + " (void loadLibrary)");
 		JNILibraryLoader.loadFromClassPath(libname + JNI_EXTENSION);
 		/*
 		if(!JNILibraryLoader.loadFromClassPath(libname + JNI_EXTENSION)){
@@ -19,7 +19,7 @@ public class JNILibraryLoader {
 	}
 	
 	private static boolean loadFromClassPath(String filename){
-		System.out.println("trying to load" + filename + " (bool loadFromClassPath)");
+		LOG.debug("trying to load" + filename + " (bool loadFromClassPath)");
 		
 		File file = new File(/*JNI_TMP_PATH +*/ filename);
 		/*
@@ -39,14 +39,14 @@ public class JNILibraryLoader {
 			}
 			*/
 			if(file.exists()){
-				System.out.println("calling file.getAbsolutePath() : "+ file.getAbsolutePath());
+				LOG.debug("calling file.getAbsolutePath() : "+ file.getAbsolutePath());
 				System.load(file.getAbsolutePath());
 				//System.load(file.getAbsolutePath());
 				return true;
 			}
 			//else
 			//{
-				System.out.println("Can't find file " + file.getAbsolutePath());
+				LOG.debug("Can't find file " + file.getAbsolutePath());
 				return false;
 			//}
 			/*
@@ -60,6 +60,8 @@ public class JNILibraryLoader {
 		return false;
 			 */
 	}
+	/** The Logger for this class. */
+	public static final transient Logger LOG = Logger.getLogger(JNILibraryLoader.class);
 }	
 	
 

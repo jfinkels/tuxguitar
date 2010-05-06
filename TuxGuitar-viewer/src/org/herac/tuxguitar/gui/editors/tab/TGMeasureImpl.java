@@ -34,7 +34,9 @@ import org.herac.tuxguitar.song.models.TGMeasureHeader;
  * TODO To change the template for this generated type comment go to Window - Preferences - Java - Code Style - Code Templates
  */
 public class TGMeasureImpl extends TGMeasure{
-	
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGMeasureImpl.class);
+
 	public static final int NATURAL = 1;
 	public static final int SHARP = 2;
 	public static final int FLAT = 3;
@@ -302,7 +304,7 @@ public class TGMeasureImpl extends TGMeasure{
 				}
 			}
 			if (emptyBeat){
-				System.out.println( "Empty Beat !!!!!! " + beat.getStart() + "  " + i);
+				LOG.debug( "Empty Beat !!!!!! " + beat.getStart() + "  " + i);
 			}
 			
 			makeBeat(layout,beat,previousBeat,chordEnabled);
