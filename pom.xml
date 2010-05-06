@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>gtar</groupId>
+  <artifactId>gtar</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <!-- COMPILE DEPENDENCIES -->    
+    <dependency> <!-- for PDF writing -->
+      <groupId>com.itextpdf</groupId>
+      <artifactId>itextpdf</artifactId>
+      <version>${version.dependency.itextpdf}</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency> <!-- windowing toolkit -->
+      <groupId>org.eclipse.swt.gtk.linux</groupId>
+      <artifactId>x86</artifactId>
+      <version>${version.dependency.swt}</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency> <!-- command-line arguments parsing -->
+      <groupId>net.sf.jopt-simple</groupId>
+      <artifactId>jopt-simple</artifactId>
+      <version>${version.dependency.jopt-simple}</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
+
+    <dependency><!--  Log4j API -->
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>${version.dependency.log4j}</version>
+      <scope>compile</scope>
+      <type>jar</type>
+    </dependency>
+
+    <!-- TEST-COMPILE DEPENDENCIES -->
+    <dependency> <!-- JUnit 4 unit testing framework -->
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${version.dependency.junit}</version>
+      <scope>test</scope>
+      <type>jar</type>
+    </dependency>
+
+  </dependencies>
+
+  <properties>
+    <!-- dependency versions -->
+    <version.dependency.itextpdf>5.0.2</version.dependency.itextpdf>
+    <version.dependency.jopt-simple>3.2</version.dependency.jopt-simple>
+    <version.dependency.junit>4.7</version.dependency.junit>
+    <version.dependency.log4j>1.2.14</version.dependency.log4j>
+    <version.dependency.swt>3.3.0-v3346</version.dependency.swt>
+
+    <!-- plugin versions -->
+    <!--<version.plugin.changelog>2.2-SNAPSHOT</version.plugin.changelog>-->
+    <version.plugin.checkstyle>2.4</version.plugin.checkstyle>
+    <version.plugin.clirr>2.2.2</version.plugin.clirr>
+    <version.plugin.cobertura>2.3</version.plugin.cobertura>
+    <version.plugin.compiler>2.0.2</version.plugin.compiler>
+    <version.plugin.findbugs>2.3</version.plugin.findbugs>
+    <version.plugin.jar>2.3</version.plugin.jar>
+    <version.plugin.javadoc>2.6.1</version.plugin.javadoc>
+    <version.plugin.javancss>2.0</version.plugin.javancss>
+    <version.plugin.jdepend>2.0-beta-2</version.plugin.jdepend>
+    <version.plugin.jxr>2.1</version.plugin.jxr>
+    <version.plugin.pmd>2.4</version.plugin.pmd>
+    <version.plugin.reports>2.1.2</version.plugin.reports>
+    <version.plugin.release>2.0-beta-9</version.plugin.release>
+    <version.plugin.resources>2.4.1</version.plugin.resources>
+    <version.plugin.scm>1.2</version.plugin.scm>
+    <version.plugin.site>2.0.1</version.plugin.site>
+    <version.plugin.source>2.1.1</version.plugin.source>
+    <version.plugin.surefire>2.4.3</version.plugin.surefire>
+    <version.plugin.taglist>2.4</version.plugin.taglist>
+    <version.plugin.versions>1.1</version.plugin.versions>
+    
+    <!-- Java runtime/JDK versions -->
+    <version.java.source>1.6</version.java.source>
+    <version.java.target>1.6</version.java.target>
+
+    <!-- configuration variables -->
+    <config.checkstyle>checkstyle.xml</config.checkstyle>
+    <mainClass>org.herac.tuxguitar.gui.TGMain</mainClass>
+    
+    <!-- character encodings -->
+    <project.build.encoding>UTF-8</project.build.encoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.encoding>UTF-8</project.reporting.encoding>
+    <project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+
+      <plugin> <!-- force JDK and JRE versions -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${version.plugin.compiler}</version>
+        <configuration>
+          <source>${version.java.source}</source>
+          <target>${version.java.target}</target>
+        </configuration>
+      </plugin>
+
+      <plugin> <!-- create an executable JAR on "mvn package" -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>${version.plugin.jar}</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <mainClass>${mainClass}</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions> <!-- execute jar:jar and :test-jar on "mvn package" -->
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin> <!-- enforce resources encoding -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>${version.plugin.resources}</version>
+      </plugin>
+
+      <plugin> <!-- enforce site encoding -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${version.plugin.site}</version>
+      </plugin>
+      
+      <plugin> <!-- package source and test-sources, too -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>${version.plugin.source}</version>
+        <configuration>
+          <attach>false</attach>
+        </configuration>
+        <executions> <!-- execute source:jar and :test-jar on "mvn package" -->
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin> <!-- Javadoc generation -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${version.plugin.javadoc}</version>
+        <configuration>
+          <attach>false</attach>
+        </configuration>
+        <executions> <!-- execute javadoc:jar and :test-jar on "mvn package" -->
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+
+      <plugin> <!-- Checkstyle coding style violations report -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${version.plugin.checkstyle}</version>
+        <configuration>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <configLocation>${config.checkstyle}</configLocation>
+          <enableRSS>false</enableRSS>
+          <enableRulesSummary>false</enableRulesSummary>
+        </configuration>
+      </plugin>
+      
+      <plugin> <!-- Javadoc generation -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${version.plugin.javadoc}</version>
+      </plugin>
+
+      <plugin> <!-- Java code cross-reference links -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${version.plugin.jxr}</version>
+      </plugin>
+
+      <plugin> <!-- PMD code analysis report -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${version.plugin.pmd}</version>
+        <configuration>
+          <targetJdk>${version.java.target}</targetJdk>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${version.plugin.reports}</version>
+      </plugin>
+
+      <plugin> <!-- Surefire test report -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>${version.plugin.surefire}</version>
+        <reportSets>
+          <reportSet>
+            <reports> <!-- only run tests once -->
+              <report>report-only</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+     
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>clirr-maven-plugin</artifactId>
+        <version>${version.plugin.clirr}</version>
+      </plugin>
+      
+      
+      <plugin> <!-- Cobertura test coverage report -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>${version.plugin.cobertura}</version>
+      </plugin>
+
+      <plugin> <!-- FindBugs report -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>${version.plugin.findbugs}</version>
+        <configuration>
+          <!--<threshold>Low</threshold>-->
+          <!--<effort>Max</effort>-->
+        </configuration>
+      </plugin>
+
+      <plugin> <!-- NCSS metrics -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javancss-maven-plugin</artifactId>
+        <version>${version.plugin.javancss}</version>
+      </plugin>
+
+      <plugin> <!-- dependency cycle checks -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jdepend-maven-plugin</artifactId>
+        <version>${version.plugin.jdepend}</version>
+      </plugin>
+      
+      <plugin> <!-- TODO tag extraction -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <version>${version.plugin.taglist}</version>
+        <configuration>
+          <tagListOptions>
+            <tagClasses>
+              <tagClass>
+                <displayName>Todo</displayName>
+                <tags>
+                  <tag>
+                    <matchString>todo</matchString>
+                    <matchType>ignoreCase</matchType>
+                  </tag>
+                </tags>
+              </tagClass>
+            </tagClasses>
+          </tagListOptions>
+        </configuration>
+      </plugin>
+
+      <plugin> <!-- dependency and plugin versions -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${version.plugin.versions}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>dependency-updates-report</report>
+              <report>plugin-updates-report</report>
+              <report>property-updates-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <name>tuxguitar</name>
+  <description>tuxguitar</description>
+  <url>http://www.tuxguitar.com.ar/</url>
+  <inceptionYear>2005</inceptionYear>
+  <!--<licenses>
+    <license>
+      <distribution>repo</distribution>
+      <name>GNU General Public License version 3</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+    </license>
+  </licenses>-->
+  
+  <developers>
+    <developer>
+      <email>jeffrey.finkelstein@gmail.com</email>
+      <id>jfinkels</id>
+      <name>Jeffrey Finkelstein</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-5</timezone>
+      <url>http://github.com/jfinkels</url>
+    </developer>
+  </developers>
+
+  <!--<issueManagement>
+    <system>GitHub Issue Tracker</system>
+    <url>http://github.com/jfinkels/jmona/issues</url>
+  </issueManagement>-->
+
+  <!--<mailingLists>
+    <mailingList>
+      <archive>http://n3.nabble.com/jmona-f94687.html</archive>
+      <name>jmona</name>
+      <subscribe>http://n3.nabble.com/subscriptions/Subscribe.jtp?node=94687</subscribe>
+      <unsubscribe>http://n3.nabble.com/subscriptions/Subscribe.jtp?node=94687</unsubscribe>
+    </mailingList>
+  </mailingLists>-->
+
+  <!--<scm>
+    <connection>scm:git:git://github.com/jfinkels/jmona.git</connection>
+    <url>http://github.com/jfinkels/jmona</url>
+  </scm>-->
+  
+  <!--<pluginRepositories>
+    <pluginRepository>
+      <id>apache.snapshots</id>
+      <url>http://repository.apache.org/snapshots/</url>
+    </pluginRepository>
+  </pluginRepositories>-->
+    
+  <!--<distributionManagement>
+    <downloadUrl>http://www.cs.tufts.edu/~jfinke02/jmona/</downloadUrl>
+    <repository>
+      <uniqueVersion>false</uniqueVersion>
+      <id>jmona.repo</id>
+      <name>jmona repository</name>
+      <url>scp://linux.cs.tufts.edu/h/jfinke02/public_html/repo</url>
+      <layout>default</layout>
+    </repository>
+    <site>
+      <id>jmona.website</id>
+      <name>jmona website</name>
+      <url>scp://linux.cs.tufts.edu/h/jfinke02/public_html/jmona</url>
+    </site>
+  </distributionManagement>-->
+
+  <repositories>
+    <repository>
+      <id>itext-repo</id>
+      <name>iText repository</name>
+      <url>http://maven.itextpdf.com</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  
+</project>
