@@ -7,14 +7,14 @@ import org.herac.tuxguitar.song.models.TGBeat;
 
 public class TGEditorManager {
 
-  private List beatViewerListeners;
-  private List redrawListeners;
-  private List updateListeners;
+  private List<TGExternalBeatViewerListener> beatViewerListeners;
+  private List<TGRedrawListener> redrawListeners;
+  private List<TGUpdateListener> updateListeners;
 
   public TGEditorManager() {
-    this.redrawListeners = new ArrayList();
-    this.updateListeners = new ArrayList();
-    this.beatViewerListeners = new ArrayList();
+    this.redrawListeners = new ArrayList<TGRedrawListener>();
+    this.updateListeners = new ArrayList<TGUpdateListener>();
+    this.beatViewerListeners = new ArrayList<TGExternalBeatViewerListener>();
   }
 
   public void addBeatViewerListener(TGExternalBeatViewerListener listener) {

@@ -1,7 +1,5 @@
 package org.herac.tuxguitar.gui.editors.tab.edit;
 
-import java.util.Iterator;
-
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -18,6 +16,7 @@ import org.herac.tuxguitar.gui.editors.tab.Tablature;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.system.config.TGConfigKeys;
 import org.herac.tuxguitar.song.models.TGBeat;
+import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGString;
 
 public class EditorKit implements MouseListener, MouseMoveListener,
@@ -44,18 +43,19 @@ public class EditorKit implements MouseListener, MouseMoveListener,
     this.setDefaults();
   }
 
-  public TGBeatImpl findSelectedBeat(TGMeasureImpl measure, int x) {
+  public TGBeat findSelectedBeat(TGMeasureImpl measure, int x) {
     int voice = getTablature().getCaret().getVoice();
     int posX = measure.getHeaderImpl().getLeftSpacing(
         getTablature().getViewLayout())
         + measure.getPosX();
     int bestDiff = -1;
-    TGBeatImpl bestBeat = null;
-    Iterator it = measure.getBeats().iterator();
-    while (it.hasNext()) {
-      TGBeatImpl beat = (TGBeatImpl) it.next();
+    TGBeat bestBeat = null;
+
+    for (final TGBeat beat : measure.getBeats()) {
       if (!beat.getVoice(voice).isEmpty()) {
-        int diff = Math.abs(x - (posX + (beat.getPosX() + beat.getSpacing())));
+        int diff = Math.abs(x
+            - (posX + (((TGBeatImpl) beat).getPosX() + ((TGBeatImpl) beat)
+                .getSpacing())));
         if (bestDiff == -1 || diff < bestDiff) {
           bestBeat = beat;
           bestDiff = diff;
@@ -73,9 +73,8 @@ public class EditorKit implements MouseListener, MouseMoveListener,
     TGMeasureImpl measure = null;
     int minorDistance = 0;
 
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasureImpl m = (TGMeasureImpl) it.next();
+    for (final TGMeasure meas : track.getMeasures()) {
+      final TGMeasureImpl m = (TGMeasureImpl) meas;
       if (!m.isOutOfBounds() && m.getTs() != null) {
         boolean isAtX = (x >= m.getPosX() && x <= m.getPosX()
             + m.getWidth(getTablature().getViewLayout()) + m.getSpacing());
@@ -100,9 +99,7 @@ public class EditorKit implements MouseListener, MouseMoveListener,
     int firstStringY = measure.getPosY()
         + measure.getTs().getPosition(TGTrackSpacing.POSITION_TABLATURE);
 
-    Iterator it = measure.getTrack().getStrings().iterator();
-    while (it.hasNext()) {
-      TGString currString = (TGString) it.next();
+    for (final TGString currString : measure.getTrack().getStrings()) {
       int distanceX = Math
           .abs(y
               - (firstStringY + ((currString.getNumber() * stringSpacing) - stringSpacing)));

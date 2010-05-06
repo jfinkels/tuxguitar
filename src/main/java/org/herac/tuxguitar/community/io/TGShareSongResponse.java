@@ -64,14 +64,14 @@ public class TGShareSongResponse {
     this.document = builder.parse(stream);
   }
 
-  public String loadMessages(List list) throws Throwable {
+  public String loadMessages(List<String> list) throws Throwable {
     if (this.document != null) {
       return loadMessages(list, this.document.getFirstChild());
     }
     return null;
   }
 
-  private String loadMessages(List list, Node rootNode) throws Throwable {
+  private String loadMessages(List<String> list, Node rootNode) throws Throwable {
     NodeList rootNodes = rootNode.getChildNodes();
     for (int i = 0; i < rootNodes.getLength(); i++) {
       Node messagesNode = rootNodes.item(i);

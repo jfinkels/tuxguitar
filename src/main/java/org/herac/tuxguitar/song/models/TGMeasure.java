@@ -27,7 +27,7 @@ public abstract class TGMeasure {
   public static final int DEFAULT_CLEF = CLEF_TREBLE;
   public static final int DEFAULT_KEY_SIGNATURE = 0;
 
-  private List beats;
+  private List<TGBeat> beats;
   private int clef;
   private TGMeasureHeader header;
   private int keySignature;
@@ -38,7 +38,7 @@ public abstract class TGMeasure {
     this.header = header;
     this.clef = DEFAULT_CLEF;
     this.keySignature = DEFAULT_KEY_SIGNATURE;
-    this.beats = new ArrayList();
+    this.beats = new ArrayList<TGBeat>();
   }
 
   public void addBeat(TGBeat beat) {
@@ -68,7 +68,7 @@ public abstract class TGMeasure {
     return null;
   }
 
-  public List getBeats() {
+  public List<TGBeat> getBeats() {
     return this.beats;
   }
 

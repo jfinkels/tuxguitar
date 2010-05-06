@@ -7,6 +7,7 @@ import org.herac.tuxguitar.community.auth.TGCommunityAuth;
 import org.herac.tuxguitar.community.auth.TGCommunityAuthDialog;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.tools.browser.TGBrowserException;
+import org.herac.tuxguitar.gui.tools.browser.base.TGBrowserElement;
 
 public class TGBrowserConnection {
 
@@ -20,7 +21,7 @@ public class TGBrowserConnection {
     this.auth.update();
   }
 
-  public void getElements(List elements, TGBrowserElementImpl element)
+  public void getElements(List<TGBrowserElement> elements, TGBrowserElementImpl element)
       throws TGBrowserException {
     try {
       TGBrowserRequest request = new TGBrowserRequest(this.auth, element);

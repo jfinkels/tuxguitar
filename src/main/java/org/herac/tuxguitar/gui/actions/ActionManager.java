@@ -160,10 +160,10 @@ import org.herac.tuxguitar.gui.actions.view.ShowTransportAction;
  */
 public class ActionManager {
 
-  private Map actions;
+  private Map<String, Action> actions;
 
   public ActionManager() {
-    this.actions = new HashMap();
+    this.actions = new HashMap<String, Action>();
     this.init();
   }
 
@@ -175,8 +175,8 @@ public class ActionManager {
     return (Action) this.actions.get(name);
   }
 
-  public List getAvailableKeyBindingActions() {
-    List availableKeyBindingActions = new ArrayList();
+  public List<String> getAvailableKeyBindingActions() {
+    List<String> availableKeyBindingActions = new ArrayList<String>();
     Iterator it = this.actions.keySet().iterator();
     while (it.hasNext()) {
       String actionName = (String) it.next();

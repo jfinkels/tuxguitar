@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.herac.tuxguitar.gui.tools.browser.base.TGBrowserElement;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -70,13 +71,13 @@ public class TGBrowserResponse {
     this.document = builder.parse(stream);
   }
 
-  public void loadElements(List list) {
+  public void loadElements(List<TGBrowserElement> list) {
     if (this.document != null) {
       loadElements(list, this.document.getFirstChild());
     }
   }
 
-  private void loadElements(List list, Node rootNode) {
+  private void loadElements(List<TGBrowserElement> list, Node rootNode) {
     NodeList rootNodes = rootNode.getChildNodes();
     for (int i = 0; i < rootNodes.getLength(); i++) {
       Node elementsNode = rootNodes.item(i);

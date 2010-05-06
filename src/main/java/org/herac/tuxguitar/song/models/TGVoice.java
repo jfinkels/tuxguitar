@@ -28,11 +28,11 @@ public abstract class TGVoice {
   private TGDuration duration;
   private boolean empty;
   private int index;
-  private List notes;
+  private List<TGNote> notes;
 
   public TGVoice(TGFactory factory, int index) {
     this.duration = factory.newDuration();
-    this.notes = new ArrayList();
+    this.notes = new ArrayList<TGNote>();
     this.index = index;
     this.empty = true;
     this.direction = DIRECTION_NONE;
@@ -83,7 +83,7 @@ public abstract class TGVoice {
     return null;
   }
 
-  public List getNotes() {
+  public List<TGNote> getNotes() {
     return this.notes;
   }
 

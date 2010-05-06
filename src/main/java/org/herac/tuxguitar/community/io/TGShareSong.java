@@ -86,7 +86,7 @@ public class TGShareSong {
       } else if (status != null
           && status.equals(TGShareSongConnection.HTTP_STATUS_INVALID)) {
         String message = new String();
-        List messages = new ArrayList();
+        List<String> messages = new ArrayList<String>();
         response.loadMessages(messages);
         Iterator it = messages.iterator();
         while (it.hasNext()) {

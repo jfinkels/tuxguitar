@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.song.models;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.factory.TGFactory;
@@ -25,14 +24,14 @@ public abstract class TGTrack {
   private TGChannel channel;
   private TGColor color;
   private TGLyric lyrics;
-  private List measures;
+  private List<TGMeasure> measures;
   private boolean mute;
   private String name;
   private int number;
   private int offset;
   private boolean solo;
   private TGSong song;
-  private List strings;
+  private List<TGString> strings;
 
   public TGTrack(TGFactory factory) {
     this.number = 0;
@@ -40,8 +39,8 @@ public abstract class TGTrack {
     this.solo = false;
     this.mute = false;
     this.name = new String();
-    this.measures = new ArrayList();
-    this.strings = new ArrayList();
+    this.measures = new ArrayList<TGMeasure>();
+    this.strings = new ArrayList<TGString>();
     this.channel = factory.newChannel();
     this.color = factory.newColor();
     this.lyrics = factory.newLyric();
@@ -109,8 +108,8 @@ public abstract class TGTrack {
     return null;
   }
 
-  public Iterator getMeasures() {
-    return this.measures.iterator();
+  public List<TGMeasure> getMeasures() {
+    return this.measures;
   }
 
   public String getName() {
@@ -133,7 +132,7 @@ public abstract class TGTrack {
     return (TGString) this.strings.get(number - 1);
   }
 
-  public List getStrings() {
+  public List<TGString> getStrings() {
     return this.strings;
   }
 
@@ -189,7 +188,7 @@ public abstract class TGTrack {
     this.song = song;
   }
 
-  public void setStrings(List strings) {
+  public void setStrings(List<TGString> strings) {
     this.strings = strings;
   }
 

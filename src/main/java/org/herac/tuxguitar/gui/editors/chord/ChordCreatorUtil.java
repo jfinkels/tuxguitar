@@ -32,11 +32,10 @@ import org.herac.tuxguitar.song.models.TGChord;
 public class ChordCreatorUtil {
 
   /** used to sort the array */
-  protected class PriorityComparator implements Comparator {
+  protected class PriorityComparator implements Comparator<PriorityItem> {
 
-    public int compare(Object o1, Object o2) {
-      return Math.round(((PriorityItem) o2).priority
-          - ((PriorityItem) o1).priority);
+    public int compare(PriorityItem o1, PriorityItem o2) {
+      return Math.round(o2.priority - o1.priority);
     }
 
   }
@@ -45,7 +44,7 @@ public class ChordCreatorUtil {
   protected class PriorityItem {
 
     float priority;
-    ArrayList stringValues;
+    ArrayList<StringValue> stringValues;
 
   }
 
@@ -184,7 +183,7 @@ public class ChordCreatorUtil {
    * @return true if it can be reached
    * 
    */
-  private boolean checkCombination(ArrayList combination) {
+  private boolean checkCombination(ArrayList<StringValue> combination) {
 
     Iterator it = combination.iterator();
     int maxLeft, maxRight;
@@ -237,7 +236,7 @@ public class ChordCreatorUtil {
    *          ArrayList of already stored StringList chords
    * @return true if it is duplicate, false if it is unique
    */
-  private boolean checkIfSubset(List stringValues, List betterOnes) {
+  private boolean checkIfSubset(List<StringValue> stringValues, List betterOnes) {
     if (!isValidProcess()) {
       return false;
     }
@@ -268,7 +267,7 @@ public class ChordCreatorUtil {
   }
 
   /** checks if the bass tone is the lowest tone in chord */
-  private float combinationBassInBass(ArrayList stringValueCombination) {
+  private float combinationBassInBass(ArrayList<StringValue> stringValueCombination) {
     if (!isValidProcess()) {
       return 0;
     }
@@ -310,7 +309,7 @@ public class ChordCreatorUtil {
    * - If there are not some with NON_ESSENTIAL_INDEX are not here, penalty
    * should be less<br>
    */
-  private float combinationChordSemantics(ArrayList stringValueCombination) {
+  private float combinationChordSemantics(ArrayList<StringValue> stringValueCombination) {
     if (!isValidProcess()) {
       return 0;
     }
@@ -330,9 +329,9 @@ public class ChordCreatorUtil {
       while (it.hasNext() && !found) {
         StringValue sv = (StringValue) it.next();
         if (sv.getString() == string && !found && sv.getFret() != -1) { // stumbled
-                                                                        // upon
-                                                                        // next
-                                                                        // string
+          // upon
+          // next
+          // string
           current = sv;
           found = true;
           stringDepth++;
@@ -407,7 +406,7 @@ public class ChordCreatorUtil {
   }
 
   /** adds points if the combination has all the notes in the basis of chord */
-  private float combinationHasAllRequiredNotes(ArrayList stringValueCombination) {
+  private float combinationHasAllRequiredNotes(ArrayList<StringValue> stringValueCombination) {
     if (!isValidProcess()) {
       return 0;
     }
@@ -489,7 +488,7 @@ public class ChordCreatorUtil {
    * - can be placed capo <br>
    * 
    */
-  private float combinationHasGoodFingering(ArrayList stringValueCombination) {
+  private float combinationHasGoodFingering(ArrayList<StringValue> stringValueCombination) {
     if (!isValidProcess()) {
       return 0;
     }
@@ -587,8 +586,8 @@ public class ChordCreatorUtil {
     // ... it can be held with capo on 5th fret, but very hard :)
     // ... This is the same as with "capo after", I didn't consider that (e.g.
     // chord -35555)
-    ArrayList[] fingers = { new ArrayList(2), new ArrayList(2),
-        new ArrayList(2), new ArrayList(2) };
+    ArrayList[] fingers = { new ArrayList<Integer>(2), new ArrayList<Integer>(2),
+        new ArrayList<Integer>(2), new ArrayList<Integer>(2) };
     // TODO: still no thumb, sorry :)
 
     // STRUCTURE: ArrayList consists of Integers - first is fret
@@ -650,7 +649,7 @@ public class ChordCreatorUtil {
   }
 
   /** adds points if the combination has strings in a row */
-  private float combinationHasSubsequentStrings(ArrayList stringValueCombination) {
+  private float combinationHasSubsequentStrings(ArrayList<StringValue> stringValueCombination) {
     if (!isValidProcess()) {
       return 0;
     }
@@ -803,7 +802,7 @@ public class ChordCreatorUtil {
    * @return true if the note is needed for chord formation
    * 
    */
-  private void find(int stringTone, int stringIndex, int fret, List stringList) {
+  private void find(int stringTone, int stringIndex, int fret, List<StringValue> stringList) {
     if (!isValidProcess()) {
       return;
     }
@@ -888,7 +887,7 @@ public class ChordCreatorUtil {
    * @return the list of TGChord structures that are most suitable
    * 
    */
-  private java.util.List getChords() {
+  private List<TGChord> getChords() {
     if (!isValidProcess()) {
       return null;
     }
@@ -943,8 +942,8 @@ public class ChordCreatorUtil {
         // rest
         for (int i = 2; i <= this.alteration; i++)
           this.expandingNotes[i] = getAddNote(i - 2, i == 2 ? add9 : add11); // @2=add9+-,
-                                                                             // @3=add11+-
-                                                                             // tone
+        // @3=add11+-
+        // tone
       }
 
     } else
@@ -1080,11 +1079,11 @@ public class ChordCreatorUtil {
       if (ChordSettings.instance().getFindChordsMin() > 0
           && ChordSettings.instance().isEmptyStringChords())
         find(this.tuning[string], string, 0, currentStringList); // if it's open
-                                                                 // chord but
-                                                                 // wanted to
-                                                                 // search from
-                                                                 // different
-                                                                 // minimal fret
+      // chord but
+      // wanted to
+      // search from
+      // different
+      // minimal fret
 
       for (int fret = ChordSettings.instance().getFindChordsMin(); fret <= ChordSettings
           .instance().getFindChordsMax(); fret++) {
@@ -1194,7 +1193,7 @@ public class ChordCreatorUtil {
 
       for (int i = 0; i < notes.size(); i++)
         for (int j = 0; j < lastLevelCombination.size(); j++) { // cartesian
-                                                                // multiplication
+          // multiplication
           ArrayList currentCombination = (ArrayList) ((ArrayList) lastLevelCombination
               .get(j)).clone();
           currentCombination.add(notes.get(i));

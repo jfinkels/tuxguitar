@@ -25,8 +25,8 @@ import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
 
 public class TGMeasureManager {
-  public static List createDurations(TGFactory factory, long time) {
-    List durations = new ArrayList();
+  public static List<TGDuration> createDurations(TGFactory factory, long time) {
+    List<TGDuration> durations = new ArrayList<TGDuration>();
     TGDuration minimum = factory.newDuration();
     minimum.setValue(TGDuration.SIXTY_FOURTH);
     minimum.setDotted(false);
@@ -689,10 +689,9 @@ public class TGMeasureManager {
   private void createSilences(TGMeasure measure, long start, long length,
       int voiceIndex) {
     long nextStart = start;
-    List durations = createDurations(getSongManager().getFactory(), length);
-    Iterator it = durations.iterator();
-    while (it.hasNext()) {
-      TGDuration duration = (TGDuration) it.next();
+    List<TGDuration> durations = createDurations(getSongManager().getFactory(), length);
+
+    for (final TGDuration duration : durations) {
 
       boolean isNew = false;
       long beatStart = getRealStart(measure, nextStart);
@@ -725,9 +724,8 @@ public class TGMeasureManager {
    * Retorna las Nota en la posicion y cuerda
    */
   public TGBeat getBeat(TGMeasure measure, long start) {
-    Iterator it = measure.getBeats().iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    
+    for (final TGBeat beat : measure.getBeats()) {
       if (beat.getStart() == start) {
         return beat;
       }
@@ -736,12 +734,9 @@ public class TGMeasureManager {
   }
 
   public TGBeat getBeat(TGTrack track, long start) {
-    Iterator measures = track.getMeasures();
-    while (measures.hasNext()) {
-      TGMeasure measure = (TGMeasure) measures.next();
-      Iterator beats = measure.getBeats().iterator();
-      while (beats.hasNext()) {
-        TGBeat beat = (TGBeat) beats.next();
+
+    for (final TGMeasure measure : track.getMeasures()) {
+      for (final TGBeat beat : measure.getBeats()) {
         if (beat.getStart() == start) {
           return beat;
         }
@@ -769,11 +764,10 @@ public class TGMeasureManager {
     return beatIn;
   }
 
-  public List getBeatsBeetween(List beats, long p1, long p2) {
-    List list = new ArrayList();
-    Iterator it = beats.iterator();
-    while (it.hasNext()) {
-      TGBeat current = (TGBeat) it.next();
+  public List<TGBeat> getBeatsBeetween(List<TGBeat> beats, long p1, long p2) {
+    List<TGBeat> list = new ArrayList<TGBeat>();
+
+    for (final TGBeat current : beats) {
       if (current.getStart() >= p1 && current.getStart() < p2) {
         list.add(current);
       }
@@ -784,11 +778,10 @@ public class TGMeasureManager {
   /**
    * Retorna Todos los desde Start hasta el final del compas
    */
-  public List getBeatsBeforeEnd(List beats, long fromStart) {
-    List list = new ArrayList();
-    Iterator it = beats.iterator();
-    while (it.hasNext()) {
-      TGBeat current = (TGBeat) it.next();
+  public List<TGBeat> getBeatsBeforeEnd(List<TGBeat> beats, long fromStart) {
+    List<TGBeat> list = new ArrayList<TGBeat>();
+
+    for (final TGBeat current : beats) {
       if (current.getStart() >= fromStart) {
         list.add(current);
       }
@@ -810,7 +803,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Primer Componente
    */
-  public TGBeat getFirstBeat(List components) {
+  public TGBeat getFirstBeat(List<TGBeat> components) {
     TGBeat first = null;
     for (int i = 0; i < components.size(); i++) {
       TGBeat component = (TGBeat) components.get(i);
@@ -824,7 +817,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Primer Componente
    */
-  public TGVoice getFirstVoice(List beats, int index) {
+  public TGVoice getFirstVoice(List<TGBeat> beats, int index) {
     TGVoice first = null;
     for (int i = 0; i < beats.size(); i++) {
       TGBeat current = (TGBeat) beats.get(i);
@@ -839,7 +832,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Ultimo Componente
    */
-  public TGBeat getLastBeat(List components) {
+  public TGBeat getLastBeat(List<TGBeat> components) {
     TGBeat last = null;
     for (int i = 0; i < components.size(); i++) {
       TGBeat component = (TGBeat) components.get(i);
@@ -853,7 +846,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Ultimo Componente
    */
-  public TGVoice getLastVoice(List beats, int index) {
+  public TGVoice getLastVoice(List<TGBeat> beats, int index) {
     TGVoice last = null;
     for (int i = 0; i < beats.size(); i++) {
       TGBeat current = (TGBeat) beats.get(i);
@@ -882,7 +875,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Siguiente Componente
    */
-  public TGBeat getNextBeat(List beats, TGBeat beat) {
+  public TGBeat getNextBeat(List<TGBeat> beats, TGBeat beat) {
     TGBeat next = null;
     for (int i = 0; i < beats.size(); i++) {
       TGBeat current = (TGBeat) beats.get(i);
@@ -925,7 +918,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Siguiente Componente
    */
-  public TGVoice getNextRestVoice(List beats, TGVoice voice) {
+  public TGVoice getNextRestVoice(List<TGBeat> beats, TGVoice voice) {
     TGVoice next = getNextVoice(beats, voice.getBeat(), voice.getIndex());
     while (next != null && !next.isRestVoice()) {
       next = getNextVoice(beats, next.getBeat(), next.getIndex());
@@ -936,7 +929,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Siguiente Componente
    */
-  public TGVoice getNextVoice(List beats, TGBeat beat, int index) {
+  public TGVoice getNextVoice(List<TGBeat> beats, TGBeat beat, int index) {
     TGVoice next = null;
     for (int i = 0; i < beats.size(); i++) {
       TGBeat current = (TGBeat) beats.get(i);
@@ -984,9 +977,7 @@ public class TGMeasureManager {
   }
 
   public TGNote getNote(TGVoice voice, int string) {
-    Iterator it = voice.getNotes().iterator();
-    while (it.hasNext()) {
-      TGNote note = (TGNote) it.next();
+    for (final TGNote note : voice.getNotes()) {
       if (note.getString() == string) {
         return note;
       }
@@ -997,16 +988,15 @@ public class TGMeasureManager {
   /**
    * Retorna Todas las Notas en el pulso
    */
-  public List getNotes(TGBeat beat) {
-    List notes = new ArrayList();
+  public List<TGNote> getNotes(TGBeat beat) {
+    List<TGNote> notes = new ArrayList<TGNote>();
 
     if (beat != null) {
       for (int v = 0; v < beat.countVoices(); v++) {
         TGVoice voice = beat.getVoice(v);
         if (!voice.isEmpty() && !voice.isRestVoice()) {
-          Iterator it = voice.getNotes().iterator();
-          while (it.hasNext()) {
-            TGNote note = (TGNote) it.next();
+
+          for (final TGNote note : voice.getNotes()) {
             notes.add(note);
           }
         }
@@ -1018,16 +1008,15 @@ public class TGMeasureManager {
   /**
    * Retorna Todas las Notas en la posicion Start
    */
-  public List getNotes(TGMeasure measure, long start) {
-    List notes = new ArrayList();
+  public List<TGNote> getNotes(TGMeasure measure, long start) {
+    List<TGNote> notes = new ArrayList<TGNote>();
 
     TGBeat beat = getBeat(measure, start);
     if (beat != null) {
       for (int v = 0; v < beat.countVoices(); v++) {
         TGVoice voice = beat.getVoice(v);
-        Iterator it = voice.getNotes().iterator();
-        while (it.hasNext()) {
-          TGNote note = (TGNote) it.next();
+
+        for (final TGNote note : voice.getNotes()) {
           notes.add(note);
         }
       }
@@ -1081,7 +1070,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Componente Anterior
    */
-  public TGVoice getPreviousVoice(List beats, TGBeat beat, int index) {
+  public TGVoice getPreviousVoice(List<TGBeat> beats, TGBeat beat, int index) {
     TGVoice previous = null;
     for (int i = 0; i < beats.size(); i++) {
       TGBeat current = (TGBeat) beats.get(i);
@@ -1130,18 +1119,15 @@ public class TGMeasureManager {
   }
 
   public List getSortedStringsByValue(TGTrack track, final int direction) {
-    List strings = new ArrayList();
+    List<TGString> strings = new ArrayList<TGString>();
     for (int number = 1; number <= track.stringCount(); number++) {
       strings.add(track.getString(number));
     }
 
-    Collections.sort(strings, new Comparator() {
-      public int compare(Object o1, Object o2) {
-        if (o1 != null && o2 != null && o1 instanceof TGString
-            && o2 instanceof TGString) {
-          TGString s1 = (TGString) o1;
-          TGString s2 = (TGString) o2;
-          int status = (s1.getValue() - s2.getValue());
+    Collections.sort(strings, new Comparator<TGString>() {
+      public int compare(TGString o1, TGString o2) {
+        if (o1 != null && o2 != null) {
+          int status = o1.getValue() - o2.getValue();
           if (status == 0) {
             return 0;
           }
@@ -1169,9 +1155,7 @@ public class TGMeasureManager {
    * Retorna las Nota en la posicion y cuerda
    */
   public TGVoice getVoiceIn(TGMeasure measure, long start, int voiceIndex) {
-    Iterator it = measure.getBeats().iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    for (final TGBeat beat : measure.getBeats()) {
       TGVoice voice = beat.getVoice(voiceIndex);
       if (!voice.isEmpty() && beat.getStart() <= start
           && (beat.getStart() + voice.getDuration().getTime() > start)) {
@@ -1181,11 +1165,10 @@ public class TGMeasureManager {
     return null;
   }
 
-  public List getVoicesBeforeEnd(List beats, long fromStart, int index) {
-    List list = new ArrayList();
-    Iterator it = beats.iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+  public List<TGVoice> getVoicesBeforeEnd(List<TGBeat> beats, long fromStart, int index) {
+    List<TGVoice> list = new ArrayList<TGVoice>();
+
+    for (final TGBeat beat : beats) {
       if (beat.getStart() >= fromStart) {
         TGVoice voice = beat.getVoice(index);
         if (!voice.isEmpty()) {
@@ -1300,10 +1283,8 @@ public class TGMeasureManager {
   /**
    * Mueve los componentes
    */
-  private void moveBeats(List beats, long theMove) {
-    Iterator it = beats.iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+  private void moveBeats(List<TGBeat> beats, long theMove) {
+    for (final TGBeat beat : beats) {
       moveBeat(beat, theMove);
     }
   }
@@ -1322,12 +1303,12 @@ public class TGMeasureManager {
     long measureEnd = (measureStart + measure.getLength());
 
     // Muevo los componentes
-    List beatsToMove = getBeatsBeforeEnd(measure.getBeats(), start);
+    List<TGBeat> beatsToMove = getBeatsBeforeEnd(measure.getBeats(), start);
     moveBeats(beatsToMove, theMove);
 
     if (success) {
-      List beatsToRemove = new ArrayList();
-      List beats = new ArrayList(measure.getBeats());
+      List<TGBeat> beatsToRemove = new ArrayList<TGBeat>();
+      List<TGBeat> beats = new ArrayList<TGBeat>(measure.getBeats());
 
       // Verifica los silencios a eliminar al principio del compas
       TGBeat first = getFirstBeat(beats);
@@ -1361,9 +1342,7 @@ public class TGMeasureManager {
 
       if (success) {
         // Elimino los silencios que quedaron fuera del compas.
-        Iterator it = beatsToRemove.iterator();
-        while (it.hasNext()) {
-          TGBeat beat = (TGBeat) it.next();
+        for (final TGBeat beat : beatsToRemove) {
           removeBeat(beat);
         }
 
@@ -1418,7 +1397,7 @@ public class TGMeasureManager {
 
   public void moveOutOfBoundsBeatsToNewMeasure(TGMeasure measure,
       boolean newMeasureAlsoForRestBeats) {
-    List beats = new ArrayList();
+    List<TGBeat> beats = new ArrayList<TGBeat>();
     long mStart = measure.getStart();
     long mLength = measure.getLength();
     for (int i = 0; i < measure.countBeats(); i++) {
@@ -1542,10 +1521,10 @@ public class TGMeasureManager {
     long measureStart = measure.getStart();
     long measureEnd = (measureStart + measure.getLength());
 
-    List voicesToMove = getVoicesBeforeEnd(measure.getBeats(), start,
+    List<TGVoice> voicesToMove = getVoicesBeforeEnd(measure.getBeats(), start,
         voiceIndex);
-    List voicesToRemove = new ArrayList();
-    List currentBeats = getBeatsBeforeEnd(measure.getBeats(), start);
+    List<TGVoice> voicesToRemove = new ArrayList<TGVoice>();
+    List<TGBeat> currentBeats = getBeatsBeforeEnd(measure.getBeats(), start);
 
     // Verifica los silencios a eliminar al principio del compas
     TGVoice first = getFirstVoice(currentBeats, voiceIndex);
@@ -1584,10 +1563,8 @@ public class TGMeasureManager {
       this.moveVoices(voicesToMove, theMove);
 
       // Elimino los silencios que quedaron fuera del compas.
-      Iterator it = voicesToRemove.iterator();
-      while (it.hasNext()) {
-        TGVoice beat = (TGVoice) it.next();
-        removeVoice(beat);
+      for (final TGVoice voice : voicesToRemove) {
+        removeVoice(voice);
       }
 
       // Se crean silencios en los espacios vacios, si la duracion fue
@@ -1692,19 +1669,15 @@ public class TGMeasureManager {
   }
 
   public void removeBeatsBeetween(TGMeasure measure, long p1, long p2) {
-    List beats = getBeatsBeetween(measure.getBeats(), p1, p2);
-    Iterator it = beats.iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    List<TGBeat> beats = getBeatsBeetween(measure.getBeats(), p1, p2);
+    for (final TGBeat beat : beats) {
       removeBeat(beat);
     }
   }
 
   public void removeBeatsBeforeEnd(TGMeasure measure, long fromStart) {
-    List beats = getBeatsBeforeEnd(measure.getBeats(), fromStart);
-    Iterator it = beats.iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    List<TGBeat> beats = getBeatsBeforeEnd(measure.getBeats(), fromStart);
+    for (final TGBeat beat : beats) {
       removeBeat(beat);
     }
   }
@@ -1720,10 +1693,8 @@ public class TGMeasureManager {
   }
 
   public void removeEmptyBeats(TGMeasure measure) {
-    List beats = new ArrayList();
-    Iterator it = measure.getBeats().iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    List<TGBeat> beats = new ArrayList<TGBeat>();
+    for (final TGBeat beat : measure.getBeats()) {
       boolean emptyBeat = true;
       for (int v = 0; v < beat.countVoices(); v++) {
         TGVoice voice = beat.getVoice(v);
@@ -1736,9 +1707,7 @@ public class TGMeasureManager {
       }
     }
 
-    it = beats.iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    for (final TGBeat beat : beats) {
       this.removeBeat(beat);
     }
   }
@@ -1746,10 +1715,8 @@ public class TGMeasureManager {
   public void removeMeasureVoices(TGMeasure measure, int index) {
     boolean hasNotes = false;
 
-    List voices = new ArrayList();
-    Iterator it = measure.getBeats().iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    List<TGVoice> voices = new ArrayList<TGVoice>();
+    for (final TGBeat beat : measure.getBeats()) {
       TGVoice voice = beat.getVoice(index);
       if (voice.isRestVoice()) {
         voices.add(voice);
@@ -1760,9 +1727,7 @@ public class TGMeasureManager {
     }
 
     if (!hasNotes) {
-      it = voices.iterator();
-      while (it.hasNext()) {
-        TGVoice voice = (TGVoice) it.next();
+      for (final TGVoice voice : voices) {
         this.removeVoice(voice);
       }
     }
@@ -1817,25 +1782,20 @@ public class TGMeasureManager {
   }
 
   public void removeNotesAfterString(TGMeasure measure, int string) {
-    List notesToRemove = new ArrayList();
+    List<TGNote> notesToRemove = new ArrayList<TGNote>();
 
-    Iterator beats = measure.getBeats().iterator();
-    while (beats.hasNext()) {
-      TGBeat beat = (TGBeat) beats.next();
+    for (final TGBeat beat : measure.getBeats()) {
       for (int v = 0; v < beat.countVoices(); v++) {
         TGVoice voice = beat.getVoice(v);
-        Iterator notes = voice.getNotes().iterator();
-        while (notes.hasNext()) {
-          TGNote note = (TGNote) notes.next();
+        for (final TGNote note : voice.getNotes()) {
           if (note.getString() > string) {
             notesToRemove.add(note);
           }
         }
       }
     }
-    Iterator it = notesToRemove.iterator();
-    while (it.hasNext()) {
-      TGNote note = (TGNote) it.next();
+
+    for (final TGNote note : notesToRemove) {
       removeNote(note);
     }
   }
@@ -1896,14 +1856,12 @@ public class TGMeasureManager {
   }
 
   public void removeVoicesOutOfTime(TGMeasure measure) {
-    List voicesToRemove = new ArrayList();
+    List<TGVoice> voicesToRemove = new ArrayList<TGVoice>();
 
     long mStart = measure.getStart();
     long mEnd = mStart + measure.getLength();
 
-    Iterator beats = measure.getBeats().iterator();
-    while (beats.hasNext()) {
-      TGBeat beat = (TGBeat) beats.next();
+    for (final TGBeat beat : measure.getBeats()) {
       for (int v = 0; v < beat.countVoices(); v++) {
         TGVoice voice = beat.getVoice(v);
         if (!voice.isEmpty()) {
@@ -2052,7 +2010,7 @@ public class TGMeasureManager {
     return false;
   }
 
-  private boolean transposeNote(TGNote note, List notes, List strings,
+  private boolean transposeNote(TGNote note, List<TGNote> notes, List strings,
       int transposition, boolean tryKeepString, boolean forceChangeString) {
     boolean canTransposeFret = false;
 
@@ -2244,7 +2202,7 @@ public class TGMeasureManager {
     long beatStart = beat.getStart();
     long beatLength = duration.getTime();
     long beatEnd = (beatStart + beatLength);
-    List beats = measure.getBeats();
+    List<TGBeat> beats = measure.getBeats();
 
     // Verifico si hay un beat en el mismo lugar, y comparo las duraciones.
     TGBeat currentBeat = getBeat(measure, beatStart);
@@ -2275,7 +2233,7 @@ public class TGMeasureManager {
     if (nextVoice != null && !nextVoice.isEmpty() && nextVoice.isRestVoice()) {
       // Verifico si lo que sigue es un silencio. y lo borro
       long nextBeatEnd = 0;
-      List nextBeats = new ArrayList();
+      List<TGVoice> nextBeats = new ArrayList<TGVoice>();
       while (nextVoice != null && !nextVoice.isEmpty()
           && nextVoice.isRestVoice() && !nextVoice.getBeat().isTextBeat()) {
         nextBeats.add(nextVoice);
@@ -2313,7 +2271,7 @@ public class TGMeasureManager {
         }
 
         if (requiredLength <= (nextSilenceLength + errorMargin)) {
-          List voices = getVoicesBeforeEnd(measure.getBeats(), nextVoice
+          List<TGVoice> voices = getVoicesBeforeEnd(measure.getBeats(), nextVoice
               .getBeat().getStart(), voice);
           while (!voices.isEmpty()) {
             TGVoice currentVocie = (TGVoice) voices.get(0);
