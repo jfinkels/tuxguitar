@@ -2,6 +2,7 @@ package org.herac.tuxguitar.gui.editors.chord;
 
 import java.io.File;
 import java.util.List;
+
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.chord.xml.ChordXMLReader;
 import org.herac.tuxguitar.gui.editors.chord.xml.ChordXMLWriter;

@@ -1,10 +1,10 @@
 package org.herac.tuxguitar.midiinput;
 
 import javax.sound.midi.MidiDevice;
-import javax.sound.midi.Transmitter;
-import javax.sound.midi.Receiver;
 import javax.sound.midi.MidiMessage;
+import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Transmitter;
 
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.util.TGSynchronizer;

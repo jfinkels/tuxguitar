@@ -17,9 +17,9 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.actions.duration.ChangeDivisionTypeAction;
 import org.herac.tuxguitar.gui.actions.duration.ChangeDottedDurationAction;
 import org.herac.tuxguitar.gui.actions.duration.ChangeDoubleDottedDurationAction;
-import org.herac.tuxguitar.gui.actions.duration.ChangeDivisionTypeAction;
 import org.herac.tuxguitar.gui.actions.duration.SetEighthDurationAction;
 import org.herac.tuxguitar.gui.actions.duration.SetHalfDurationAction;
 import org.herac.tuxguitar.gui.actions.duration.SetQuarterDurationAction;
@@ -29,8 +29,8 @@ import org.herac.tuxguitar.gui.actions.duration.SetThirtySecondDurationAction;
 import org.herac.tuxguitar.gui.actions.duration.SetWholeDurationAction;
 import org.herac.tuxguitar.gui.editors.TablatureEditor;
 import org.herac.tuxguitar.gui.items.ToolItems;
-import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGDivisionType;
+import org.herac.tuxguitar.song.models.TGDuration;
 
 /**
  * @author julian

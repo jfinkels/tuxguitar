@@ -12,8 +12,8 @@ import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
-import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGDivisionType;
+import org.herac.tuxguitar.song.models.TGDuration;
 
 /**
  * @author julian

@@ -10,8 +10,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.herac.tuxguitar.gui.system.keybindings.KeyBindingAction;
 import org.herac.tuxguitar.gui.system.keybindings.KeyBinding;
+import org.herac.tuxguitar.gui.system.keybindings.KeyBindingAction;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;

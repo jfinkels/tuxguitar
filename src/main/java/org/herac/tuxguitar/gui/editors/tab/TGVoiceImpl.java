@@ -8,8 +8,8 @@ import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGNotePainter;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGSilencePainter;
 import org.herac.tuxguitar.song.factory.TGFactory;
-import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGDivisionType;
+import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGVoice;
 
 public class TGVoiceImpl extends TGVoice{

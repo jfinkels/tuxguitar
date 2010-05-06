@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.herac.tuxguitar.player.base.MidiPlayerException;
 import org.herac.tuxguitar.player.base.MidiOutputPortProvider;
+import org.herac.tuxguitar.player.base.MidiPlayerException;
 
 public class MidiOutputPortProviderImpl implements MidiOutputPortProvider{
 	
