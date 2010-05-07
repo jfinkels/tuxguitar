@@ -1,0 +1,3 @@
+* unit tests
+* remove repeated code
+* add @Override annotations where appropriate
