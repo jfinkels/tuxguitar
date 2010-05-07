@@ -837,9 +837,7 @@ public class MidiPlayer {
   public void updateControllers() {
     this.anySolo = false;
     boolean percussionUpdated = false;
-    Iterator it = this.songManager.getSong().getTracks();
-    while (it.hasNext()) {
-      TGTrack track = (TGTrack) it.next();
+    for (final TGTrack track : this.songManager.getSong().getTracks()) {
       this.updateController(track);
       this.anySolo = ((!this.anySolo) ? track.isSolo() : this.anySolo);
       percussionUpdated = (percussionUpdated || track.isPercussionTrack());
@@ -897,9 +895,7 @@ public class MidiPlayer {
 
   public void updatePrograms() {
     try {
-      Iterator it = this.songManager.getSong().getTracks();
-      while (it.hasNext()) {
-        TGTrack track = (TGTrack) it.next();
+      for (final TGTrack track : this.songManager.getSong().getTracks()) {
         getOutputTransmitter()
             .sendProgramChange(track.getChannel().getChannel(),
                 track.getChannel().getInstrument());

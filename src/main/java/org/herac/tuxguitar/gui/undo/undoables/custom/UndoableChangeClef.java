@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.undo.undoables.custom;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.gui.TuxGuitar;
@@ -11,6 +10,7 @@ import org.herac.tuxguitar.gui.undo.CannotRedoException;
 import org.herac.tuxguitar.gui.undo.CannotUndoException;
 import org.herac.tuxguitar.gui.undo.UndoableEdit;
 import org.herac.tuxguitar.gui.undo.undoables.UndoableCaretHelper;
+import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGTrack;
 
 public class UndoableChangeClef implements UndoableEdit {
@@ -44,12 +44,12 @@ public class UndoableChangeClef implements UndoableEdit {
     undoable.position = caret.getPosition();
     undoable.undoableClef = caret.getMeasure().getClef();
     undoable.track = caret.getTrack();
-    undoable.nextClefPositions = new ArrayList();
+    undoable.nextClefPositions = new ArrayList<ClefPosition>();
 
     int prevClef = undoable.undoableClef;
-    Iterator it = caret.getTrack().getMeasures();
-    while (it.hasNext()) {
-      TGMeasureImpl measure = (TGMeasureImpl) it.next();
+
+    for (final TGMeasure meas : caret.getTrack().getMeasures()) {
+      TGMeasureImpl measure = (TGMeasureImpl) meas;
       if (measure.getStart() > undoable.position) {
         int currClef = measure.getClef();
         if (prevClef != currClef) {
@@ -65,7 +65,7 @@ public class UndoableChangeClef implements UndoableEdit {
   }
 
   private int doAction;
-  private List nextClefPositions;
+  private List<ClefPosition> nextClefPositions;
   private long position;
   private int redoableClef;
   private UndoableCaretHelper redoCaret;
@@ -115,9 +115,8 @@ public class UndoableChangeClef implements UndoableEdit {
     TuxGuitar.instance().getSongManager().getTrackManager().changeClef(
         this.track, this.position, this.undoableClef, this.toEnd);
     if (this.toEnd) {
-      Iterator it = this.nextClefPositions.iterator();
-      while (it.hasNext()) {
-        ClefPosition ksp = (ClefPosition) it.next();
+
+      for (final ClefPosition ksp : this.nextClefPositions) {
         TuxGuitar.instance().getSongManager().getTrackManager().changeClef(
             this.track, ksp.getPosition(), ksp.getClef(), true);
       }

@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.undo.undoables.custom;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.gui.TuxGuitar;
@@ -22,16 +21,16 @@ public class UndoableChangeTempo implements UndoableEdit {
   }
 
   private int doAction;
-  private List redoableTempos;
+  private List<TGTempo> redoableTempos;
   private UndoableCaretHelper redoCaret;
-  private List undoableTempos;
+  private List<TGTempo> undoableTempos;
 
   private UndoableCaretHelper undoCaret;
 
   private UndoableChangeTempo() {
     super();
-    this.undoableTempos = new ArrayList();
-    this.redoableTempos = new ArrayList();
+    this.undoableTempos = new ArrayList<TGTempo>();
+    this.redoableTempos = new ArrayList<TGTempo>();
   }
 
   public boolean canRedo() {
@@ -48,11 +47,9 @@ public class UndoableChangeTempo implements UndoableEdit {
     return this;
   }
 
-  private void getTempos(List list) {
-    Iterator it = TuxGuitar.instance().getSongManager().getSong()
-        .getMeasureHeaders();
-    while (it.hasNext()) {
-      TGMeasureHeader header = (TGMeasureHeader) it.next();
+  private void getTempos(List<TGTempo> list) {
+    for (final TGMeasureHeader header : TuxGuitar.instance().getSongManager()
+        .getSong().getMeasureHeaders()) {
       list.add(header.getTempo().clone(
           TuxGuitar.instance().getSongManager().getFactory()));
     }
@@ -68,7 +65,7 @@ public class UndoableChangeTempo implements UndoableEdit {
     this.doAction = UNDO_ACTION;
   }
 
-  private void setTempos(List tempos) {
+  private void setTempos(List<TGTempo> tempos) {
     int length = tempos.size();
     if (length != TuxGuitar.instance().getSongManager().getSong()
         .countMeasureHeaders()) {

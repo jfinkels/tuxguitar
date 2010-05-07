@@ -34,12 +34,12 @@ public class PageViewLayout extends ViewLayout {
     protected boolean fullLine;
     protected int lastIndex;
     protected int maxY = 0;
-    protected List measures;
+    protected List<Integer> measures;
     protected int minY = 0;
     protected int tempWith;
 
     public TempLine() {
-      this.measures = new ArrayList();
+      this.measures = new ArrayList<Integer>();
     }
 
     protected void addMeasure(int index) {
@@ -188,9 +188,8 @@ public class PageViewLayout extends ViewLayout {
     int nextMeasureIndex = 0;
     while (measureCount > nextMeasureIndex) {
       TempLine line = null;
-      Iterator tracks = getSongManager().getSong().getTracks();
-      while (tracks.hasNext()) {
-        TGTrackImpl track = (TGTrackImpl) tracks.next();
+      for (final TGTrack trk : getSongManager().getSong().getTracks()) {
+        TGTrackImpl track = (TGTrackImpl) trk;
         if (number < 0 || track.getNumber() == number) {
 
           TGTrackSpacing ts = new TGTrackSpacing(this);

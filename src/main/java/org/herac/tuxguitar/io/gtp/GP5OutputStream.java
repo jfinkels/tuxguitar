@@ -102,9 +102,7 @@ public class GP5OutputStream extends GTPOutputStream {
       channels[i].setTremolo((short) 0);
     }
 
-    Iterator it = song.getTracks();
-    while (it.hasNext()) {
-      TGTrack track = (TGTrack) it.next();
+    for (final TGTrack track : song.getTracks()) {
       channels[track.getChannel().getChannel()].setInstrument(track
           .getChannel().getInstrument());
       channels[track.getChannel().getChannel()].setVolume(track.getChannel()
@@ -412,9 +410,7 @@ public class GP5OutputStream extends GTPOutputStream {
 
   private void writeLyrics(TGSong song) throws IOException {
     TGTrack lyricTrack = null;
-    Iterator it = song.getTracks();
-    while (it.hasNext()) {
-      TGTrack track = (TGTrack) it.next();
+    for (final TGTrack track : song.getTracks()) {
       if (!track.getLyrics().isEmpty()) {
         lyricTrack = track;
         break;

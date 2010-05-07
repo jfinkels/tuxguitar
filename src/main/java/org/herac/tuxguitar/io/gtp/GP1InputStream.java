@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.io.gtp;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.song.managers.TGSongManager;
@@ -50,9 +49,8 @@ public class GP1InputStream extends GTPInputStream {
   private TGBeat getBeat(TGMeasure measure, long start) {
     if (start >= measure.getStart()
         && start < (measure.getStart() + measure.getLength())) {
-      Iterator beats = measure.getBeats().iterator();
-      while (beats.hasNext()) {
-        TGBeat beat = (TGBeat) beats.next();
+
+      for (final TGBeat beat : measure.getBeats()) {
         if (beat.getStart() == start) {
           return beat;
         }
@@ -76,9 +74,8 @@ public class GP1InputStream extends GTPInputStream {
 
   private int getClef(TGTrack track) {
     if (!track.isPercussionTrack()) {
-      Iterator it = track.getStrings().iterator();
-      while (it.hasNext()) {
-        TGString string = (TGString) it.next();
+
+      for (final TGString string : track.getStrings()) {
         if (string.getValue() <= 34) {
           return TGMeasure.CLEF_BASS;
         }
@@ -94,9 +91,8 @@ public class GP1InputStream extends GTPInputStream {
   private int parseRepeatAlternative(TGSong song, int measure, int value) {
     int repeatAlternative = 0;
     int existentAlternatives = 0;
-    Iterator it = song.getMeasureHeaders();
-    while (it.hasNext()) {
-      TGMeasureHeader header = (TGMeasureHeader) it.next();
+
+    for (final TGMeasureHeader header : song.getMeasureHeaders()) {
       if (header.getNumber() == measure) {
         break;
       }
@@ -152,9 +148,8 @@ public class GP1InputStream extends GTPInputStream {
         TGBeat previousBeat = getBeat(track, measure, lastReadedStart);
         if (previousBeat != null) {
           TGVoice previousVoice = previousBeat.getVoice(0);
-          Iterator it = previousVoice.getNotes().iterator();
-          while (it.hasNext()) {
-            TGNote previous = (TGNote) it.next();
+
+          for (final TGNote previous : previousVoice.getNotes()) {
             TGNote note = getFactory().newNote();
             note.setValue(previous.getValue());
             note.setString(previous.getString());

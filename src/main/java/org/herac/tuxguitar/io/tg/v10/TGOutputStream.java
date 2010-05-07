@@ -216,9 +216,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
 
     // escribo las pistas
     TGMeasureHeader lastHeader = null;
-    Iterator headers = song.getMeasureHeaders();
-    while (headers.hasNext()) {
-      TGMeasureHeader header = (TGMeasureHeader) headers.next();
+    for (final TGMeasureHeader header : song.getMeasureHeaders()) {
       writeMeasureHeader(header, lastHeader);
       lastHeader = header;
     }
@@ -718,9 +716,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
 
     // escribo los compases
     TGMeasure lastMeasure = null;
-    Iterator measures = track.getMeasures();
-    while (measures.hasNext()) {
-      TGMeasure measure = (TGMeasure) measures.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       writeMeasure(measure, lastMeasure);
       lastMeasure = measure;
     }

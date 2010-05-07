@@ -6,8 +6,6 @@
  */
 package org.herac.tuxguitar.gui.editors.tab.layout;
 
-import java.util.Iterator;
-
 import org.eclipse.swt.graphics.Rectangle;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.TGLyricImpl;
@@ -15,6 +13,8 @@ import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackSpacing;
 import org.herac.tuxguitar.gui.editors.tab.Tablature;
+import org.herac.tuxguitar.song.models.TGMeasure;
+import org.herac.tuxguitar.song.models.TGTrack;
 
 /**
  * @author julian
@@ -38,9 +38,8 @@ public class LinearViewLayout extends ViewLayout {
     int posY = fromY;
     int width = getFirstMeasureSpacing();
 
-    Iterator measures = track.getMeasures();
-    while (measures.hasNext()) {
-      TGMeasureImpl measure = (TGMeasureImpl) measures.next();
+    for (final TGMeasure meas : track.getMeasures()) {
+      TGMeasureImpl measure = (TGMeasureImpl) meas;
 
       // asigno la posicion dentro del compas
       measure.setPosX(posX);
@@ -81,9 +80,9 @@ public class LinearViewLayout extends ViewLayout {
     int posY = fromY + getFirstTrackSpacing();
     int height = getFirstTrackSpacing();
     int trackHeight;
-    Iterator tracks = getSongManager().getSong().getTracks();
-    while (tracks.hasNext()) {
-      TGTrackImpl track = (TGTrackImpl) tracks.next();
+    
+    for (final TGTrack trk : getSongManager().getSong().getTracks()) {
+      TGTrackImpl track = (TGTrackImpl) trk;
       if (number < 0 || track.getNumber() == number) {
 
         TGTrackSpacing ts = new TGTrackSpacing(this);
@@ -100,9 +99,8 @@ public class LinearViewLayout extends ViewLayout {
           minY = -(getScoreLineSpacing() * 3);
         }
 
-        Iterator measures = track.getMeasures();
-        while (measures.hasNext()) {
-          TGMeasureImpl measure = (TGMeasureImpl) measures.next();
+        for (final TGMeasure meas : track.getMeasures()) {
+          TGMeasureImpl measure = (TGMeasureImpl) meas;
           maxY = (measure.getMaxY() > maxY) ? measure.getMaxY() : maxY;
           minY = (measure.getMinY() < minY) ? measure.getMinY() : minY;
           measure.registerSpacing(this, ts);

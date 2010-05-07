@@ -25,10 +25,8 @@ public class TGSongSegmentHelper {
     for (int number = number1; number <= number2; number++) {
       segment.getHeaders().add(this.sm.getMeasureHeader(number));
     }
-    Iterator it = this.sm.getSong().getTracks();
-    while (it.hasNext()) {
-      TGTrack track = (TGTrack) it.next();
-      List measures = new ArrayList();
+    for (final TGTrack track : this.sm.getSong().getTracks()) {
+      List<TGMeasure> measures = new ArrayList<TGMeasure>();
       for (int number = number1; number <= number2; number++) {
         measures.add(this.sm.getTrackManager().getMeasure(track, number));
       }
@@ -39,7 +37,7 @@ public class TGSongSegmentHelper {
 
   public TGSongSegment copyMeasures(int m1, int m2, TGTrack track) {
     TGSongSegment segment = new TGSongSegment();
-    List measures = new ArrayList();
+    List<TGMeasure> measures = new ArrayList<TGMeasure>();
     int number1 = Math.max(1, m1);
     int number2 = Math.min(this.sm.getSong().countMeasureHeaders(), m2);
     for (int number = number1; number <= number2; number++) {
@@ -118,9 +116,7 @@ public class TGSongSegmentHelper {
       this.sm.addMeasureHeader(header.getNumber() - 1, header);
     }
 
-    it = this.sm.getSong().getTracks();
-    while (it.hasNext()) {
-      TGTrack currTrack = (TGTrack) it.next();
+    for (final TGTrack currTrack : this.sm.getSong().getTracks()) {
       List measures = null;
 
       Iterator tracks = segment.getTracks().iterator();

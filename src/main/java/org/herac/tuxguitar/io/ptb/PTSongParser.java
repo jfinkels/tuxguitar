@@ -1,7 +1,5 @@
 package org.herac.tuxguitar.io.ptb;
 
-import java.util.Iterator;
-
 import org.herac.tuxguitar.io.ptb.base.PTBar;
 import org.herac.tuxguitar.io.ptb.base.PTBeat;
 import org.herac.tuxguitar.io.ptb.base.PTComponent;
@@ -200,9 +198,7 @@ public class PTSongParser {
     tgVoice.getDuration().getDivision().setTimes(beat.getTimes());
     tgVoice.getDuration().getDivision().setEnters(beat.getEnters());
 
-    Iterator it = beat.getNotes().iterator();
-    while (it.hasNext()) {
-      PTNote ptNote = (PTNote) it.next();
+    for (final PTNote ptNote : beat.getNotes()) {
       if (ptNote.getString() <= measure.getTrack().stringCount()
           && ptNote.getValue() >= 0) {
         TGNote note = this.manager.getFactory().newNote();
@@ -252,9 +248,7 @@ public class PTSongParser {
       }
 
       // If track was already created, but it's not in use
-      Iterator it = this.manager.getSong().getTracks();
-      while (it.hasNext()) {
-        TGTrack tgTrack = (TGTrack) it.next();
+      for (final TGTrack tgTrack : this.manager.getSong().getTracks()) {
         if (hasSameInfo(tgTrack, info)) {
           boolean exists = false;
           for (int i = 0; i < this.helper.getInfoHelper().countStaffTracks(); i++) {

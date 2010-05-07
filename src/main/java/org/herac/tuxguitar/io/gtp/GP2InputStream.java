@@ -93,9 +93,7 @@ public class GP2InputStream extends GTPInputStream {
   private int parseRepeatAlternative(TGSong song, int measure, int value) {
     int repeatAlternative = 0;
     int existentAlternatives = 0;
-    Iterator it = song.getMeasureHeaders();
-    while (it.hasNext()) {
-      TGMeasureHeader header = (TGMeasureHeader) it.next();
+    for (final TGMeasureHeader header : song.getMeasureHeaders()) {
       if (header.getNumber() == measure) {
         break;
       }

@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.gui.mixer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -52,7 +51,7 @@ public class TGMixer implements TGUpdateListener, IconLoader, LanguageLoader {
       | REVERB | PHASER | TREMOLO | CHANNEL);
 
   protected Shell dialog;
-  private List tracks;
+  private List<TGMixerTrack> tracks;
   private Scale volumeScale;
   private String volumeTip;
   private int volumeValue;
@@ -60,7 +59,7 @@ public class TGMixer implements TGUpdateListener, IconLoader, LanguageLoader {
   private Label volumeValueTitleLabel;
 
   public TGMixer() {
-    this.tracks = new ArrayList();
+    this.tracks = new ArrayList<TGMixerTrack>();
   }
 
   public void addListeners() {
@@ -105,9 +104,8 @@ public class TGMixer implements TGUpdateListener, IconLoader, LanguageLoader {
   }
 
   public synchronized void fireChanges(TGChannel channel, int type) {
-    Iterator it = this.tracks.iterator();
-    while (it.hasNext()) {
-      TGMixerTrack mixer = (TGMixerTrack) it.next();
+    
+    for (final TGMixerTrack mixer : this.tracks) {
       if (mixer.getTrack().getChannel().getChannel() == channel.getChannel()) {
         channel.copy(mixer.getTrack().getChannel());
       }
@@ -137,9 +135,8 @@ public class TGMixer implements TGUpdateListener, IconLoader, LanguageLoader {
 
   protected void loadData() {
     this.tracks.clear();
-    Iterator it = TuxGuitar.instance().getSongManager().getSong().getTracks();
-    while (it.hasNext()) {
-      TGTrack track = (TGTrack) it.next();
+    
+    for (final TGTrack track : TuxGuitar.instance().getSongManager().getSong().getTracks()) {
       TGMixerTrack trackMixer = new TGMixerTrack(this, track);
       trackMixer.init(this.dialog);
       this.tracks.add(trackMixer);
@@ -195,9 +192,8 @@ public class TGMixer implements TGUpdateListener, IconLoader, LanguageLoader {
 
   public synchronized void loadProperties(boolean pack) {
     if (!isDisposed()) {
-      Iterator it = this.tracks.iterator();
-      while (it.hasNext()) {
-        TGMixerTrack mixer = (TGMixerTrack) it.next();
+      
+      for (final TGMixerTrack mixer : this.tracks) {
         mixer.loadProperties();
       }
       this.volumeValueTitleLabel.setText(TuxGuitar.getProperty("mixer.volume")
@@ -264,9 +260,8 @@ public class TGMixer implements TGUpdateListener, IconLoader, LanguageLoader {
 
   public synchronized void updateItems() {
     if (!isDisposed()) {
-      Iterator it = this.tracks.iterator();
-      while (it.hasNext()) {
-        TGMixerTrack mixer = (TGMixerTrack) it.next();
+      
+      for (final TGMixerTrack mixer : this.tracks) {
         mixer.updateItems();
       }
     }
@@ -276,9 +271,7 @@ public class TGMixer implements TGUpdateListener, IconLoader, LanguageLoader {
     if (!isDisposed()) {
       this.loadVolume();
 
-      Iterator it = this.tracks.iterator();
-      while (it.hasNext()) {
-        TGMixerTrack mixer = (TGMixerTrack) it.next();
+      for (final TGMixerTrack mixer : this.tracks) {
         mixer.fireChanges(CHANGE_ALL);
       }
     }

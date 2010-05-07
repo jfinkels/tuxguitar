@@ -88,9 +88,7 @@ public class ASCIITabOutputStream {
     this.out.drawStringLine("Album: " + song.getAlbum());
     this.out.drawStringLine("Author: " + song.getAuthor());
 
-    Iterator it = song.getTracks();
-    while (it.hasNext()) {
-      TGTrack track = (TGTrack) it.next();
+    for (final TGTrack track : song.getTracks()) {
       this.out.nextLine();
       drawTrack(track);
       this.out.nextLine();

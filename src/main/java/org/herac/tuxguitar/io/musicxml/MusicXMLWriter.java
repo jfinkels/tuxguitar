@@ -403,9 +403,7 @@ public class MusicXMLWriter {
   private void writePartList(Node parent) {
     Node partList = this.addNode(parent, "part-list");
 
-    Iterator tracks = this.manager.getSong().getTracks();
-    while (tracks.hasNext()) {
-      TGTrack track = (TGTrack) tracks.next();
+    for (final TGTrack track : this.manager.getSong().getTracks()) {
 
       Node scoreParts = this.addNode(partList, "score-part");
       this.addAttribute(scoreParts, "id", "P" + track.getNumber());
@@ -428,18 +426,14 @@ public class MusicXMLWriter {
   }
 
   private void writeParts(Node parent) {
-    Iterator tracks = this.manager.getSong().getTracks();
-    while (tracks.hasNext()) {
-      TGTrack track = (TGTrack) tracks.next();
+    for (final TGTrack track : this.manager.getSong().getTracks()) {
       Node part = this.addAttribute(this.addNode(parent, "part"), "id", "P"
           + track.getNumber());
 
       TGMeasure previous = null;
 
-      Iterator measures = track.getMeasures();
-      while (measures.hasNext()) {
+      for (final TGMeasure srcMeasure : track.getMeasures()) {
         // TODO: Add multivoice support.
-        TGMeasure srcMeasure = (TGMeasure) measures.next();
         TGMeasure measure = new TGVoiceJoiner(this.manager.getFactory(),
             srcMeasure).process();
         Node measureNode = this.addAttribute(this.addNode(part, "measure"),

@@ -74,9 +74,7 @@ public class TGTrackManager {
   }
 
   public void autoCompleteSilences(TGTrack track) {
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       this.songManager.getMeasureManager().autoCompleteSilences(measure);
     }
   }
@@ -170,9 +168,7 @@ public class TGTrackManager {
 
   public TGMeasure getFirstMeasure(TGTrack track) {
     TGMeasure firstMeasure = null;
-    Iterator measures = track.getMeasures();
-    while (measures.hasNext()) {
-      TGMeasure currMeasure = (TGMeasure) measures.next();
+    for (final TGMeasure currMeasure : track.getMeasures()) {
       if (firstMeasure == null
           || (currMeasure.getStart() < firstMeasure.getStart())) {
         firstMeasure = currMeasure;
@@ -186,9 +182,7 @@ public class TGTrackManager {
   }
 
   public TGMeasure getMeasure(TGTrack track, int number) {
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       if (measure.getNumber() == number) {
         return measure;
       }
@@ -197,9 +191,7 @@ public class TGTrackManager {
   }
 
   public TGMeasure getMeasureAt(TGTrack track, long start) {
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       long measureStart = measure.getStart();
       long measureLength = measure.getLength();
       if (start >= measureStart && start < measureStart + measureLength) {
@@ -214,9 +206,7 @@ public class TGTrackManager {
    */
   public List getMeasuresBeforeEnd(TGTrack track, long fromStart) {
     List measures = new ArrayList();
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure currMeasure = (TGMeasure) it.next();
+    for (final TGMeasure currMeasure : track.getMeasures()) {
       if (currMeasure.getStart() >= fromStart) {
         measures.add(currMeasure);
       }
@@ -229,9 +219,7 @@ public class TGTrackManager {
    */
   public List getMeasuresBetween(TGTrack track, long p1, long p2) {
     List measures = new ArrayList();
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       if ((measure.getStart() + measure.getLength()) > p1
           && measure.getStart() < p2) {
         measures.add(measure);
@@ -304,9 +292,7 @@ public class TGTrackManager {
   }
 
   public void orderBeats(TGTrack track) {
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       this.songManager.getMeasureManager().orderBeats(measure);
     }
   }
@@ -324,9 +310,7 @@ public class TGTrackManager {
   }
 
   public void removeNotesAfterString(TGTrack track, int string) {
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       getSongManager().getMeasureManager().removeNotesAfterString(measure,
           string);
     }
@@ -340,9 +324,7 @@ public class TGTrackManager {
 
   public void transposeNotes(TGTrack track, int transposition,
       boolean tryKeepString, boolean applyToChords, int applyToString) {
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       this.songManager.getMeasureManager().transposeNotes(measure,
           transposition, tryKeepString, applyToChords, applyToString);
     }
@@ -350,9 +332,7 @@ public class TGTrackManager {
 
   public void transposeNotes(TGTrack track, int[] transpositionStrings,
       boolean tryKeepString, boolean applyToChords) {
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       this.songManager.getMeasureManager().transposeNotes(measure,
           transpositionStrings, tryKeepString, applyToChords);
     }

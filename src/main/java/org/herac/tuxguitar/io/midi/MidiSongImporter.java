@@ -407,9 +407,8 @@ public class MidiSongImporter implements TGLocalFileImporter {
   private TGMeasure getMeasure(TGTrack track, long tick) {
     long realTick = (tick >= TGDuration.QUARTER_TIME) ? tick
         : TGDuration.QUARTER_TIME;
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    
+    for (final TGMeasure measure : track.getMeasures()) {
       if (realTick >= measure.getStart()
           && realTick < measure.getStart() + measure.getLength()) {
         return measure;
@@ -729,25 +728,21 @@ class SongAdjuster {
   }
 
   public TGSong adjustSong() {
-    Iterator it = this.song.getTracks();
-
-    while (it.hasNext()) {
-      TGTrack track = (TGTrack) it.next();
+    for (final TGTrack track : this.song.getTracks()) {
       adjustTrack(track);
     }
+    
     return this.song;
   }
 
   private void adjustStrings(TGBeat beat) {
     TGTrack track = beat.getMeasure().getTrack();
-    List freeStrings = new ArrayList(track.getStrings());
+    List<TGString> freeStrings = new ArrayList<TGString>(track.getStrings());
     List notesToRemove = new ArrayList();
 
     // ajusto las cuerdas
-    Iterator it = beat.getVoice(0).getNotes().iterator();
-    while (it.hasNext()) {
-      TGNote note = (TGNote) it.next();
-
+    
+    for (final TGNote note : beat.getVoice(0).getNotes()) {
       int string = getStringForValue(freeStrings, note.getValue());
       for (int j = 0; j < freeStrings.size(); j++) {
         TGString tempString = (TGString) freeStrings.get(j);
@@ -780,9 +775,7 @@ class SongAdjuster {
   }
 
   private void adjustTrack(TGTrack track) {
-    Iterator it = track.getMeasures();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : track.getMeasures()) {
       process(measure);
     }
   }

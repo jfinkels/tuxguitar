@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.song.models;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.factory.TGFactory;
@@ -26,9 +25,9 @@ public abstract class TGSong {
   private String comments;
   private String copyright;
   private String date;
-  private List measureHeaders;
+  private List<TGMeasureHeader> measureHeaders;
   private String name;
-  private List tracks;
+  private List<TGTrack> tracks;
   private String transcriber;
   private String writer;
 
@@ -42,8 +41,8 @@ public abstract class TGSong {
     this.writer = new String();
     this.transcriber = new String();
     this.comments = new String();
-    this.tracks = new ArrayList();
-    this.measureHeaders = new ArrayList();
+    this.tracks = new ArrayList<TGTrack>();
+    this.measureHeaders = new ArrayList<TGMeasureHeader>();
   }
 
   public void addMeasureHeader(int index, TGMeasureHeader measureHeader) {
@@ -65,9 +64,7 @@ public abstract class TGSong {
   }
 
   public void clear() {
-    Iterator tracks = getTracks();
-    while (tracks.hasNext()) {
-      TGTrack track = (TGTrack) tracks.next();
+    for (final TGTrack track : this.tracks) {
       track.clear();
     }
     this.tracks.clear();
@@ -91,14 +88,12 @@ public abstract class TGSong {
     song.setWriter(getWriter());
     song.setTranscriber(getTranscriber());
     song.setComments(getComments());
-    Iterator headers = getMeasureHeaders();
-    while (headers.hasNext()) {
-      TGMeasureHeader header = (TGMeasureHeader) headers.next();
+
+    for (final TGMeasureHeader header : this.measureHeaders) {
       song.addMeasureHeader(header.clone(factory));
     }
-    Iterator tracks = getTracks();
-    while (tracks.hasNext()) {
-      TGTrack track = (TGTrack) tracks.next();
+    
+    for (final TGTrack track : this.tracks) {
       song.addTrack(track.clone(factory, song));
     }
   }
@@ -139,8 +134,8 @@ public abstract class TGSong {
     return (TGMeasureHeader) this.measureHeaders.get(index);
   }
 
-  public Iterator getMeasureHeaders() {
-    return this.measureHeaders.iterator();
+  public List<TGMeasureHeader> getMeasureHeaders() {
+    return this.measureHeaders;
   }
 
   public String getName() {
@@ -151,8 +146,8 @@ public abstract class TGSong {
     return (TGTrack) this.tracks.get(index);
   }
 
-  public Iterator getTracks() {
-    return this.tracks.iterator();
+  public List<TGTrack> getTracks() {
+    return this.tracks;
   }
 
   public String getTranscriber() {

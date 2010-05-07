@@ -354,12 +354,8 @@ class TGSongAdjuster {
   }
 
   public TGSong process() {
-    Iterator tracks = this.manager.getSong().getTracks();
-    while (tracks.hasNext()) {
-      TGTrack track = (TGTrack) tracks.next();
-      Iterator measures = track.getMeasures();
-      while (measures.hasNext()) {
-        TGMeasure measure = (TGMeasure) measures.next();
+    for (final TGTrack track : this.manager.getSong().getTracks()) {
+      for (final TGMeasure measure : track.getMeasures()) {
         this.process(measure);
       }
     }
