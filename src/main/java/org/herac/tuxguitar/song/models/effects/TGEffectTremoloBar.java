@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.song.models.effects;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.factory.TGFactory;
@@ -49,10 +48,10 @@ public abstract class TGEffectTremoloBar {
 
   public static final int MAX_VALUE_LENGTH = 12;
 
-  private List points;
+  private List<TremoloBarPoint> points;
 
   public TGEffectTremoloBar() {
-    this.points = new ArrayList();
+    this.points = new ArrayList<TremoloBarPoint>();
   }
 
   public void addPoint(int position, int value) {
@@ -61,16 +60,14 @@ public abstract class TGEffectTremoloBar {
 
   public TGEffectTremoloBar clone(TGFactory factory) {
     TGEffectTremoloBar effect = factory.newEffectTremoloBar();
-    Iterator it = getPoints().iterator();
-    while (it.hasNext()) {
-      TremoloBarPoint point = (TremoloBarPoint) it.next();
+    for (final TremoloBarPoint point : this.points) {
       effect.addPoint(point.getPosition(), point.getValue());
     }
 
     return effect;
   }
 
-  public List getPoints() {
+  public List<TremoloBarPoint> getPoints() {
     return this.points;
   }
 

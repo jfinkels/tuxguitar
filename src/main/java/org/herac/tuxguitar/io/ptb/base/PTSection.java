@@ -1,25 +1,22 @@
 package org.herac.tuxguitar.io.ptb.base;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class PTSection {
 
   private int number;
-  private List positions;
+  private List<PTPosition> positions;
   private int staffs;
 
   public PTSection(int number) {
     this.number = number;
-    this.positions = new ArrayList();
+    this.positions = new ArrayList<PTPosition>();
   }
 
   public int getNextPositionNumber() {
     int next = 0;
-    Iterator it = getPositions().iterator();
-    while (it.hasNext()) {
-      PTPosition p = (PTPosition) it.next();
+    for (final PTPosition p : getPositions()) {
       next = Math.max(next, (p.getPosition() + 1));
     }
     return next;
@@ -30,9 +27,7 @@ public class PTSection {
   }
 
   public PTPosition getPosition(int position) {
-    Iterator it = getPositions().iterator();
-    while (it.hasNext()) {
-      PTPosition p = (PTPosition) it.next();
+    for (final PTPosition p : getPositions()) {
       if (p.getPosition() == position) {
         return p;
       }
@@ -42,7 +37,7 @@ public class PTSection {
     return p;
   }
 
-  public List getPositions() {
+  public List<PTPosition> getPositions() {
     return this.positions;
   }
 

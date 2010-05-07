@@ -6,6 +6,6 @@ public interface MidiOutputPortProvider {
 
   public void closeAll() throws MidiPlayerException;
 
-  public List listPorts() throws MidiPlayerException;
+  public List<MidiOutputPort> listPorts() throws MidiPlayerException;
 
 }

@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.tools.custom;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class TGCustomToolManager {
@@ -15,18 +14,18 @@ public class TGCustomToolManager {
     return instance;
   }
 
-  private List tools;
+  private List<TGCustomTool> tools;
 
   public TGCustomToolManager() {
-    this.tools = new ArrayList();
+    this.tools = new ArrayList<TGCustomTool>();
   }
 
   public void addCustomTool(TGCustomTool tool) {
     this.tools.add(tool);
   }
 
-  public Iterator getCustomTools() {
-    return this.tools.iterator();
+  public List<TGCustomTool> getCustomTools() {
+    return this.tools;
   }
 
   public void removeCustomTool(TGCustomTool tool) {

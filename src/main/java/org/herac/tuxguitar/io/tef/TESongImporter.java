@@ -3,7 +3,6 @@ package org.herac.tuxguitar.io.tef;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
@@ -66,9 +65,7 @@ public class TESongImporter implements TGLocalFileImporter {
   }
 
   private void addComponents(TESong song) {
-    Iterator it = song.getComponents().iterator();
-    while (it.hasNext()) {
-      TEComponent component = (TEComponent) it.next();
+    for (final TEComponent component : song.getComponents()) {
 
       if (component.getMeasure() >= 0
           && component.getMeasure() < this.manager.getSong()
@@ -245,32 +242,26 @@ public class TESongImporter implements TGLocalFileImporter {
   }
 
   public void sortComponents(TESong song) {
-    Collections.sort(song.getComponents(), new Comparator() {
-      public int compare(Object o1, Object o2) {
-        if (o1 instanceof TEComponent && o2 instanceof TEComponent) {
-          TEComponent c1 = (TEComponent) o1;
-          TEComponent c2 = (TEComponent) o2;
+    Collections.sort(song.getComponents(), new Comparator<TEComponent>() {
+      public int compare(TEComponent c1, TEComponent c2) {
 
-          if (c1.getMeasure() < c2.getMeasure()) {
-            return -1;
-          }
-          if (c1.getMeasure() > c2.getMeasure()) {
-            return 1;
-          }
-          if (c1.getPosition() < c2.getPosition()) {
-            return -1;
-          }
-          if (c1.getPosition() > c2.getPosition()) {
-            return 1;
-          }
-          if ((c1 instanceof TEComponentNote)
-              && !(c2 instanceof TEComponentNote)) {
-            return -1;
-          }
-          if ((c2 instanceof TEComponentNote)
-              && !(c1 instanceof TEComponentNote)) {
-            return 1;
-          }
+        if (c1.getMeasure() < c2.getMeasure()) {
+          return -1;
+        }
+        if (c1.getMeasure() > c2.getMeasure()) {
+          return 1;
+        }
+        if (c1.getPosition() < c2.getPosition()) {
+          return -1;
+        }
+        if (c1.getPosition() > c2.getPosition()) {
+          return 1;
+        }
+        if ((c1 instanceof TEComponentNote) && !(c2 instanceof TEComponentNote)) {
+          return -1;
+        }
+        if ((c2 instanceof TEComponentNote) && !(c1 instanceof TEComponentNote)) {
+          return 1;
         }
         return 0;
       }

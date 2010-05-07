@@ -25,6 +25,8 @@ import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
+import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
+import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar.TremoloBarPoint;
 
 /**
  * @author julian
@@ -74,12 +76,12 @@ public class MidiSequenceParser {
 
   private class MidiSequenceHelper {
 
-    private List measureHeaderHelpers;
+    private List<MidiMeasureHelper> measureHeaderHelpers;
     private MidiSequenceHandler sequence;
 
     public MidiSequenceHelper(MidiSequenceHandler sequence) {
       this.sequence = sequence;
-      this.measureHeaderHelpers = new ArrayList();
+      this.measureHeaderHelpers = new ArrayList<MidiMeasureHelper>();
     }
 
     public void addMeasureHelper(MidiMeasureHelper helper) {
@@ -90,7 +92,7 @@ public class MidiSequenceParser {
       return (MidiMeasureHelper) this.measureHeaderHelpers.get(index);
     }
 
-    public List getMeasureHelpers() {
+    public List<MidiMeasureHelper> getMeasureHelpers() {
       return this.measureHeaderHelpers;
     }
 
@@ -648,7 +650,7 @@ public class MidiSequenceParser {
 
   public void makeBend(MidiSequenceHelper sh, int track, long start,
       long duration, TGEffectBend bend, int channel) {
-    List points = bend.getPoints();
+    List<BendPoint> points = bend.getPoints();
     for (int i = 0; i < points.size(); i++) {
       TGEffectBend.BendPoint point = (TGEffectBend.BendPoint) points.get(i);
       long bendStart = start + point.getTime(duration);
@@ -946,7 +948,7 @@ public class MidiSequenceParser {
 
   public void makeTremoloBar(MidiSequenceHelper sh, int track, long start,
       long duration, TGEffectTremoloBar effect, int channel) {
-    List points = effect.getPoints();
+    List<TremoloBarPoint> points = effect.getPoints();
     for (int i = 0; i < points.size(); i++) {
       TGEffectTremoloBar.TremoloBarPoint point = (TGEffectTremoloBar.TremoloBarPoint) points
           .get(i);

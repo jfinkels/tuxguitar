@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.system.icons;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
@@ -30,7 +29,7 @@ public class IconManager {
   private Image compositionRepeatOpen;
   private Image compositionTempo;
   private Image compositionTimeSignature;
-  private List disposableIcons;
+  private List<Image> disposableIcons;
   private Image divisionType;
   private Image durationDotted;
   private Image durationDoubleDotted;
@@ -83,7 +82,7 @@ public class IconManager {
   private Image layoutMultitrack;
   private Image layoutPage;
   private Image layoutScore;
-  private List loaders;
+  private List<IconLoader> loaders;
   private Image markerAdd;
   private Image markerFirst;
   private Image markerLast;
@@ -137,8 +136,8 @@ public class IconManager {
   private Image transportStop2;
 
   public IconManager() {
-    this.loaders = new ArrayList();
-    this.disposableIcons = new ArrayList();
+    this.loaders = new ArrayList<IconLoader>();
+    this.disposableIcons = new ArrayList<Image>();
     this.loadIcons();
   }
 
@@ -152,18 +151,14 @@ public class IconManager {
     this.disposeIcons(purgeDisposableIcons());
   }
 
-  public void disposeIcons(List resources) {
-    Iterator it = resources.iterator();
-    while (it.hasNext()) {
-      Image image = (Image) it.next();
+  public void disposeIcons(List<Resource> resources) {
+    for (final Resource image: resources) {
       image.dispose();
     }
   }
 
   private void fireChanges() {
-    Iterator it = this.loaders.iterator();
-    while (it.hasNext()) {
-      IconLoader loader = (IconLoader) it.next();
+    for (final IconLoader loader : this.loaders) {
       loader.loadIcons();
     }
   }
@@ -792,11 +787,9 @@ public class IconManager {
     this.settings = loadIcon("settings.png");
   }
 
-  private List purgeDisposableIcons() {
-    List disposableIcons = new ArrayList();
-    Iterator it = this.disposableIcons.iterator();
-    while (it.hasNext()) {
-      Resource resource = (Resource) it.next();
+  private List<Resource> purgeDisposableIcons() {
+    List<Resource> disposableIcons = new ArrayList<Resource>();
+    for (final Resource resource : this.disposableIcons) {
       disposableIcons.add(resource);
     }
     this.disposableIcons.clear();
@@ -804,7 +797,7 @@ public class IconManager {
   }
 
   public void reloadIcons() {
-    List disposableIcons = purgeDisposableIcons();
+    List<Resource> disposableIcons = purgeDisposableIcons();
     this.loadIcons();
     this.fireChanges();
     this.disposeIcons(disposableIcons);

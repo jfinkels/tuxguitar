@@ -39,11 +39,11 @@ public class PrintPreview {
   protected Shell dialog;
   protected Button next;
   protected Composite pageComposite;
-  protected List pages;
+  protected List<Image> pages;
   protected Composite previewComposite;
   protected Button previous;
 
-  public PrintPreview(List pages, Rectangle bounds) {
+  public PrintPreview(List<Image> pages, Rectangle bounds) {
     this.pages = pages;
     this.bounds = bounds;
   }

@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.gui.editors.tab;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -31,6 +30,7 @@ import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
+import org.herac.tuxguitar.song.models.TGNote;
 
 /**
  * @author julian
@@ -77,7 +77,7 @@ public class TGMeasureImpl extends TGMeasure {
       { NATURAL, NATURAL, NATURAL, NATURAL, NATURAL, NATURAL, NATURAL }, // NATURAL
       // ------------SHARPS------------------------------------
       { NATURAL, NATURAL, NATURAL, SHARP, NATURAL, NATURAL, NATURAL }, // 1
-                                                                       // SHARP
+      // SHARP
       { SHARP, NATURAL, NATURAL, SHARP, NATURAL, NATURAL, NATURAL }, // 2 SHARPS
       { SHARP, NATURAL, NATURAL, SHARP, SHARP, NATURAL, NATURAL }, // 3 SHARPS
       { SHARP, SHARP, NATURAL, SHARP, SHARP, NATURAL, NATURAL }, // 4 SHARPS
@@ -160,7 +160,7 @@ public class TGMeasureImpl extends TGMeasure {
 
   private boolean text;
   private TGTrackSpacing ts;
-  private List[] voiceGroups;
+  private List<TGBeatGroup>[] voiceGroups;
   private int width;
 
   private int widthBeats = 0;
@@ -170,7 +170,7 @@ public class TGMeasureImpl extends TGMeasure {
     this.registeredAccidentals = new boolean[11][7];
     this.voiceGroups = new List[TGBeat.MAX_VOICES];
     for (int v = 0; v < TGBeat.MAX_VOICES; v++) {
-      this.voiceGroups[v] = new ArrayList();
+      this.voiceGroups[v] = new ArrayList<TGBeatGroup>();
     }
   }
 
@@ -229,10 +229,8 @@ public class TGMeasureImpl extends TGMeasure {
             this.notEmptyVoices++;
           }
 
-          Iterator it = voice.getNotes().iterator();
-          while (it.hasNext()) {
-            TGNoteImpl note = (TGNoteImpl) it.next();
-            voice.check(note);
+          for (final TGNote note : voice.getNotes()) {
+            voice.check((TGNoteImpl) note);
           }
 
           if (!voice.isRestVoice()) {
@@ -271,9 +269,7 @@ public class TGMeasureImpl extends TGMeasure {
     }
 
     for (int v = 0; v < this.voiceGroups.length; v++) {
-      Iterator voiceGroups = this.voiceGroups[v].iterator();
-      while (voiceGroups.hasNext()) {
-        TGBeatGroup group = (TGBeatGroup) voiceGroups.next();
+      for (final TGBeatGroup group : this.voiceGroups[v]) {
         group.finish(layout, this);
       }
     }
@@ -437,10 +433,8 @@ public class TGMeasureImpl extends TGMeasure {
         if (!TuxGuitar.isDisposed()) {
           getBuffer().dispose();
           disposeMarkerColor();
-          Iterator it = getBeats().iterator();
-          while (it.hasNext()) {
-            TGBeatImpl beat = (TGBeatImpl) it.next();
-            beat.dispose();
+          for (final TGBeat beat : getBeats()) {
+            ((TGBeatImpl) beat).dispose();
           }
         }
       }
@@ -715,10 +709,8 @@ public class TGMeasureImpl extends TGMeasure {
    */
   public void paintComponents(ViewLayout layout, TGPainter painter, int fromX,
       int fromY) {
-    Iterator it = getBeats().iterator();
-    while (it.hasNext()) {
-      TGBeatImpl beat = (TGBeatImpl) it.next();
-      beat.paint(layout, painter, fromX
+    for (final TGBeat beat : getBeats()) {
+      ((TGBeatImpl) beat).paint(layout, painter, fromX
           + getHeaderImpl().getLeftSpacing(layout), fromY);
     }
   }
@@ -1107,9 +1099,7 @@ public class TGMeasureImpl extends TGMeasure {
   }
 
   private void paintTexts(ViewLayout layout, TGPainter painter) {
-    Iterator it = getBeats().iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    for (final TGBeat beat : getBeats()) {
       if (beat.isTextBeat()) {
         TGTextImpl text = (TGTextImpl) beat.getText();
         text.paint(layout, painter, (getPosX() + getHeaderImpl()
@@ -1366,11 +1356,9 @@ public class TGMeasureImpl extends TGMeasure {
       for (int v = 0; v < beat.countVoices(); v++) {
         TGVoiceImpl voice = beat.getVoiceImpl(v);
         if (!voice.isEmpty()) {
-          Iterator notes = voice.getNotes().iterator();
-          while (notes.hasNext()) {
-            TGNoteImpl note = (TGNoteImpl) notes.next();
+          for (final TGNote note : voice.getNotes()) {
             beat.updateEffectsSpacing(layout, note.getEffect());
-            note.update(layout);
+            ((TGNoteImpl) note).update(layout);
           }
           voice.update(layout);
 
@@ -1407,9 +1395,7 @@ public class TGMeasureImpl extends TGMeasure {
 
     if ((layout.getStyle() & ViewLayout.DISPLAY_SCORE) != 0) {
       for (int i = 0; i < this.voiceGroups.length; i++) {
-        Iterator groups = this.voiceGroups[i].iterator();
-        while (groups.hasNext()) {
-          TGBeatGroup group = (TGBeatGroup) groups.next();
+        for (final TGBeatGroup group : this.voiceGroups[i]) {
           checkValue(layout, group.getMinNote(), group.getDirection());
           checkValue(layout, group.getMaxNote(), group.getDirection());
         }

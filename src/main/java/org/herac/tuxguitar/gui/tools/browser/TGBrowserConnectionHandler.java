@@ -11,7 +11,7 @@ public interface TGBrowserConnectionHandler {
 
   public void notifyClosed(int callId);
 
-  public void notifyElements(int callId, List elements);
+  public void notifyElements(int callId, List<TGBrowserElement> elements);
 
   public void notifyError(int callId, Throwable throwable);
 

@@ -2,9 +2,7 @@ package org.herac.tuxguitar.io.gtp;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -44,7 +42,7 @@ public class GTPSettingsUtil {
   }
 
   public void configure(Shell parent) {
-    final List charsets = getAvailableCharsets();
+    final List<String> charsets = getAvailableCharsets();
 
     final Shell dialog = DialogUtils.newDialog(parent, SWT.DIALOG_TRIM
         | SWT.APPLICATION_MODAL);
@@ -110,14 +108,8 @@ public class GTPSettingsUtil {
         | DialogUtils.OPEN_STYLE_PACK | DialogUtils.OPEN_STYLE_WAIT);
   }
 
-  private List getAvailableCharsets() {
-    List charsets = new ArrayList();
-    Iterator it = Charset.availableCharsets().entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry entry = (Map.Entry) it.next();
-      charsets.add(entry.getKey());
-    }
-    return charsets;
+  private List<String> getAvailableCharsets() {
+    return new ArrayList<String>(Charset.availableCharsets().keySet());
   }
 
   public TGConfigManager getConfig() {

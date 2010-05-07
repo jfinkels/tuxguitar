@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.player.base;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.sound.midi.MidiUnavailableException;
@@ -29,7 +28,7 @@ public class MidiPlayer {
 
   private int infoTrack;
 
-  private List listeners;
+  private List<MidiPlayerListener> listeners;
 
   protected TGLock lock = new TGLock();
 
@@ -49,7 +48,7 @@ public class MidiPlayer {
 
   private String outputPortKey;
 
-  private List outputPortProviders;
+  private List<MidiOutputPortProvider> outputPortProviders;
 
   private MidiTransmitter outputTransmitter;
 
@@ -61,7 +60,7 @@ public class MidiPlayer {
 
   private String sequencerKey;
 
-  private List sequencerProviders;
+  private List<MidiSequencerProvider> sequencerProviders;
 
   private TGSongManager songManager;
 
@@ -298,9 +297,9 @@ public class MidiPlayer {
 
   public void init(TGSongManager songManager) {
     this.songManager = songManager;
-    this.outputPortProviders = new ArrayList();
-    this.sequencerProviders = new ArrayList();
-    this.listeners = new ArrayList();
+    this.outputPortProviders = new ArrayList<MidiOutputPortProvider>();
+    this.sequencerProviders = new ArrayList<MidiSequencerProvider>();
+    this.listeners = new ArrayList<MidiPlayerListener>();
     this.getSequencer();
     this.getMode();
     this.reset();
@@ -360,12 +359,10 @@ public class MidiPlayer {
     return this.starting;
   }
 
-  public List listOutputPorts() {
-    List ports = new ArrayList();
-    Iterator it = this.outputPortProviders.iterator();
-    while (it.hasNext()) {
+  public List<MidiOutputPort> listOutputPorts() {
+    List<MidiOutputPort> ports = new ArrayList<MidiOutputPort>();
+    for (final MidiOutputPortProvider provider : this.outputPortProviders) {
       try {
-        MidiOutputPortProvider provider = (MidiOutputPortProvider) it.next();
         ports.addAll(provider.listPorts());
       } catch (Throwable throwable) {
         throwable.printStackTrace();
@@ -374,12 +371,10 @@ public class MidiPlayer {
     return ports;
   }
 
-  public List listSequencers() {
-    List sequencers = new ArrayList();
-    Iterator it = this.sequencerProviders.iterator();
-    while (it.hasNext()) {
+  public List<MidiSequencer> listSequencers() {
+    List<MidiSequencer> sequencers = new ArrayList<MidiSequencer>();
+    for (final MidiSequencerProvider provider : this.sequencerProviders) {
       try {
-        MidiSequencerProvider provider = (MidiSequencerProvider) it.next();
         sequencers.addAll(provider.listSequencers());
       } catch (Throwable throwable) {
         throwable.printStackTrace();
@@ -416,30 +411,25 @@ public class MidiPlayer {
   }
 
   public void notifyLoop() {
-    Iterator it = this.listeners.iterator();
-    while (it.hasNext()) {
-      MidiPlayerListener listener = (MidiPlayerListener) it.next();
+    for (final MidiPlayerListener listener : this.listeners) {
       listener.notifyLoop();
     }
   }
 
   public void notifyStarted() {
-    Iterator it = this.listeners.iterator();
-    while (it.hasNext()) {
-      MidiPlayerListener listener = (MidiPlayerListener) it.next();
+    for (final MidiPlayerListener listener : this.listeners) {
       listener.notifyStarted();
     }
   }
 
   public void notifyStopped() {
-    Iterator it = this.listeners.iterator();
-    while (it.hasNext()) {
-      MidiPlayerListener listener = (MidiPlayerListener) it.next();
+    for (final MidiPlayerListener listener : this.listeners) {
       listener.notifyStopped();
     }
   }
 
-  public void openOutputPort(List ports, boolean tryFirst) {
+  public void openOutputPort(List<MidiOutputPort> ports,
+      boolean tryFirst) {
     try {
       if (this.outputPortKey != null
           && !this.isOutputPortOpen(this.outputPortKey)) {
@@ -470,8 +460,8 @@ public class MidiPlayer {
     this.openOutputPort(listOutputPorts(), tryFirst);
   }
 
-  public void openSequencer(List sequencers, boolean tryFirst)
-      throws MidiPlayerException {
+  public void openSequencer(List<MidiSequencer> sequencers,
+      boolean tryFirst) throws MidiPlayerException {
     try {
       if (this.sequencerKey != null && !this.isSequencerOpen(this.sequencerKey)) {
         this.closeSequencer();
@@ -630,7 +620,7 @@ public class MidiPlayer {
     }
   }
 
-  public void playBeat(final TGTrack track, final List notes) {
+  public void playBeat(final TGTrack track, final List<TGNote> notes) {
     int channel = track.getChannel().getChannel();
     int program = track.getChannel().getInstrument();
     int volume = (int) ((this.getVolume() / 10.00) * track.getChannel()
@@ -665,9 +655,7 @@ public class MidiPlayer {
 
     MidiOutputPort current = getOutputPort();
     if (current != null) {
-      Iterator it = provider.listPorts().iterator();
-      while (it.hasNext()) {
-        MidiOutputPort port = (MidiOutputPort) it.next();
+      for (final MidiOutputPort port :  provider.listPorts()) {
         if (port.getKey().equals(current.getKey())) {
           closeOutputPort();
           break;
@@ -682,9 +670,7 @@ public class MidiPlayer {
 
     MidiSequencer current = getSequencer();
     if (!(current instanceof MidiSequencerEmpty) && current != null) {
-      Iterator it = provider.listSequencers().iterator();
-      while (it.hasNext()) {
-        MidiSequencer sequencer = (MidiSequencer) it.next();
+      for (final MidiSequencer sequencer : provider.listSequencers()) {
         if (current.getKey().equals(sequencer.getKey())) {
           closeSequencer();
           break;

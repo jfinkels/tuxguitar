@@ -19,7 +19,7 @@ public abstract class TGBrowser {
 
   public abstract void close() throws TGBrowserException;
 
-  public abstract List listElements() throws TGBrowserException;
+  public abstract List<TGBrowserElement> listElements() throws TGBrowserException;
 
   public abstract void open() throws TGBrowserException;
 

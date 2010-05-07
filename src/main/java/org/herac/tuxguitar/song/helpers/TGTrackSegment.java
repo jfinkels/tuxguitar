@@ -8,24 +8,24 @@ import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 
 public class TGTrackSegment {
-  private List measures;
+  private List<TGMeasure> measures;
   private int track;
 
-  public TGTrackSegment(int track, List measures) {
+  public TGTrackSegment(int track, List<TGMeasure> measures) {
     this.track = track;
     this.measures = measures;
   }
 
-  public Object clone(TGFactory factory, List headers) {
-    List measures = new ArrayList();
+  public TGTrackSegment clone(TGFactory factory, List<TGMeasureHeader> headers) {
+    List<TGMeasure> measures = new ArrayList<TGMeasure>();
     for (int i = 0; i < getMeasures().size(); i++) {
-      TGMeasure measure = (TGMeasure) getMeasures().get(i);
-      measures.add(measure.clone(factory, (TGMeasureHeader) headers.get(i)));
+      TGMeasure measure = getMeasures().get(i);
+      measures.add(measure.clone(factory, headers.get(i)));
     }
     return new TGTrackSegment(getTrack(), measures);
   }
 
-  public List getMeasures() {
+  public List<TGMeasure> getMeasures() {
     return this.measures;
   }
 

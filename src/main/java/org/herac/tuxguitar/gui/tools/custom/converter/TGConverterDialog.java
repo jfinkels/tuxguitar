@@ -44,24 +44,20 @@ public class TGConverterDialog implements LanguageLoader, IconLoader {
   protected Label outputFolderLabel;
   protected Label outputFormatLabel;
 
-  protected List outputFormats;
+  protected List<TGConverterFormat> outputFormats;
 
   public TGConverterDialog() {
-    this.outputFormats = new ArrayList();
+    this.outputFormats = new ArrayList<TGConverterFormat>();
   }
 
   private void addFileFormats(Combo combo) {
     this.outputFormats.clear();
 
-    Iterator outputStreams = TGFileFormatManager.instance().getOutputStreams();
-    while (outputStreams.hasNext()) {
-      TGOutputStreamBase stream = (TGOutputStreamBase) outputStreams.next();
+    for (final TGOutputStreamBase stream : TGFileFormatManager.instance().getOutputStreams()) {
       addFileFormats(combo, stream.getFileFormat(), stream);
     }
 
-    Iterator exporters = TGFileFormatManager.instance().getExporters();
-    while (exporters.hasNext()) {
-      TGRawExporter exporter = (TGRawExporter) exporters.next();
+    for (final TGRawExporter exporter : TGFileFormatManager.instance().getExporters()) {
       if (exporter instanceof TGLocalFileExporter) {
         addFileFormats(combo, ((TGLocalFileExporter) exporter).getFileFormat(),
             exporter);

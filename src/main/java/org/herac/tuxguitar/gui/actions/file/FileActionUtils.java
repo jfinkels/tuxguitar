@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.util.Iterator;
 
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.util.ConfirmDialog;
@@ -157,9 +156,8 @@ public class FileActionUtils {
     if (path != null) {
       int index = path.lastIndexOf(".");
       if (index > 0) {
-        Iterator it = TGFileFormatManager.instance().getOutputStreams();
-        while (it.hasNext()) {
-          TGOutputStreamBase writer = (TGOutputStreamBase) it.next();
+        for (final TGOutputStreamBase writer : TGFileFormatManager.instance()
+            .getOutputStreams()) {
           if (writer.isSupportedExtension(path.substring(index))) {
             return true;
           }

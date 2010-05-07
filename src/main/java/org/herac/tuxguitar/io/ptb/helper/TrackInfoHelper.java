@@ -9,10 +9,10 @@ import org.herac.tuxguitar.song.models.TGTrack;
 public class TrackInfoHelper {
 
   private PTTrackInfo defaultInfo;
-  private List staffTracks = new ArrayList();
+  private List<TGTrack> staffTracks = new ArrayList<TGTrack>();
 
   public TrackInfoHelper() {
-    this.staffTracks = new ArrayList();
+    this.staffTracks = new ArrayList<TGTrack>();
   }
 
   public void addStaffTrack(TGTrack track) {

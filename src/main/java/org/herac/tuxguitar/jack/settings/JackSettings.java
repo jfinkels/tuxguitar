@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.jack.settings;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.gui.system.config.TGConfigManager;
@@ -10,10 +9,10 @@ import org.herac.tuxguitar.gui.system.plugins.TGPluginConfigManager;
 public class JackSettings {
 
   private TGConfigManager config;
-  private List listeners;
+  private List<JackSettingsListener> listeners;
 
   public JackSettings() {
-    this.listeners = new ArrayList();
+    this.listeners = new ArrayList<JackSettingsListener>();
     this.config = new TGPluginConfigManager("tuxguitar-jack");
     this.config.init();
   }
@@ -25,9 +24,7 @@ public class JackSettings {
   }
 
   public void fireListeners() {
-    Iterator it = this.listeners.iterator();
-    while (it.hasNext()) {
-      JackSettingsListener listener = (JackSettingsListener) it.next();
+    for (final JackSettingsListener listener : this.listeners) {
       listener.loadSettings(getConfig());
     }
   }

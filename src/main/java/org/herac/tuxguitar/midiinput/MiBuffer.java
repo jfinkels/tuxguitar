@@ -2,6 +2,7 @@ package org.herac.tuxguitar.midiinput;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -15,8 +16,7 @@ class MiBuffer {
   /** The Logger for this class. */
   public static final transient Logger LOG = Logger.getLogger(MiBuffer.class);
 
-  static void dump(ArrayList inList, String inTitle) {
-    Iterator it = inList.iterator();
+  static void dump(List<MiNote> inList, String inTitle) {
 
     LOG.debug("");
     LOG.debug("dumping " + inTitle + "...");
@@ -24,9 +24,7 @@ class MiBuffer {
     // LOG.debug("Stopped at: " + f_StopTime);
     LOG.debug("");
 
-    while (it.hasNext()) {
-      MiNote n = (MiNote) it.next();
-
+    for (MiNote n : inList) {
       LOG.debug("str: " + n.getString() + ", fret: " + n.getFret()
           + ", pitch: " + n.getPitch() + ", vel: " + n.getVelocity() + ", on: "
           + n.getTimeOn() + ", off: " + n.getTimeOff() + ", dur: "
@@ -34,9 +32,11 @@ class MiBuffer {
     }
   }
 
-  private ArrayList f_NoteOffMap = new ArrayList(); // time-ordered map of
-                                                    // NOTE_OFF events
-  private ArrayList f_Notes = new ArrayList(); // time-ordered list of notes
+  private ArrayList<MiNote> f_NoteOffMap = new ArrayList<MiNote>(); // time-ordered
+  // map of
+  // NOTE_OFF events
+  private ArrayList<MiNote> f_Notes = new ArrayList<MiNote>(); // time-ordered
+  // list of notes
 
   private long f_StartTime = -1; // first MIDI time stamp [microseconds]
 
@@ -47,11 +47,11 @@ class MiBuffer {
   public void addEvent(byte inString, byte inFret, byte inPitch,
       byte inVelocity, long inTimeStamp) {
     if (inVelocity == 0)
-      f_NoteOffMap.add(new MiNote(inString, inFret, inPitch, inVelocity,
+      this.f_NoteOffMap.add(new MiNote(inString, inFret, inPitch, inVelocity,
           inTimeStamp));
     else
-      f_Notes
-          .add(new MiNote(inString, inFret, inPitch, inVelocity, inTimeStamp));
+      this.f_Notes.add(new MiNote(inString, inFret, inPitch, inVelocity,
+          inTimeStamp));
   }
 
   private void addEventDebug(int inTempo, long inTick, int inString,
@@ -63,11 +63,11 @@ class MiBuffer {
   }
 
   public int finalize(byte inMinVelocity, long inMinDuration) {
-    if (s_TESTING) {
+    if (this.s_TESTING) {
       int tempo = MiRecorder.instance().getTempo();
 
-      f_StartTime = MiStaff.ticksToTimestamp(tempo, 0);
-      f_StopTime = MiStaff.ticksToTimestamp(tempo, 15698);
+      this.f_StartTime = MiStaff.ticksToTimestamp(tempo, 0);
+      this.f_StopTime = MiStaff.ticksToTimestamp(tempo, 15698);
       /*
        * // a very long note addEventDebug(tempo, 0, 4, 50, 81);
        * addEventDebug(tempo, 15698, 4, 50, 0);
@@ -179,14 +179,14 @@ class MiBuffer {
 
     }
 
-    Iterator onIt;
+    Iterator<MiNote> onIt;
 
     // determine notes duration
-    onIt = f_Notes.iterator();
+    onIt = this.f_Notes.iterator();
     while (onIt.hasNext()) {
       MiNote on = (MiNote) onIt.next();
 
-      Iterator offIt = f_NoteOffMap.iterator();
+      Iterator<MiNote> offIt = this.f_NoteOffMap.iterator();
       boolean found = false;
 
       while (offIt.hasNext() && !found) {
@@ -201,11 +201,11 @@ class MiBuffer {
 
       // if a note is still playing, set its end time
       if (!found)
-        on.setTimeOff(f_StopTime);
+        on.setTimeOff(this.f_StopTime);
     }
 
     // remove notes with insufficient velocity or duration
-    onIt = f_Notes.iterator();
+    onIt = this.f_Notes.iterator();
     while (onIt.hasNext()) {
       MiNote on = (MiNote) onIt.next();
       /*
@@ -223,28 +223,27 @@ class MiBuffer {
       }
     }
 
-    return (f_Notes.size());
+    return (this.f_Notes.size());
   }
 
   public void startRecording(long inTimeStamp) {
-    f_StartTime = inTimeStamp;
-    f_StopTime = -1;
+    this.f_StartTime = inTimeStamp;
+    this.f_StopTime = -1;
 
-    f_Notes.clear();
-    f_NoteOffMap.clear();
+    this.f_Notes.clear();
+    this.f_NoteOffMap.clear();
   }
 
   public void stopRecording(long inTimeStamp) {
-    f_StopTime = inTimeStamp;
+    this.f_StopTime = inTimeStamp;
   }
 
   public TGBeat toBeat() {
     TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
     TGBeat tgBeat = tgSongMgr.getFactory().newBeat();
-    Iterator it = f_Notes.iterator();
 
-    while (it.hasNext()) {
-      MiNote note = (MiNote) it.next();
+    for (final MiNote note : this.f_Notes) {
+
       TGNote tgNote = tgSongMgr.getFactory().newNote();
 
       tgNote.setString(note.getString());
@@ -258,32 +257,26 @@ class MiBuffer {
   public TGChord toChord(int inStringsCount) {
     TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
     TGChord tgChord = tgSongMgr.getFactory().newChord(inStringsCount);
-    Iterator it = f_Notes.iterator();
 
-    while (it.hasNext()) {
-      MiNote note = (MiNote) it.next();
-
+    for (final MiNote note : this.f_Notes) {
       tgChord.addFretValue(note.getString() - 1, note.getFret());
     }
 
     return (tgChord);
   }
 
-  public TreeSet toPitchesSet() {
-    TreeSet pitches = new TreeSet();
-    Iterator it = f_Notes.iterator();
+  public TreeSet<Byte> toPitchesSet() {
+    TreeSet<Byte> pitches = new TreeSet<Byte>();
 
-    while (it.hasNext()) {
-      MiNote note = (MiNote) it.next();
-
+    for (final MiNote note : this.f_Notes) {
       pitches.add(new Byte(note.getPitch()));
     }
 
-    return (pitches);
+    return pitches;
   }
 
   public void toTrack(int inTempo, long inStartPosition, String inTrackName) {
-    /* MiStaff staff = */new MiStaff(f_Notes, inTempo, f_StartTime, f_StopTime,
-        inStartPosition, inTrackName);
+    /* MiStaff staff = */new MiStaff(this.f_Notes, inTempo, this.f_StartTime,
+        this.f_StopTime, inStartPosition, inTrackName);
   }
 }

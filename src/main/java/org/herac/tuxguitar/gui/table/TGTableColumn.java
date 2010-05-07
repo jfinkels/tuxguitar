@@ -14,12 +14,12 @@ import org.herac.tuxguitar.gui.TuxGuitar;
 
 public class TGTableColumn {
   private CLabel column;
-  private List controls;
+  private List<Control> controls;
   private TGTable table;
 
   public TGTableColumn(TGTable table, int align) {
     this.table = table;
-    this.controls = new ArrayList();
+    this.controls = new ArrayList<Control>();
     this.column = new CLabel(this.table.getColumnControl(), align
         | SWT.SHADOW_OUT);
     this.column.setLayout(new GridLayout());

@@ -59,20 +59,18 @@ public class PTSongSynchronizerUtil {
   }
 
   private static void applyInfos(PTTrack src, PTTrack dst) {
-    Iterator it = src.getInfos().iterator();
-    while (it.hasNext()) {
-      PTTrackInfo srcInfo = (PTTrackInfo) it.next();
+    for (final PTTrackInfo srcInfo : src.getInfos()) {
       dst.getInfos().add(srcInfo.getClone());
     }
   }
 
   private static void applyRepeats(PTTrack src, PTTrack dst) {
     applyRepeats(src, dst, new PTIndex(0, 0, 0), new PTSongSynchronizerData(),
-        new ArrayList());
+        new ArrayList<PTDirection>());
   }
 
   private static void applyRepeats(PTTrack src, PTTrack dst, PTIndex index,
-      PTSongSynchronizerData rd, List useds) {
+      PTSongSynchronizerData rd, List<PTDirection> useds) {
 
     for (int s = index.s; s < src.getSections().size(); s++) {
       PTSection srcSection = (PTSection) src.getSections().get(s);

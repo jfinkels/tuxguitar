@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.io.pdf;
 
 import java.io.OutputStream;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.graphics.ImageData;
@@ -52,15 +51,13 @@ public class PDFWriter {
    * @param printDocument
    * @throws TGFileFormatException
    */
-  public static void write(OutputStream out, List pages)
+  public static void write(OutputStream out, List<ImageData> pages)
       throws TGFileFormatException {
     try {
       Document document = new Document();
       PdfWriter.getInstance(document, out);
       document.open();
-      Iterator it = pages.iterator();
-      while (it.hasNext()) {
-        ImageData data = (ImageData) it.next();
+      for (final ImageData data : pages) {
         document.newPage();
         document.add(convertToIText(data));
       }

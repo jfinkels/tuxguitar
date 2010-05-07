@@ -1,7 +1,5 @@
 package org.herac.tuxguitar.gui.tools.browser.dialog;
 
-import java.util.Iterator;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -160,9 +158,8 @@ public class TGBrowserMenuBar extends TGBrowserBar {
     for (int i = 0; i < removeItems.length; i++) {
       removeItems[i].dispose();
     }
-    Iterator it = TGBrowserManager.instance().getCollections();
-    while (it.hasNext()) {
-      final TGBrowserCollection collection = (TGBrowserCollection) it.next();
+    for (final TGBrowserCollection collection : TGBrowserManager.instance()
+        .getCollections()) {
       if (collection.getData() != null) {
         MenuItem openItem = new MenuItem(this.openCollection, SWT.PUSH);
         openItem.setText(collection.getData().getTitle());
@@ -209,9 +206,9 @@ public class TGBrowserMenuBar extends TGBrowserBar {
     for (int i = 0; i < items.length; i++) {
       items[i].dispose();
     }
-    Iterator bookTypes = TGBrowserManager.instance().getFactories();
-    while (bookTypes.hasNext()) {
-      final TGBrowserFactory bookType = (TGBrowserFactory) bookTypes.next();
+
+    for (final TGBrowserFactory bookType : TGBrowserManager.instance()
+        .getFactories()) {
       MenuItem item = new MenuItem(this.newCollection, SWT.PUSH);
       item.setText(bookType.getName());
       item.addSelectionListener(new SelectionAdapter() {

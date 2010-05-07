@@ -9,7 +9,6 @@ package org.herac.tuxguitar.io.tg.v11;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Iterator;
 
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
@@ -41,6 +40,8 @@ import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
+import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
+import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar.TremoloBarPoint;
 
 /**
  * @author julian
@@ -192,10 +193,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     // escribo la cantidad de puntos
     writeByte(effect.getPoints().size());
 
-    Iterator it = effect.getPoints().iterator();
-    while (it.hasNext()) {
-      TGEffectBend.BendPoint point = (TGEffectBend.BendPoint) it.next();
-
+    for (final BendPoint point : effect.getPoints()) {
       // escribo la posicion
       writeByte(point.getPosition());
 
@@ -630,9 +628,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     writeByte(track.getStrings().size());
 
     // escribo las cuerdas
-    Iterator stringIt = track.getStrings().iterator();
-    while (stringIt.hasNext()) {
-      TGString string = (TGString) stringIt.next();
+    for (final TGString string : track.getStrings()) {
       writeInstrumentString(string);
     }
 
@@ -652,10 +648,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     // escribo la cantidad de puntos
     writeByte(effect.getPoints().size());
 
-    Iterator it = effect.getPoints().iterator();
-    while (it.hasNext()) {
-      TGEffectTremoloBar.TremoloBarPoint point = (TGEffectTremoloBar.TremoloBarPoint) it
-          .next();
+    for (final TremoloBarPoint point : effect.getPoints()) {
 
       // escribo la posicion
       writeByte(point.getPosition());

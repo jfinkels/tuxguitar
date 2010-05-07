@@ -5,7 +5,6 @@ package org.herac.tuxguitar.gui.editors.chord;
  */
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,7 +45,7 @@ public class ChordRecognizer extends Composite {
     }
 
     /** initialize with needed notes */
-    public Proposal(java.util.List notes) {
+    public Proposal(java.util.List<Integer> notes) {
       this.params = new int[9];
       for (int i = 0; i < 9; i++)
         this.params[i] = -1;
@@ -54,7 +53,7 @@ public class ChordRecognizer extends Composite {
       int length = notes.size();
       this.missingNotes = new int[length];
       for (int i = 0; i < length; i++) { // deep copy, because of clone() method
-        this.missingNotes[i] = ((Integer) notes.get(i)).intValue();
+        this.missingNotes[i] = notes.get(i).intValue();
       }
       this.missingCount = length;
     }
@@ -149,7 +148,7 @@ public class ChordRecognizer extends Composite {
   private ChordDialog dialog;
   private List proposalList;
 
-  private java.util.List proposalParameters;
+  private java.util.List<int[]> proposalParameters;
 
   // this var keep a control to running threads.
   private long runningProcess;
@@ -295,7 +294,7 @@ public class ChordRecognizer extends Composite {
     composite.setLayout(new GridLayout());
     composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-    this.proposalParameters = new ArrayList();
+    this.proposalParameters = new ArrayList<int[]>();
 
     this.proposalList = new List(composite, SWT.BORDER | SWT.H_SCROLL
         | SWT.V_SCROLL);
@@ -332,17 +331,17 @@ public class ChordRecognizer extends Composite {
       final boolean sharp) {
 
     int[] tuning = this.dialog.getSelector().getTuning();
-    java.util.List notesInside = new ArrayList();
+    java.util.List<Integer> notesInside = new ArrayList<Integer>();
 
     // find and put in all the distinct notes
     for (int i = 0; i < tuning.length; i++) {
       int fret = chord.getStrings()[i];
       if (fret != -1) {
         Integer note = new Integer((tuning[tuning.length - 1 - i] + fret) % 12);
-        Iterator it = notesInside.iterator();
+
         boolean found = false;
-        while (it.hasNext())
-          if (it.next().equals(note))
+        for (final Integer noteInside : notesInside)
+          if (noteInside.equals(note))
             found = true;
         if (!found)
           notesInside.add(note);
@@ -352,7 +351,7 @@ public class ChordRecognizer extends Composite {
     // Now search:
     // go through all the possible tonics
     // it is required because tonic isn't mandatory in a chord
-    java.util.List allProposals = new ArrayList(10);
+    java.util.List<Proposal> allProposals = new ArrayList<Proposal>(10);
 
     for (int tonic = 0; tonic < 12; tonic++) {
 
@@ -372,24 +371,22 @@ public class ChordRecognizer extends Composite {
         // (ChordDatabase.ChordInfo)chordItr.next();
         boolean foundNote = false;
         for (int i = 0; i < info.getRequiredNotes().length; i++) { // go through
-                                                                   // all the
-                                                                   // requred
-                                                                   // notes
-          Iterator nit = notesInside.iterator();
-          while (nit.hasNext())
+          // all the
+          // requred
+          // notes
+          for (final Integer noteInside : notesInside)
             // go through all the needed notes
-            if (((Integer) nit.next()).intValue() == (tonic
-                + info.getRequiredNotes()[i] - 1) % 12) {
+            if (noteInside.intValue() == (tonic + info.getRequiredNotes()[i] - 1) % 12) {
               foundNote = true;
               if (tonic + info.getRequiredNotes()[i] - 1 == tonic)
                 currentProp.dontHaveGrade += 15; // this means penalty for not
-                                                 // having tonic is -65
+              // having tonic is -65
               currentProp.foundNote(tonic + info.getRequiredNotes()[i] - 1); // found
-                                                                             // a
-                                                                             // note
-                                                                             // in
-                                                                             // a
-                                                                             // chord
+              // a
+              // note
+              // in
+              // a
+              // chord
             }
 
         }
@@ -438,20 +435,18 @@ public class ChordRecognizer extends Composite {
       }
     }
 
-    Iterator props = allProposals.iterator();
-    java.util.List unsortedProposals = new ArrayList(5);
-    while (props.hasNext()) {
+    java.util.List<Proposal> unsortedProposals = new ArrayList<Proposal>(5);
+    for (final Proposal current : allProposals) {
+
       // place the still missing alterations notes accordingly... bass also
       // /////////////////////////////////////////////////////////////
-
-      final Proposal current = (Proposal) props.next();
 
       boolean bassIsOnlyInBass = true;
       // ---------------- bass tone ----------------
       for (int i = chord.getStrings().length - 1; i >= 0; i--) {
         if (chord.getStrings()[i] != -1) {
           if (current.params[BASS_INDEX] == -1) {// if we still didn't determine
-                                                 // bass
+            // bass
             current.params[BASS_INDEX] = (tuning[tuning.length - 1 - i] + chord
                 .getStrings()[i]) % 12;
             if (current.params[BASS_INDEX] != current.params[TONIC_INDEX])
@@ -505,7 +500,7 @@ public class ChordRecognizer extends Composite {
       if (!(current.filled[3] && !(current.filled[0] || current.filled[1] || current.filled[2]))
           && // if just found seventh, cancel it
           current.missingCount == 0 && // we don't tollerate notes in chord that
-                                       // are not used in the ChordName
+          // are not used in the ChordName
           current.dontHaveGrade > -51) {
         findChordLogic(current);
         unsortedProposals.add(current);
@@ -556,7 +551,7 @@ public class ChordRecognizer extends Composite {
     }
     if (this.proposalParameters.size() == 0)
       return null;
-    return (int[]) this.proposalParameters.get(0);
+    return this.proposalParameters.get(0);
   }
 
   /**
@@ -662,16 +657,16 @@ public class ChordRecognizer extends Composite {
    *          1 to sort by don'tHaveGrade, 2 to sort by unusualGrade
    * @return sorted list by selected criteria
    */
-  public void shellsort(java.util.List a, int sortIndex) {
+  public void shellsort(java.util.List<Proposal> a, int sortIndex) {
     int length = a.size();
     for (int gap = length / 2; gap > 0; gap = gap == 2 ? 1 : (int) (gap / 2.2))
       for (int i = gap; i < length; i++) {
-        Proposal tmp = (Proposal) a.get(i);
+        Proposal tmp = a.get(i);
         int j = i;
 
         for (; j >= gap
-            && (sortIndex == 1 ? tmp.dontHaveGrade > ((Proposal) a.get(j - gap)).dontHaveGrade
-                : tmp.unusualGrade > ((Proposal) a.get(j - gap)).unusualGrade); j -= gap)
+            && (sortIndex == 1 ? tmp.dontHaveGrade > a.get(j - gap).dontHaveGrade
+                : tmp.unusualGrade > a.get(j - gap).unusualGrade); j -= gap)
           a.set(j, a.get(j - gap));
         a.set(j, tmp);
       }

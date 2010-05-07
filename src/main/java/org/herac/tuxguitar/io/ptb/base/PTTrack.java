@@ -5,12 +5,12 @@ import java.util.List;
 
 public class PTTrack {
 
-  private List infos;
-  private List sections;
+  private List<PTTrackInfo> infos;
+  private List<PTSection> sections;
 
   public PTTrack() {
-    this.sections = new ArrayList();
-    this.infos = new ArrayList();
+    this.sections = new ArrayList<PTSection>();
+    this.infos = new ArrayList<PTTrackInfo>();
   }
 
   public PTTrackInfo getDefaultInfo() {
@@ -34,7 +34,7 @@ public class PTTrack {
     return null;
   }
 
-  public List getInfos() {
+  public List<PTTrackInfo> getInfos() {
     return this.infos;
   }
 
@@ -45,7 +45,7 @@ public class PTTrack {
     return (PTSection) getSections().get(index);
   }
 
-  public List getSections() {
+  public List<PTSection> getSections() {
     return this.sections;
   }
 }

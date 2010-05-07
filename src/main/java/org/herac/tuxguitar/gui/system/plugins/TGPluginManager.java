@@ -10,18 +10,17 @@ import org.herac.tuxguitar.util.TGServiceReader;
 
 public class TGPluginManager {
 
-  private List plugins;
+  private List<TGPlugin> plugins;
 
   public TGPluginManager() {
-    this.plugins = new ArrayList();
+    this.plugins = new ArrayList<TGPlugin>();
     this.initPlugins();
   }
 
   public void closePlugins() {
-    Iterator it = this.plugins.iterator();
-    while (it.hasNext()) {
+    for (final TGPlugin plugin : this.plugins) {
       try {
-        ((TGPlugin) it.next()).close();
+        plugin.close();
       } catch (TGPluginException exception) {
         MessageDialog.errorMessage(exception);
       } catch (Throwable throwable) {
@@ -35,7 +34,7 @@ public class TGPluginManager {
     return (plugin.getClass().getName() + ".enabled");
   }
 
-  public List getPlugins() {
+  public List<TGPlugin> getPlugins() {
     return this.plugins;
   }
 
@@ -74,10 +73,8 @@ public class TGPluginManager {
   }
 
   public void openPlugins() {
-    Iterator it = this.plugins.iterator();
-    while (it.hasNext()) {
+    for (final TGPlugin plugin : this.plugins) {
       try {
-        TGPlugin plugin = (TGPlugin) it.next();
         plugin.setEnabled(isEnabled(plugin));
       } catch (TGPluginException exception) {
         MessageDialog.errorMessage(exception);

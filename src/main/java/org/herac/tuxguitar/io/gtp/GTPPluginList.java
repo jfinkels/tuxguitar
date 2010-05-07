@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
+import org.herac.tuxguitar.gui.system.plugins.TGPlugin;
 import org.herac.tuxguitar.gui.system.plugins.TGPluginSetup;
 import org.herac.tuxguitar.gui.system.plugins.base.TGInputStreamPlugin;
 import org.herac.tuxguitar.gui.system.plugins.base.TGOutputStreamPlugin;
@@ -25,10 +26,10 @@ public class GTPPluginList extends TGPluginList implements TGPluginSetup {
     return "GPx File Format plugin";
   }
 
-  protected List getPlugins() {
+  protected List<TGPlugin> getPlugins() {
     GTPSettingsUtil.instance().load();
 
-    List plugins = new ArrayList();
+    List<TGPlugin> plugins = new ArrayList<TGPlugin>();
     plugins.add(new TGInputStreamPlugin() {
       protected TGInputStreamBase getInputStream() {
         return new GP5InputStream(GTPSettingsUtil.instance().getSettings());

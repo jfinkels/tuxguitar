@@ -10,13 +10,13 @@ import org.herac.tuxguitar.gui.undo.UndoableEdit;
 public class UndoableJoined implements UndoableEdit {
   private int doAction;
   private UndoableCaretHelper redoCaret;
-  private List undoables;
+  private List<UndoableEdit> undoables;
   private UndoableCaretHelper undoCaret;
 
   public UndoableJoined() {
     this.doAction = UNDO_ACTION;
     this.undoCaret = new UndoableCaretHelper();
-    this.undoables = new ArrayList();
+    this.undoables = new ArrayList<UndoableEdit>();
   }
 
   public void addUndoableEdit(UndoableEdit undoable) {

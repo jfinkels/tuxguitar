@@ -98,7 +98,7 @@ public class SkinOption extends Option {
   protected Label nameLabel;
   protected Image preview;
   protected Composite previewArea;
-  protected List skins;
+  protected List<SkinInfo> skins;
 
   protected Label versionLabel;
 
@@ -197,7 +197,7 @@ public class SkinOption extends Option {
   protected void loadConfig() {
     new Thread(new Runnable() {
       public void run() {
-        SkinOption.this.skins = new ArrayList();
+        SkinOption.this.skins = new ArrayList<SkinInfo>();
         String[] skinNames = TGFileUtils.getFileNames("skins");
         if (skinNames != null) {
           for (int i = 0; i < skinNames.length; i++) {

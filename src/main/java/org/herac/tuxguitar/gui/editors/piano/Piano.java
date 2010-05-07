@@ -85,9 +85,8 @@ public class Piano extends Composite {
         if (Piano.this.beat != null) {
           for (int v = 0; v < Piano.this.beat.countVoices(); v++) {
             TGVoice voice = Piano.this.beat.getVoice(v);
-            Iterator it = voice.getNotes().iterator();
-            while (it.hasNext()) {
-              TGNote note = (TGNote) it.next();
+            
+            for (final TGNote note : voice.getNotes()) {
               paintNote(painter, getRealNoteValue(note));
             }
           }
@@ -143,7 +142,7 @@ public class Piano extends Composite {
     Caret caret = TuxGuitar.instance().getTablatureEditor().getTablature()
         .getCaret();
 
-    List strings = caret.getTrack().getStrings();
+    List<TGString> strings = caret.getTrack().getStrings();
     for (int i = 0; i < strings.size(); i++) {
       TGString string = (TGString) strings.get(i);
       if (value >= string.getValue()) {
@@ -152,9 +151,7 @@ public class Piano extends Composite {
         if (this.beat != null) {
           for (int v = 0; v < this.beat.countVoices(); v++) {
             TGVoice voice = this.beat.getVoice(v);
-            Iterator it = voice.getNotes().iterator();
-            while (it.hasNext()) {
-              TGNoteImpl note = (TGNoteImpl) it.next();
+            for (final TGNote note : voice.getNotes()){
               if (note.getString() == string.getNumber()) {
                 emptyString = false;
                 break;
@@ -582,9 +579,8 @@ public class Piano extends Composite {
     if (this.beat != null) {
       for (int v = 0; v < this.beat.countVoices(); v++) {
         TGVoice voice = this.beat.getVoice(v);
-        Iterator it = voice.getNotes().iterator();
-        while (it.hasNext()) {
-          TGNote note = (TGNote) it.next();
+        
+        for (final TGNote note : voice.getNotes()) {
           if (getRealNoteValue(note) == value) {
             // comienza el undoable
             UndoableMeasureGeneric undoable = UndoableMeasureGeneric

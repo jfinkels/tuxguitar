@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class UndoableManager {
   private static final int LIMIT = 100;
-  private List edits;
+  private List<UndoableEdit> edits;
   private int indexOfNextAdd;
 
   public UndoableManager() {
@@ -86,7 +86,7 @@ public class UndoableManager {
 
   private void init() {
     this.indexOfNextAdd = 0;
-    this.edits = new ArrayList();
+    this.edits = new ArrayList<UndoableEdit>();
   }
 
   public synchronized void redo() throws CannotRedoException {

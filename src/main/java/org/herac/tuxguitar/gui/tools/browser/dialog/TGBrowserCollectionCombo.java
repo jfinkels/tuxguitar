@@ -11,12 +11,12 @@ import org.herac.tuxguitar.gui.tools.browser.TGBrowserCollection;
 
 public class TGBrowserCollectionCombo {
 
-  private List collections;
+  private List<TGBrowserCollection> collections;
   private Combo combo;
 
   public TGBrowserCollectionCombo(Composite parent, int style) {
     this.combo = new Combo(parent, style);
-    this.collections = new ArrayList();
+    this.collections = new ArrayList<TGBrowserCollection>();
     this.addFirstElement();
   }
 

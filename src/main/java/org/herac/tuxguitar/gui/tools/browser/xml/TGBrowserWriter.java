@@ -3,7 +3,6 @@ package org.herac.tuxguitar.gui.tools.browser.xml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -49,9 +48,7 @@ public class TGBrowserWriter {
     // chords tag
     Node listNode = document.createElement(ITEM_LIST_TAG);
 
-    Iterator collections = manager.getCollections();
-    while (collections.hasNext()) {
-      TGBrowserCollection collection = (TGBrowserCollection) collections.next();
+    for (final TGBrowserCollection collection : manager.getCollections()) {
 
       // chord tag
       Node node = document.createElement(ITEM_TAG);

@@ -39,12 +39,12 @@ public class PrinterViewLayout extends ViewLayout {
     protected boolean fullLine;
     protected int lastIndex;
     protected int maxY = 0;
-    protected List measures;
+    protected List<Integer> measures;
     protected int minY = 50;
     protected int tempWith;
 
     public TempLine() {
-      this.measures = new ArrayList();
+      this.measures = new ArrayList<Integer>();
     }
 
     protected void addMeasure(int index) {

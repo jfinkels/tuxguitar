@@ -713,9 +713,7 @@ public class FretBoard extends Composite {
     if (this.beat != null) {
       for (int v = 0; v < this.beat.countVoices(); v++) {
         TGVoice voice = this.beat.getVoice(v);
-        Iterator it = voice.getNotes().iterator();
-        while (it.hasNext()) {
-          TGNote note = (TGNote) it.next();
+        for (final TGNote note : voice.getNotes()) {
           if (note.getValue() == fret && note.getString() == string) {
             // comienza el undoable
             UndoableMeasureGeneric undoable = UndoableMeasureGeneric

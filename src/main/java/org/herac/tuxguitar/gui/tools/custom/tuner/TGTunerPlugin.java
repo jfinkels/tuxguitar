@@ -14,13 +14,13 @@ public class TGTunerPlugin extends
     org.herac.tuxguitar.gui.system.plugins.base.TGToolItemPlugin {
 
   protected void doAction() {
-    List strings = TuxGuitar.instance().getTablatureEditor().getTablature()
+    List<TGString> strings = TuxGuitar.instance().getTablatureEditor().getTablature()
         .getCaret().getTrack().getStrings();
-    Iterator it = strings.iterator();
+
     int[] tuning = new int[strings.size()];
     int i = 0;
-    while (it.hasNext()) {
-      TGString current = (TGString) it.next();
+    
+    for (final TGString current : strings) {
       tuning[i] = current.getValue();
       i++;
     }

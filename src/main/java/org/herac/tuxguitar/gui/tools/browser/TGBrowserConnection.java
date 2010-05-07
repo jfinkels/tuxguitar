@@ -121,7 +121,7 @@ public class TGBrowserConnection {
         public void run() {
           try {
             if (isOpen()) {
-              List elements = getBrowser().listElements();
+              List<TGBrowserElement> elements = getBrowser().listElements();
               notifyElements(callId, elements);
             } else {
               notifyClosed(callId);
@@ -148,7 +148,7 @@ public class TGBrowserConnection {
     this.handler.notifyClosed(callId);
   }
 
-  public void notifyElements(final int callId, List elements) {
+  public void notifyElements(final int callId, List<TGBrowserElement> elements) {
     this.handler.notifyElements(callId, elements);
   }
 

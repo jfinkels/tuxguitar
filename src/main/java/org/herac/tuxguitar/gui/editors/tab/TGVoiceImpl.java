@@ -1,7 +1,5 @@
 package org.herac.tuxguitar.gui.editors.tab;
 
-import java.util.Iterator;
-
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
@@ -10,6 +8,7 @@ import org.herac.tuxguitar.gui.editors.tab.painters.TGSilencePainter;
 import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
+import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGVoice;
 
 public class TGVoiceImpl extends TGVoice {
@@ -161,10 +160,8 @@ public class TGVoiceImpl extends TGVoice {
       if (isRestVoice() && !isHiddenSilence()) {
         paintSilence(layout, painter, fromX, fromY);
       } else {
-        Iterator notes = getNotes().iterator();
-        while (notes.hasNext()) {
-          TGNoteImpl note = (TGNoteImpl) notes.next();
-          note.paint(layout, painter, fromX, fromY);
+        for (final TGNote note : getNotes()) {
+          ((TGNoteImpl) note).paint(layout, painter, fromX, fromY);
         }
         if (!layout.isPlayModeEnabled()) {
           paintBeat(layout, painter, fromX, fromY);

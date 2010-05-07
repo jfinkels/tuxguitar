@@ -8,7 +8,6 @@ package org.herac.tuxguitar.gui.util;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -30,7 +29,7 @@ public class FileChooser {
     private String[] filterExtensions;
     private String[] filterNames;
 
-    public FilterList(List formats) {
+    public FilterList(List<TGFileFormat> formats) {
       int size = (formats.size() + 2);
       this.filterNames = new String[size];
       this.filterExtensions = new String[size];
@@ -72,7 +71,7 @@ public class FileChooser {
     return instance;
   }
 
-  private String getFileName(List formats, String defaultName,
+  private String getFileName(List<TGFileFormat> formats, String defaultName,
       boolean replaceExtension) {
     if (formats == null || formats.isEmpty()) {
       return defaultName;
@@ -84,9 +83,7 @@ public class FileChooser {
       if (index > 0) {
         String fileName = file.substring(0, index);
         String fileExtension = file.substring(index).toLowerCase();
-        Iterator it = formats.iterator();
-        while (it.hasNext()) {
-          TGFileFormat format = (TGFileFormat) it.next();
+        for (final TGFileFormat format :  formats){
           if (format.getSupportedFormats() != null) {
             String[] extensions = format.getSupportedFormats().split(
                 TGFileFormat.EXTENSION_SEPARATOR);
@@ -116,13 +113,13 @@ public class FileChooser {
     return defaultName;
   }
 
-  private List list(Object o) {
-    List list = new ArrayList();
+  private <E> List<E> list(E o) {
+    List<E> list = new ArrayList<E>();
     list.add(o);
     return list;
   }
 
-  public String open(Shell parent, List formats) {
+  public String open(Shell parent, List<TGFileFormat> formats) {
     String currentPath = TuxGuitar.instance().getFileHistory()
         .getCurrentFilePath();
     String chooserPath = TuxGuitar.instance().getFileHistory().getOpenPath();
@@ -157,7 +154,7 @@ public class FileChooser {
     return path;
   }
 
-  public String save(Shell parent, List formats) {
+  public String save(Shell parent, List<TGFileFormat> formats) {
     String chooserPath = TuxGuitar.instance().getFileHistory().getSavePath();
 
     FilterList filter = new FilterList(formats);

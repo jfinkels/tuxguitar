@@ -8,7 +8,6 @@ package org.herac.tuxguitar.gui.system.language;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,11 +24,11 @@ public class LanguageManager {
   public static final String PREFIX = "messages";
 
   private String[] languages;
-  private List loaders;
+  private List<LanguageLoader> loaders;
   private TGResourceBundle resources;
 
   public LanguageManager() {
-    this.loaders = new ArrayList();
+    this.loaders = new ArrayList<LanguageLoader>();
     this.loadLanguages();
   }
 
@@ -40,9 +39,7 @@ public class LanguageManager {
   }
 
   private void fireChanges() {
-    Iterator it = this.loaders.iterator();
-    while (it.hasNext()) {
-      LanguageLoader loader = (LanguageLoader) it.next();
+    for (final LanguageLoader loader : this.loaders) {
       loader.loadProperties();
     }
   }
@@ -127,7 +124,7 @@ public class LanguageManager {
    * 
    */
   private void loadLanguages() {
-    List availableList = new ArrayList();
+    List<String> availableList = new ArrayList<String>();
     String[] fileNames = TGFileUtils.getFileNames("lang");
     if (fileNames != null) {
       // now iterate over them

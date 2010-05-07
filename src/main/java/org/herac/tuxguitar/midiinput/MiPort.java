@@ -49,7 +49,7 @@ public class MiPort implements Receiver {
   private Transmitter f_Transmitter;
 
   private MiPort(MidiDevice inDevice) {
-    f_Device = inDevice;
+    this.f_Device = inDevice;
   }
 
   public void close() {
@@ -61,8 +61,8 @@ public class MiPort implements Receiver {
 
   protected synchronized void closePort() throws MiException {
     try {
-      if (f_Transmitter != null) {
-        final Transmitter transmitter = f_Transmitter;
+      if (this.f_Transmitter != null) {
+        final Transmitter transmitter = this.f_Transmitter;
         TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
           public void run() throws Throwable {
             transmitter.close();
@@ -71,8 +71,8 @@ public class MiPort implements Receiver {
         });
       }
 
-      if (f_Device.isOpen()) {
-        final MidiDevice device = f_Device;
+      if (this.f_Device.isOpen()) {
+        final MidiDevice device = this.f_Device;
         TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
           public void run() throws Throwable {
             device.close();
@@ -86,10 +86,10 @@ public class MiPort implements Receiver {
   }
 
   protected void connectTransmitter(Transmitter inTransmitter) {
-    f_Transmitter = inTransmitter;
+    this.f_Transmitter = inTransmitter;
 
-    if (f_Transmitter != null)
-      f_Transmitter.setReceiver(this);
+    if (this.f_Transmitter != null)
+      this.f_Transmitter.setReceiver(this);
   }
 
   /*
@@ -97,7 +97,7 @@ public class MiPort implements Receiver {
    */
 
   public String getName() {
-    return f_Device.getDeviceInfo().getName();
+    return this.f_Device.getDeviceInfo().getName();
   }
 
   /*
@@ -106,8 +106,8 @@ public class MiPort implements Receiver {
 
   protected synchronized void openPort() throws MiException {
     try {
-      if (!f_Device.isOpen()) {
-        final MidiDevice device = f_Device;
+      if (!this.f_Device.isOpen()) {
+        final MidiDevice device = this.f_Device;
         TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
           public void run() throws Throwable {
             device.open();
@@ -115,8 +115,8 @@ public class MiPort implements Receiver {
         });
       }
 
-      if (f_Transmitter == null) {
-        final MidiDevice device = f_Device;
+      if (this.f_Transmitter == null) {
+        final MidiDevice device = this.f_Device;
         TGSynchronizer.instance().addRunnable(new TGSynchronizer.TGRunnable() {
           public void run() throws Throwable {
             connectTransmitter(device.getTransmitter());

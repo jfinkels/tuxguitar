@@ -2,7 +2,6 @@ package org.herac.tuxguitar.gui.system.language;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -48,9 +47,7 @@ public class TGResourceBundle {
 
   private static void loadResources(String name, Properties p) {
     try {
-      Enumeration enumeration = TGFileUtils.getResourceUrls(name);
-      while (enumeration.hasMoreElements()) {
-        URL url = (URL) enumeration.nextElement();
+      for (final URL url : TGFileUtils.getResourceUrls(name)) {
         Properties properties = new Properties();
         properties.load(url.openStream());
         p.putAll(properties);

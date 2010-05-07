@@ -2,7 +2,6 @@ package org.herac.tuxguitar.gui.system.keybindings.xml;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -62,12 +61,10 @@ public class KeyBindingWriter {
    * @param shortcutsNode
    * @return
    */
-  private static void setBindings(List list, Document document) {
+  private static void setBindings(List<KeyBindingAction> list, Document document) {
     Node shortcutsNode = document.createElement(SHORTCUT_ROOT);
 
-    Iterator it = list.iterator();
-    while (it.hasNext()) {
-      KeyBindingAction keyBindingAction = (KeyBindingAction) it.next();
+    for (final KeyBindingAction keyBindingAction : list) {
 
       Node node = document.createElement(SHORTCUT_TAG);
       shortcutsNode.appendChild(node);
@@ -89,7 +86,7 @@ public class KeyBindingWriter {
     document.appendChild(shortcutsNode);
   }
 
-  public static void setBindings(List list, String fileName) {
+  public static void setBindings(List<KeyBindingAction> list, String fileName) {
     try {
       File file = new File(fileName);
       Document doc = createDocument();

@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.gui.editors.tab.layout;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.graphics.Color;
@@ -104,7 +103,7 @@ public abstract class ViewLayout {
   private Tablature tablature;
   private int textSpacing;
 
-  private List trackPositions;
+  private List<TrackPosition> trackPositions;
 
   private int trackSpacing;
 
@@ -116,7 +115,7 @@ public abstract class ViewLayout {
 
   public ViewLayout(Tablature tablature, int style, float scale) {
     this.tablature = tablature;
-    this.trackPositions = new ArrayList();
+    this.trackPositions = new ArrayList<TrackPosition>();
     this.playModeEnabled = false;
     this.resources = new TGResources(this);
     this.style = style;
@@ -401,9 +400,7 @@ public abstract class ViewLayout {
     TrackPosition trackPos = null;
     int minorDistance = 0;
 
-    Iterator it = this.trackPositions.iterator();
-    while (it.hasNext()) {
-      TrackPosition pos = (TrackPosition) it.next();
+    for (final TrackPosition pos : this.trackPositions) {
       int distanceY = Math.min(Math.abs(y - (pos.getPosY())), Math.abs(y
           - (pos.getPosY() + pos.getHeight() - 10)));
       if (trackPos == null || distanceY < minorDistance) {

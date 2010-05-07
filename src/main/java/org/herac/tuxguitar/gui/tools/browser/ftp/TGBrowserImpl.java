@@ -127,8 +127,8 @@ public class TGBrowserImpl extends TGBrowser {
     return this.root;
   }
 
-  public List listElements() throws TGBrowserException {
-    List elements = new ArrayList();
+  public List<TGBrowserElement> listElements() throws TGBrowserException {
+    List<TGBrowserElement> elements = new ArrayList<TGBrowserElement>();
     try {
       this.client.binary();
       String[] names = this.client.listNames();

@@ -1,13 +1,12 @@
 package org.herac.tuxguitar.io.tef.base;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class TESong {
 
   private TEChord[] chords;
-  private List components;
+  private List<TEComponent> components;
   private TEInfo info;
   private int measures;
   private TEPercussion[] percussions;
@@ -18,11 +17,11 @@ public class TESong {
   private TEText[] texts;
   private TETimeSignature timeSignature;
   private TETrack[] tracks;
-  private List tsChanges;
+  private List<TETimeSignatureChange> tsChanges;
 
   public TESong() {
-    this.components = new ArrayList();
-    this.tsChanges = new ArrayList();
+    this.components = new ArrayList<TEComponent>();
+    this.tsChanges = new ArrayList<TETimeSignatureChange>();
   }
 
   public void addTimeSignatureChange(TETimeSignatureChange tsChange) {
@@ -33,7 +32,7 @@ public class TESong {
     return this.chords;
   }
 
-  public List getComponents() {
+  public List<TEComponent> getComponents() {
     return this.components;
   }
 
@@ -74,9 +73,7 @@ public class TESong {
   }
 
   public TETimeSignature getTimeSignature(int measure) {
-    Iterator it = this.tsChanges.iterator();
-    while (it.hasNext()) {
-      TETimeSignatureChange change = (TETimeSignatureChange) it.next();
+    for (final TETimeSignatureChange change : this.tsChanges){
       if (change.getMeasure() == measure) {
         return change.getTimeSignature();
       }

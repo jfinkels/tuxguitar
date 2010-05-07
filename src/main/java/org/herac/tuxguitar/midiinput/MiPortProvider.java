@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.midiinput;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.sound.midi.MidiDevice;
@@ -34,18 +33,18 @@ public class MiPortProvider {
     return (null);
   }
 
-  public static List listPortsNames() throws MiException {
+  public static List<String> listPortsNames() throws MiException {
     try {
-      ArrayList portsNames = new ArrayList();
+      List<String> portsNames = new ArrayList<String>();
       MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
 
       for (int i = 0; i < infos.length; i++) {
         try {
-          Iterator it = portsNames.iterator();
+
           boolean exists = false;
 
-          while (it.hasNext()) {
-            if (((String) it.next()).equals(infos[i].getName())) {
+          for (final String name : portsNames) {
+            if (name.equals(infos[i].getName())) {
               exists = true;
               break;
             }

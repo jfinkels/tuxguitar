@@ -19,17 +19,17 @@ public class ScaleManager {
 
   private TGScale scale;
 
-  private List scaleListeners;
+  private List<ScaleListener> scaleListeners;
 
-  private List scales;
+  private List<ScaleInfo> scales;
 
   private int selectionIndex;
 
   private int selectionKey;
 
   public ScaleManager() {
-    this.scales = new ArrayList();
-    this.scaleListeners = new ArrayList();
+    this.scales = new ArrayList<ScaleInfo>();
+    this.scaleListeners = new ArrayList<ScaleListener>();
     this.scale = TuxGuitar.instance().getSongManager().getFactory().newScale();
     this.selectionKey = 0;
     this.selectionIndex = NONE_SELECTION;

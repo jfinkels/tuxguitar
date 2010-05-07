@@ -88,9 +88,9 @@ public class TGShareSong {
         String message = new String();
         List<String> messages = new ArrayList<String>();
         response.loadMessages(messages);
-        Iterator it = messages.iterator();
-        while (it.hasNext()) {
-          message += ((String) it.next() + "\r\n");
+        
+        for (final String msg : messages) {
+          message += (msg + "\r\n");
         }
         processDialog(file, message);
       } else {

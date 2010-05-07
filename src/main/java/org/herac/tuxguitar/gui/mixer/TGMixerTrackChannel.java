@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.mixer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -36,10 +35,10 @@ public class TGMixerTrackChannel {
   }
 
   private class ChannelList {
-    private List channelIndexs;
+    private List<ChannelIndex> channelIndexs;
 
     public ChannelList() {
-      this.channelIndexs = new ArrayList();
+      this.channelIndexs = new ArrayList<ChannelIndex>();
     }
 
     public void addChannel(int index, int channel) {
@@ -51,9 +50,7 @@ public class TGMixerTrackChannel {
     }
 
     public int getChannel(int index) {
-      Iterator it = this.channelIndexs.iterator();
-      while (it.hasNext()) {
-        ChannelIndex channelIndex = (ChannelIndex) it.next();
+      for (final ChannelIndex channelIndex : this.channelIndexs) {
         if (index == channelIndex.getIndex()) {
           return channelIndex.getChannel();
         }

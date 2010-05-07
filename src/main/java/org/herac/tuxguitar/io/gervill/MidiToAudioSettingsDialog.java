@@ -49,8 +49,8 @@ public class MidiToAudioSettingsDialog {
     super();
   }
 
-  public List getAvailableFormats() {
-    List list = new ArrayList();
+  public List<MidiToAudioFormat> getAvailableFormats() {
+    List<MidiToAudioFormat> list = new ArrayList<MidiToAudioFormat>();
     AudioFormat srcFormat = MidiToAudioSettings.DEFAULT_FORMAT;
     AudioFormat.Encoding[] encodings = AudioSystem
         .getTargetEncodings(srcFormat);
@@ -86,7 +86,7 @@ public class MidiToAudioSettingsDialog {
   public boolean open(final MidiToAudioSettings settings) {
     this.success = false;
 
-    final List formats = getAvailableFormats();
+    final List<MidiToAudioFormat> formats = getAvailableFormats();
 
     final Shell dialog = DialogUtils.newDialog(TuxGuitar.instance().getShell(),
         SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);

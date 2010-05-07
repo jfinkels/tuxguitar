@@ -15,7 +15,7 @@ public class CustomChordManager {
     return (TGFileUtils.PATH_USER_CONFIG + File.separator + "customchords.xml");
   }
 
-  private List chords;
+  private List<TGChord> chords;
 
   private long lastEdit;
 

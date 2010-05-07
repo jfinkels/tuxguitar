@@ -10,56 +10,57 @@ class MiNote {
 
   public MiNote(byte inString, byte inFret, byte inPitch, byte inVelocity,
       long inTime) {
-    f_String = inString;
-    f_Fret = inFret;
-    f_Pitch = inPitch;
-    f_Velocity = inVelocity;
-    f_TimeOn = inTime;
-    f_TimeOff = -1;
+    this(inString, inFret, inPitch, inVelocity, inTime, -1);
+  }
+
+  public MiNote(byte inString, byte inFret, byte inPitch, byte inVelocity,
+      long inTime, long outTime) {
+    this.f_String = inString;
+    this.f_Fret = inFret;
+    this.f_Pitch = inPitch;
+    this.f_Velocity = inVelocity;
+    this.f_TimeOn = inTime;
+    this.f_TimeOff = -1;
   }
 
   public MiNote(MiNote inNote) {
-    f_String = inNote.getString();
-    f_Fret = inNote.getFret();
-    f_Pitch = inNote.getPitch();
-    f_Velocity = inNote.getVelocity();
-    f_TimeOn = inNote.getTimeOn();
-    f_TimeOff = inNote.getTimeOff();
+    this(inNote.getString(), inNote.getFret(), inNote.getPitch(), inNote
+        .getVelocity(), inNote.getTimeOn(), inNote.getTimeOff());
   }
 
   long getDuration() {
-    return (f_TimeOff - f_TimeOn);
+    return this.f_TimeOff - this.f_TimeOn;
   }
 
   byte getFret() {
-    return (f_Fret);
+    return this.f_Fret;
   }
 
   byte getPitch() {
-    return (f_Pitch);
+    return this.f_Pitch;
   }
 
   byte getString() {
-    return (f_String);
+    return this.f_String;
   }
 
   long getTimeOff() {
-    return (f_TimeOff);
+    return this.f_TimeOff;
   }
 
   long getTimeOn() {
-    return (f_TimeOn);
+    return this.f_TimeOn;
   }
 
   byte getVelocity() {
-    return (f_Velocity);
+    return this.f_Velocity;
   }
 
   void setTimeOff(long inTime) {
-    f_TimeOff = inTime;
+    this.f_TimeOff = inTime;
   }
 
   void setTimeOn(long inTime) {
-    f_TimeOn = inTime;
+    this.f_TimeOn = inTime;
   }
 }

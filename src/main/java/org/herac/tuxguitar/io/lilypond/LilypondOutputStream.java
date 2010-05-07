@@ -3,7 +3,6 @@ package org.herac.tuxguitar.io.lilypond;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.managers.TGSongManager;
@@ -34,10 +33,10 @@ public class LilypondOutputStream {
     private boolean repeatAlternativeOpen;
     private int repeatCount;
     private boolean repeatOpen;
-    private List skippedLyricBeats;
+    private List<String> skippedLyricBeats;
 
     protected LilypondTempData() {
-      this.skippedLyricBeats = new ArrayList();
+      this.skippedLyricBeats = new ArrayList<String>();
       this.reset();
     }
 
@@ -53,7 +52,7 @@ public class LilypondOutputStream {
       return this.repeatCount;
     }
 
-    public List getSkippedLyricBeats() {
+    public List<String> getSkippedLyricBeats() {
       return this.skippedLyricBeats;
     }
 
@@ -309,7 +308,7 @@ public class LilypondOutputStream {
   }
 
   private void addEffectsBeforeBeat(TGVoice voice) {
-    List graceNotes = new ArrayList();
+    List<TGNote> graceNotes = new ArrayList<TGNote>();
     for (int i = 0; i < voice.countNotes(); i++) {
       TGNote note = voice.getNote(i);
       if (note.getEffect().isGrace()) {
@@ -887,9 +886,7 @@ public class LilypondOutputStream {
 
   private String getLilypondTuning(TGTrack track) {
     String tuning = ("\\with { stringTunings = #'( ");
-    Iterator strings = track.getStrings().iterator();
-    while (strings.hasNext()) {
-      TGString string = (TGString) strings.next();
+    for (final TGString string : track.getStrings()) {
       // Lilypond relates string tuning to MIDI middle C (note 60)
       tuning += ((string.getValue() - 60) + " ");
     }
@@ -935,9 +932,7 @@ public class LilypondOutputStream {
           return false;
         }
         // Check if is there any note at same string.
-        Iterator it = voice.getNotes().iterator();
-        while (it.hasNext()) {
-          TGNote current = (TGNote) it.next();
+        for (final TGNote current : voice.getNotes()) {
           if (current.getString() == note.getString()) {
             return current.isTiedNote();
           }

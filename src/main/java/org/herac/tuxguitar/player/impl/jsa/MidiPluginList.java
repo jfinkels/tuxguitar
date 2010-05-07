@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
+import org.herac.tuxguitar.gui.system.plugins.TGPlugin;
 import org.herac.tuxguitar.gui.system.plugins.TGPluginSetup;
 import org.herac.tuxguitar.gui.system.plugins.base.TGMidiOutputPortProviderPlugin;
 import org.herac.tuxguitar.gui.system.plugins.base.TGMidiSequencerProviderPlugin;
@@ -28,8 +29,8 @@ public class MidiPluginList extends TGPluginList implements TGPluginSetup {
     return "Java Sound Api plugin";
   }
 
-  protected List getPlugins() {
-    List plugins = new ArrayList();
+  protected List<TGPlugin> getPlugins() {
+    List<TGPlugin> plugins = new ArrayList<TGPlugin>();
     plugins.add(new TGMidiOutputPortProviderPlugin() {
       protected MidiOutputPortProvider getProvider() {
         return new MidiPortProviderImpl();

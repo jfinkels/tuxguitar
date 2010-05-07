@@ -2,7 +2,6 @@ package org.herac.tuxguitar.gui.tools.browser;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.gui.tools.browser.base.TGBrowserData;
@@ -24,17 +23,17 @@ public class TGBrowserManager {
   }
 
   private boolean changes;
-  private List collectionInfos;
-  private List collections;
+  private List<TGBrowserCollectionInfo> collectionInfos;
+  private List<TGBrowserCollection> collections;
 
-  private List factories;
+  private List<TGBrowserFactory> factories;
 
   private TGBrowserFactoryHandler handler;
 
   private TGBrowserManager() {
-    this.factories = new ArrayList();
-    this.collections = new ArrayList();
-    this.collectionInfos = new ArrayList();
+    this.factories = new ArrayList<TGBrowserFactory>();
+    this.collections = new ArrayList<TGBrowserCollection>();
+    this.collectionInfos = new ArrayList<TGBrowserCollectionInfo>();
     this.readCollections();
     this.addDefaultFactory();
   }
@@ -59,9 +58,7 @@ public class TGBrowserManager {
   public void addFactory(TGBrowserFactory factory) {
     this.factories.add(factory);
 
-    Iterator it = this.collectionInfos.iterator();
-    while (it.hasNext()) {
-      TGBrowserCollectionInfo info = (TGBrowserCollectionInfo) it.next();
+    for (final TGBrowserCollectionInfo info : this.collectionInfos) {
       if (info.getType().equals(factory.getType())) {
         TGBrowserCollection collection = new TGBrowserCollection();
         collection.setType(factory.getType());
@@ -91,9 +88,7 @@ public class TGBrowserManager {
   }
 
   public TGBrowserCollection getCollection(String type, TGBrowserData data) {
-    Iterator it = this.getCollections();
-    while (it.hasNext()) {
-      TGBrowserCollection collection = (TGBrowserCollection) it.next();
+    for (final TGBrowserCollection collection : this.collections) {
       if (collection.getType().equals(type)
           && collection.getData().equals(data)) {
         return collection;
@@ -102,8 +97,8 @@ public class TGBrowserManager {
     return null;
   }
 
-  public Iterator getCollections() {
-    return this.collections.iterator();
+  public List<TGBrowserCollection> getCollections() {
+    return this.collections;
   }
 
   private String getCollectionsFileName() {
@@ -111,14 +106,12 @@ public class TGBrowserManager {
         + "browser-collections.xml";
   }
 
-  public Iterator getFactories() {
-    return this.factories.iterator();
+  public List<TGBrowserFactory> getFactories() {
+    return this.factories;
   }
 
   public TGBrowserFactory getFactory(String type) {
-    Iterator factories = getFactories();
-    while (factories.hasNext()) {
-      TGBrowserFactory factory = (TGBrowserFactory) factories.next();
+    for (final TGBrowserFactory factory : this.factories) {
       if (factory.getType().equals(type)) {
         return factory;
       }

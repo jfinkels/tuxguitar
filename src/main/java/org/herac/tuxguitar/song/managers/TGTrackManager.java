@@ -1,13 +1,13 @@
 package org.herac.tuxguitar.song.managers;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
+import org.herac.tuxguitar.song.models.TGString;
 import org.herac.tuxguitar.song.models.TGTrack;
 
 public class TGTrackManager {
@@ -92,10 +92,8 @@ public class TGTrackManager {
     measure.setClef(clef);
 
     if (toEnd) {
-      List measures = getMeasuresBeforeEnd(track, measure.getStart() + 1);
-      Iterator it = measures.iterator();
-      while (it.hasNext()) {
-        TGMeasure nextMeasure = (TGMeasure) it.next();
+      for (final TGMeasure nextMeasure : getMeasuresBeforeEnd(track, measure
+          .getStart() + 1)) {
         nextMeasure.setClef(clef);
       }
     }
@@ -126,7 +124,7 @@ public class TGTrackManager {
     this.songManager.updateChannel(track.getChannel());
   }
 
-  public void changeInstrumentStrings(TGTrack track, List strings) {
+  public void changeInstrumentStrings(TGTrack track, List<TGString> strings) {
     if (strings.size() < track.getStrings().size()) {
       removeNotesAfterString(track, strings.size());
     }
@@ -147,10 +145,8 @@ public class TGTrackManager {
     measure.setKeySignature(keySignature);
 
     if (toEnd) {
-      List measures = getMeasuresBeforeEnd(track, measure.getStart() + 1);
-      Iterator it = measures.iterator();
-      while (it.hasNext()) {
-        TGMeasure nextMeasure = (TGMeasure) it.next();
+      for (final TGMeasure nextMeasure : getMeasuresBeforeEnd(track, measure
+          .getStart() + 1)) {
         nextMeasure.setKeySignature(keySignature);
       }
     }
@@ -204,8 +200,8 @@ public class TGTrackManager {
   /**
    * Retorna Todos los desde Start hasta el final del compas
    */
-  public List getMeasuresBeforeEnd(TGTrack track, long fromStart) {
-    List measures = new ArrayList();
+  public List<TGMeasure> getMeasuresBeforeEnd(TGTrack track, long fromStart) {
+    List<TGMeasure> measures = new ArrayList<TGMeasure>();
     for (final TGMeasure currMeasure : track.getMeasures()) {
       if (currMeasure.getStart() >= fromStart) {
         measures.add(currMeasure);
@@ -217,8 +213,8 @@ public class TGTrackManager {
   /**
    * Retorna Todos los desde Start hasta el final del compas
    */
-  public List getMeasuresBetween(TGTrack track, long p1, long p2) {
-    List measures = new ArrayList();
+  public List<TGMeasure> getMeasuresBetween(TGTrack track, long p1, long p2) {
+    List<TGMeasure> measures = new ArrayList<TGMeasure>();
     for (final TGMeasure measure : track.getMeasures()) {
       if ((measure.getStart() + measure.getLength()) > p1
           && measure.getStart() < p2) {
@@ -264,9 +260,7 @@ public class TGTrackManager {
   }
 
   public void moveOutOfBoundsBeatsToNewMeasure(TGTrack track, long start) {
-    Iterator it = getMeasuresBeforeEnd(track, start).iterator();
-    while (it.hasNext()) {
-      TGMeasure measure = (TGMeasure) it.next();
+    for (final TGMeasure measure : getMeasuresBeforeEnd(track, start)) {
       getSongManager().getMeasureManager().moveOutOfBoundsBeatsToNewMeasure(
           measure);
     }
@@ -274,7 +268,7 @@ public class TGTrackManager {
 
   public void moveTrackBeats(TGTrack track, long measureStart, long moveStart,
       long theMove) {
-    List measures = getMeasuresBeforeEnd(track, measureStart);
+    List<TGMeasure> measures = getMeasuresBeforeEnd(track, measureStart);
     for (int i = 0; i < measures.size(); i++) {
       TGMeasure measure = (TGMeasure) measures.get(i);
       if (moveStart + theMove < moveStart) {

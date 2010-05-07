@@ -110,21 +110,16 @@ public class LanguageOption extends Option {
     this.loadConfig();
   }
 
-  protected List getLanguageItems(String[] languages) {
-    List list = new ArrayList();
+  protected List<LanguageItem> getLanguageItems(String[] languages) {
+    List<LanguageItem> list = new ArrayList<LanguageItem>();
     if (languages != null) {
       for (int i = 0; i < languages.length; i++) {
         list.add(new LanguageItem(languages[i], TuxGuitar.getProperty("locale."
             + languages[i])));
       }
-      Collections.sort(list, new Comparator() {
-        public int compare(Object o1, Object o2) {
-          if (o1 instanceof LanguageItem && o2 instanceof LanguageItem) {
-            LanguageItem l1 = (LanguageItem) o1;
-            LanguageItem l2 = (LanguageItem) o2;
-            return l1.getValue().compareTo(l2.getValue());
-          }
-          return 0;
+      Collections.sort(list, new Comparator<LanguageItem>() {
+        public int compare(LanguageItem l1, LanguageItem l2) {
+          return l1.getValue().compareTo(l2.getValue());
         }
       });
     }
@@ -136,7 +131,7 @@ public class LanguageOption extends Option {
       public void run() {
         final String language = getConfig().getStringConfigValue(
             TGConfigKeys.LANGUAGE);
-        final List languages = getLanguageItems(TuxGuitar.instance()
+        final List<LanguageItem> languages = getLanguageItems(TuxGuitar.instance()
             .getLanguageManager().getLanguages());
         new SyncThread(new Runnable() {
           public void run() {

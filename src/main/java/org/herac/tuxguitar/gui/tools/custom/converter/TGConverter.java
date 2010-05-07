@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.Iterator;
 
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGFileFormatManager;
@@ -128,10 +127,8 @@ public class TGConverter {
   }
 
   private TGSong importSong(TGFactory factory, String filename) {
-    Iterator importers = TGFileFormatManager.instance().getImporters();
-    while (importers.hasNext()) {
+    for (final TGRawImporter rawImporter : TGFileFormatManager.instance().getImporters()) {
       try {
-        TGRawImporter rawImporter = (TGRawImporter) importers.next();
         if (rawImporter instanceof TGLocalFileImporter) {
           TGLocalFileImporter currentImporter = (TGLocalFileImporter) rawImporter;
           currentImporter.configure(true);

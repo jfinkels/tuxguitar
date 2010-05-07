@@ -3,7 +3,6 @@ package org.herac.tuxguitar.gui.editors.chord.xml;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -64,13 +63,11 @@ public class ChordXMLWriter {
   /**
    * Write chords to xml file
    */
-  private static void setChords(List chords, Document document) {
+  private static void setChords(List<TGChord> chords, Document document) {
     // chords tag
     Node chordsNode = document.createElement(ChordXML.CHORD_LIST_TAG);
 
-    Iterator it = chords.iterator();
-    while (it.hasNext()) {
-      TGChord chord = (TGChord) it.next();
+    for (final TGChord chord : chords) {
 
       // chord tag
       Node chordNode = document.createElement(ChordXML.CHORD_TAG);
@@ -115,7 +112,7 @@ public class ChordXMLWriter {
     document.appendChild(chordsNode);
   }
 
-  public static void setChords(List chords, String fileName) {
+  public static void setChords(List<TGChord> chords, String fileName) {
     File file = new File(fileName);
 
     Document doc = createDocument();

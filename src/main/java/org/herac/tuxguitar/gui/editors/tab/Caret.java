@@ -6,9 +6,6 @@
  */
 package org.herac.tuxguitar.gui.editors.tab;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
@@ -117,10 +114,7 @@ public class Caret {
   }
 
   public TGString getSelectedString() {
-    List strings = this.selectedTrack.getStrings();
-    Iterator it = strings.iterator();
-    while (it.hasNext()) {
-      TGString instrumentString = (TGString) it.next();
+    for (final TGString instrumentString : this.selectedTrack.getStrings()) {
       if (instrumentString.getNumber() == this.string) {
         return instrumentString;
       }

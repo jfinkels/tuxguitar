@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.undo.undoables.measure;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.gui.TuxGuitar;
@@ -15,23 +14,20 @@ import org.herac.tuxguitar.song.models.TGMarker;
 
 public class UndoableRemoveMeasure implements UndoableEdit {
   private class UndoMarkers {
-    private List markers;
+    private List<TGMarker> markers;
 
     public UndoMarkers() {
-      this.markers = new ArrayList();
-      Iterator it = TuxGuitar.instance().getSongManager().getMarkers()
-          .iterator();
-      while (it.hasNext()) {
-        this.markers.add(((TGMarker) it.next()).clone(TuxGuitar.instance()
-            .getSongManager().getFactory()));
+      this.markers = new ArrayList<TGMarker>();
+      for (final TGMarker marker : TuxGuitar.instance().getSongManager().getMarkers()) {
+        this.markers.add((marker.clone(TuxGuitar.instance()
+            .getSongManager().getFactory())));
       }
     }
 
     public void undo() {
       TuxGuitar.instance().getSongManager().removeAllMarkers();
-      Iterator it = this.markers.iterator();
-      while (it.hasNext()) {
-        TGMarker marker = (TGMarker) it.next();
+
+      for (final TGMarker marker : this.markers) {
         TuxGuitar.instance().getSongManager().updateMarker(
             marker.clone(TuxGuitar.instance().getSongManager().getFactory()));
       }

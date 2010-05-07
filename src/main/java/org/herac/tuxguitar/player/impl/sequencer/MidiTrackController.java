@@ -9,11 +9,11 @@ public class MidiTrackController {
 
   private boolean anySolo;
   private MidiSequencerImpl sequencer;
-  private List tracks;
+  private List<MidiTrack> tracks;
 
   public MidiTrackController(MidiSequencerImpl sequencer) {
     this.sequencer = sequencer;
-    this.tracks = new ArrayList();
+    this.tracks = new ArrayList<MidiTrack>();
     this.anySolo = false;
   }
 

@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.io.musicxml;
 
 import java.io.OutputStream;
-import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

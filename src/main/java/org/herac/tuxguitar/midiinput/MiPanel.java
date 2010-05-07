@@ -32,13 +32,13 @@ class MiPanel {
   private Shell f_Dialog = null;
 
   void showDialog(Shell parent) {
-    if (f_Dialog != null)
-      f_Dialog.forceActive();
+    if (this.f_Dialog != null)
+      this.f_Dialog.forceActive();
     else {
       try {
-        f_Dialog = DialogUtils.newDialog(parent, SWT.DIALOG_TRIM);
-        f_Dialog.setLayout(new GridLayout());
-        f_Dialog.setText(TuxGuitar.getProperty("midiinput.panel.title"));
+        this.f_Dialog = DialogUtils.newDialog(parent, SWT.DIALOG_TRIM);
+        this.f_Dialog.setLayout(new GridLayout());
+        this.f_Dialog.setText(TuxGuitar.getProperty("midiinput.panel.title"));
 
         GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
         data.minimumWidth = 80;
@@ -56,18 +56,18 @@ class MiPanel {
         lblMode.setText(TuxGuitar.getProperty("midiinput.panel.label.mode")
             + ":");
 
-        f_CmbMode = new Combo(groupMode, SWT.DROP_DOWN | SWT.READ_ONLY);
-        f_CmbMode.setLayoutData(new GridData(130, SWT.DEFAULT));
+        this.f_CmbMode = new Combo(groupMode, SWT.DROP_DOWN | SWT.READ_ONLY);
+        this.f_CmbMode.setLayoutData(new GridData(130, SWT.DEFAULT));
 
-        f_CmbMode.add(TuxGuitar.getProperty("midiinput.mode.echo"));
-        f_CmbMode.add(TuxGuitar.getProperty("midiinput.mode.chords"));
-        f_CmbMode.add(TuxGuitar.getProperty("midiinput.mode.scales"));
+        this.f_CmbMode.add(TuxGuitar.getProperty("midiinput.mode.echo"));
+        this.f_CmbMode.add(TuxGuitar.getProperty("midiinput.mode.chords"));
+        this.f_CmbMode.add(TuxGuitar.getProperty("midiinput.mode.scales"));
         // /* RECORDING
-        f_CmbMode.add(TuxGuitar.getProperty("midiinput.mode.record"));
+        this.f_CmbMode.add(TuxGuitar.getProperty("midiinput.mode.record"));
         // */
-        f_CmbMode.select(MiConfig.instance().getMode());
+        this.f_CmbMode.select(MiConfig.instance().getMode());
 
-        f_CmbMode.addSelectionListener(new SelectionAdapter() {
+        this.f_CmbMode.addSelectionListener(new SelectionAdapter() {
           public void widgetSelected(SelectionEvent arg0) {
             int mode = f_CmbMode.getSelectionIndex();
 
@@ -82,12 +82,12 @@ class MiPanel {
         });
 
         // CONFIGURE button
-        f_BtnConfig = new Button(groupMode, SWT.PUSH);
-        f_BtnConfig.setLayoutData(data);
+        this.f_BtnConfig = new Button(groupMode, SWT.PUSH);
+        this.f_BtnConfig.setLayoutData(data);
 
-        f_BtnConfig.setText(TuxGuitar
+        this.f_BtnConfig.setText(TuxGuitar
             .getProperty("midiinput.panel.button.config"));
-        f_BtnConfig.addSelectionListener(new SelectionAdapter() {
+        this.f_BtnConfig.addSelectionListener(new SelectionAdapter() {
           public void widgetSelected(SelectionEvent arg0) {
             MiConfig.instance().showDialog(f_Dialog);
           }
@@ -102,12 +102,12 @@ class MiPanel {
             .getProperty("midiinput.panel.label.group.rec"));
 
         // START button
-        f_BtnRecord = new Button(groupRec, SWT.PUSH);
-        f_BtnRecord.setLayoutData(data);
+        this.f_BtnRecord = new Button(groupRec, SWT.PUSH);
+        this.f_BtnRecord.setLayoutData(data);
 
-        f_BtnRecord.setText(TuxGuitar
+        this.f_BtnRecord.setText(TuxGuitar
             .getProperty("midiinput.panel.button.start"));
-        f_BtnRecord.addSelectionListener(new SelectionAdapter() {
+        this.f_BtnRecord.addSelectionListener(new SelectionAdapter() {
           public void widgetSelected(SelectionEvent arg0) {
             MiRecorder.instance().start();
             updateControls();
@@ -115,11 +115,12 @@ class MiPanel {
         });
 
         // STOP button
-        f_BtnStop = new Button(groupRec, SWT.PUSH);
-        f_BtnStop.setLayoutData(data);
+        this.f_BtnStop = new Button(groupRec, SWT.PUSH);
+        this.f_BtnStop.setLayoutData(data);
 
-        f_BtnStop.setText(TuxGuitar.getProperty("midiinput.panel.button.stop"));
-        f_BtnStop.addSelectionListener(new SelectionAdapter() {
+        this.f_BtnStop.setText(TuxGuitar
+            .getProperty("midiinput.panel.button.stop"));
+        this.f_BtnStop.addSelectionListener(new SelectionAdapter() {
           public void widgetSelected(SelectionEvent arg0) {
             MiRecorder.instance().stop();
             updateControls();
@@ -128,9 +129,9 @@ class MiPanel {
         // */
 
         updateControls();
-        DialogUtils.openDialog(f_Dialog, DialogUtils.OPEN_STYLE_CENTER
+        DialogUtils.openDialog(this.f_Dialog, DialogUtils.OPEN_STYLE_CENTER
             | DialogUtils.OPEN_STYLE_PACK | DialogUtils.OPEN_STYLE_WAIT);
-        f_Dialog = null;
+        this.f_Dialog = null;
       } catch (Exception e) {
         MessageDialog.errorMessage(e);
       }
@@ -138,16 +139,16 @@ class MiPanel {
   }
 
   void updateControls() {
-    f_CmbMode.setEnabled(!MiRecorder.instance().isRecording());
-    f_BtnConfig.setEnabled(!MiRecorder.instance().isRecording());
+    this.f_CmbMode.setEnabled(!MiRecorder.instance().isRecording());
+    this.f_BtnConfig.setEnabled(!MiRecorder.instance().isRecording());
 
     // /* RECORDING
     if (MiProvider.instance().getMode() != MiConfig.MODE_SONG_RECORDING) {
-      f_BtnRecord.setEnabled(false);
-      f_BtnStop.setEnabled(false);
+      this.f_BtnRecord.setEnabled(false);
+      this.f_BtnStop.setEnabled(false);
     } else {
-      f_BtnRecord.setEnabled(!MiRecorder.instance().isRecording());
-      f_BtnStop.setEnabled(MiRecorder.instance().isRecording());
+      this.f_BtnRecord.setEnabled(!MiRecorder.instance().isRecording());
+      this.f_BtnStop.setEnabled(MiRecorder.instance().isRecording());
     }
     // */
   }

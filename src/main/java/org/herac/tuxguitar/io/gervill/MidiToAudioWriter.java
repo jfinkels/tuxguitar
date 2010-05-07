@@ -3,7 +3,6 @@ package org.herac.tuxguitar.io.gervill;
 import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.sound.midi.MetaMessage;
@@ -17,24 +16,15 @@ import org.herac.tuxguitar.song.models.TGDuration;
 
 public class MidiToAudioWriter {
 
-  private static void sort(List events) {
-    Collections.sort(events, new Comparator() {
-      public int compare(Object o1, Object o2) {
-        if (o1 instanceof MidiEvent && o2 instanceof MidiEvent) {
-          MidiEvent e1 = (MidiEvent) o1;
-          MidiEvent e2 = (MidiEvent) o2;
-          if (e1.getTick() > e2.getTick()) {
-            return 1;
-          } else if (e1.getTick() < e2.getTick()) {
-            return -1;
-          }
-        }
-        return 0;
+  private static void sort(List<MidiEvent> events) {
+    Collections.sort(events, new Comparator<MidiEvent>() {
+      public int compare(MidiEvent e1, MidiEvent e2) {
+        return (int) (e1.getTick() - e2.getTick());
       }
     });
   }
 
-  public static void write(OutputStream out, List events,
+  public static void write(OutputStream out, List<MidiEvent> events,
       MidiToAudioSettings settings) throws Throwable {
     MidiToAudioSynth.instance().openSynth();
 
@@ -45,9 +35,7 @@ public class MidiToAudioWriter {
     Receiver receiver = MidiToAudioSynth.instance().getReceiver();
     AudioInputStream stream = MidiToAudioSynth.instance().getStream();
 
-    Iterator it = events.iterator();
-    while (it.hasNext()) {
-      MidiEvent event = (MidiEvent) it.next();
+    for (final MidiEvent event : events) {
       MidiMessage msg = event.getMessage();
 
       timePosition += ((event.getTick() - previousTick) * usqTempo)

@@ -40,11 +40,11 @@ public class TGBeatGroup {
 
   private int voice;
 
-  private List voices;
+  private List<TGVoice> voices;
 
   public TGBeatGroup(int voice) {
     this.voice = voice;
-    this.voices = new ArrayList();
+    this.voices = new ArrayList<TGVoice>();
     this.direction = DIRECTION_NOT_SETTED;
     this.firstMinNote = null;
     this.firstMaxNote = null;
@@ -156,7 +156,7 @@ public class TGBeatGroup {
     return this.minNote;
   }
 
-  public List getVoices() {
+  public List<TGVoice> getVoices() {
     return this.voices;
   }
 

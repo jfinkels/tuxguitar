@@ -41,6 +41,7 @@ import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.song.models.TGBeat;
+import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGString;
 
 /**
@@ -62,7 +63,7 @@ public class ChordList extends Composite {
   private Composite composite;
   private ChordDialog dialog;
   private Font font;
-  private List graphicChords;
+  private List<TGChord> graphicChords;
   private int height;
   private TGChordImpl selectedChord;
 
@@ -70,16 +71,15 @@ public class ChordList extends Composite {
     super(parent, SWT.NONE);
     this.setLayout(dialog.gridLayout(1, false, 0, 0));
     this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-    this.graphicChords = new ArrayList();
+    this.graphicChords = new ArrayList<TGChord>();
     this.dialog = dialog;
     this.beat = beat;
     this.init();
   }
 
   public void disposeChords() {
-    Iterator it = this.graphicChords.iterator();
-    while (it.hasNext()) {
-      ((TGChordImpl) it.next()).dispose();
+    for (final TGChord chord : this.graphicChords) {
+      ((TGChordImpl) chord).dispose();
     }
     this.graphicChords.clear();
   }
@@ -91,9 +91,8 @@ public class ChordList extends Composite {
   }
 
   protected TGChordImpl getChord(int x, int y, boolean setAsSelected) {
-    Iterator it = this.graphicChords.iterator();
-    while (it.hasNext()) {
-      TGChordImpl chord = (TGChordImpl) it.next();
+    for (final TGChord crd : this.graphicChords) {
+      TGChordImpl chord = (TGChordImpl) crd;
       int x1 = chord.getPosX();
       int x2 = x1 + chord.getWidth();
       int y1 = chord.getPosY();
@@ -197,9 +196,9 @@ public class ChordList extends Composite {
     int fromX = 15;
     int fromY = 10;
     int vScroll = this.composite.getVerticalBar().getSelection();
-    Iterator it = this.graphicChords.iterator();
-    while (it.hasNext()) {
-      TGChordImpl chord = (TGChordImpl) it.next();
+
+    for (final TGChord crd : this.graphicChords) {
+      TGChordImpl chord = (TGChordImpl) crd;
 
       Color color = getChordColor(chord);
       chord.setBackgroundColor(this.composite.getBackground());
@@ -234,13 +233,12 @@ public class ChordList extends Composite {
     this.composite.redraw();
   }
 
-  public void setChords(List chords) {
+  public void setChords(List<TGChord> chords) {
     this.disposeChords();
     this.selectedChord = null;
 
-    Iterator it = chords.iterator();
-    while (it.hasNext()) {
-      TGChordImpl chord = (TGChordImpl) it.next();
+    for (final TGChord crd : chords) {
+      TGChordImpl chord = (TGChordImpl) crd;
       chord.setTonic(ChordList.this.dialog.getSelector().getTonicList()
           .getSelectionIndex());
       chord.setBeat(ChordList.this.beat);

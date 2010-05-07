@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.tools.browser.dialog;
 
 import java.io.InputStream;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -54,7 +53,7 @@ public class TGBrowserDialog implements TGBrowserFactoryHandler,
   protected TableColumn column;
   private TGBrowserConnection connection;
   private Shell dialog;
-  protected List elements;
+  protected List<TGBrowserElement> elements;
   protected TGBrowserMenuBar menu;
   protected Table table;
   protected TGBrowserToolBar toolBar;
@@ -65,7 +64,7 @@ public class TGBrowserDialog implements TGBrowserFactoryHandler,
     this.toolBar = new TGBrowserToolBar(this);
   }
 
-  protected void addElements(List elements) {
+  protected void addElements(List<TGBrowserElement> elements) {
     this.elements = elements;
   }
 
@@ -168,7 +167,7 @@ public class TGBrowserDialog implements TGBrowserFactoryHandler,
     }
   }
 
-  public void notifyElements(int callId, List elements) {
+  public void notifyElements(int callId, List<TGBrowserElement> elements) {
     if (!isDisposed()) {
       this.addElements(elements);
       this.updateTable();
@@ -394,9 +393,7 @@ public class TGBrowserDialog implements TGBrowserFactoryHandler,
           if (!isDisposed()) {
             TGBrowserDialog.this.table.removeAll();
             if (TGBrowserDialog.this.elements != null) {
-              Iterator it = TGBrowserDialog.this.elements.iterator();
-              while (it.hasNext()) {
-                TGBrowserElement element = (TGBrowserElement) it.next();
+              for (final TGBrowserElement element : TGBrowserDialog.this.elements) {
                 TableItem item = new TableItem(TGBrowserDialog.this.table,
                     SWT.NONE);
                 item.setImage(element.isFolder() ? TuxGuitar.instance()

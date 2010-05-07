@@ -2,9 +2,9 @@ package org.herac.tuxguitar.player.impl.midiport.fluidsynth;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import org.herac.tuxguitar.player.base.MidiOutputPort;
 import org.herac.tuxguitar.player.base.MidiOutputPortProvider;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
 
@@ -43,12 +43,10 @@ public class MidiOutputPortProviderImpl implements MidiOutputPortProvider {
     return this.synth;
   }
 
-  public List listPorts() throws MidiPlayerException {
+  public List<MidiOutputPort> listPorts() throws MidiPlayerException {
     try {
-      List ports = new ArrayList();
-      Iterator it = getSettings().getSoundfonts().iterator();
-      while (it.hasNext()) {
-        String path = (String) it.next();
+      List<MidiOutputPort> ports = new ArrayList<MidiOutputPort>();
+      for (final String path : getSettings().getSoundfonts()){
         File soundfont = new File(path);
         if (soundfont.exists() && !soundfont.isDirectory()) {
           ports.add(new MidiOutputPortImpl(getSynth(), soundfont));

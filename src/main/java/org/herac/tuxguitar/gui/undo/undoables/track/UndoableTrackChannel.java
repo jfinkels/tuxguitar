@@ -22,7 +22,7 @@ public class UndoableTrackChannel implements UndoableEdit {
     UndoableTrackChannel undoable = new UndoableTrackChannel();
     undoable.doAction = UNDO_ACTION;
     undoable.undoCaret = new UndoableCaretHelper();
-    undoable.undoChannels = new ArrayList();
+    undoable.undoChannels = new ArrayList<TGChannel>();
 
     for (int i = 0; i < tracks; i++) {
       TGTrack track = song.getTrack(i);
@@ -33,10 +33,10 @@ public class UndoableTrackChannel implements UndoableEdit {
 
   private int doAction;
   private UndoableCaretHelper redoCaret;
-  private List redoChannels;
+  private List<TGChannel> redoChannels;
   private UndoableCaretHelper undoCaret;
 
-  private List undoChannels;
+  private List<TGChannel> undoChannels;
 
   private UndoableTrackChannel() {
     super();

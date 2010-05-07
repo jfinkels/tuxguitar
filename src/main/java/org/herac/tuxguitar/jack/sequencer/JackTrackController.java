@@ -9,11 +9,11 @@ public class JackTrackController {
 
   private boolean anySolo;
   private JackSequencer sequencer;
-  private List tracks;
+  private List<JackTrack> tracks;
 
   public JackTrackController(JackSequencer sequencer) {
     this.sequencer = sequencer;
-    this.tracks = new ArrayList();
+    this.tracks = new ArrayList<JackTrack>();
     this.anySolo = false;
   }
 

@@ -123,12 +123,12 @@ public class MidiSynth {
     return new int[] { minimum.getValue(), maximum.getValue() };
   }
 
-  private native void getPropertyOptions(long instance, String key, List options);
+  private native void getPropertyOptions(long instance, String key, List<String> options);
 
-  public List getPropertyOptions(String key) {
-    List options = new ArrayList();
+  public List<String> getPropertyOptions(String key) {
+    List<String> options = new ArrayList<String>();
     if (isInitialized()) {
-      this.getPropertyOptions(instance, key, options);
+      this.getPropertyOptions(this.instance, key, options);
     }
     return options;
   }

@@ -6,7 +6,7 @@ import java.util.List;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
 
 public class MidiEventPlayer {
-  private List events;
+  private List<MidiEvent> events;
   private long lastTick;
 
   private boolean reset;
@@ -15,7 +15,7 @@ public class MidiEventPlayer {
 
   public MidiEventPlayer(MidiSequencerImpl sequencer) {
     this.sequencer = sequencer;
-    this.events = new ArrayList();
+    this.events = new ArrayList<MidiEvent>();
     this.reset();
   }
 

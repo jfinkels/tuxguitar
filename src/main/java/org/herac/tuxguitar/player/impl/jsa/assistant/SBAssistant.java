@@ -3,6 +3,7 @@ package org.herac.tuxguitar.player.impl.jsa.assistant;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,10 +36,13 @@ public class SBAssistant {
     try {
       return new URL(s);
     } catch (MalformedURLException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(SBAssistant.class);
 
   private MidiPortSynthesizer synthesizer;
 

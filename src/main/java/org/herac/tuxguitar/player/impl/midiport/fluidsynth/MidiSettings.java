@@ -104,8 +104,8 @@ public class MidiSettings {
         this.getSynth().getIntegerProperty(property));
   }
 
-  public List getSoundfonts() {
-    List ports = new ArrayList();
+  public List<String> getSoundfonts() {
+    List<String> ports = new ArrayList<String>();
     TGConfigManager config = getConfig();
 
     int count = config.getIntConfigValue("soundfont.count");
@@ -143,11 +143,11 @@ public class MidiSettings {
     getConfig().setProperty(property, value);
   }
 
-  public void setSoundfonts(List soundfonts) {
+  public void setSoundfonts(List<String> soundfonts) {
     TGConfigManager config = getConfig();
     config.setProperty("soundfont.count", soundfonts.size());
     for (int i = 0; i < soundfonts.size(); i++) {
-      String path = (String) soundfonts.get(i);
+      String path = soundfonts.get(i);
       config.setProperty("soundfont.path" + i, path);
     }
   }

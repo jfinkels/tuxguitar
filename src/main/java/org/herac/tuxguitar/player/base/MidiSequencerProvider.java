@@ -6,6 +6,6 @@ public interface MidiSequencerProvider {
 
   public void closeAll() throws MidiPlayerException;
 
-  public List listSequencers() throws MidiPlayerException;
+  public List<MidiSequencer> listSequencers() throws MidiPlayerException;
 
 }

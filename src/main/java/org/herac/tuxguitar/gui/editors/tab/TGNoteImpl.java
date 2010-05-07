@@ -6,8 +6,6 @@
  */
 package org.herac.tuxguitar.gui.editors.tab;
 
-import java.util.Iterator;
-
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.herac.tuxguitar.gui.editors.TGPainter;
@@ -54,14 +52,12 @@ public class TGNoteImpl extends TGNote {
   /**
    * Encuentra la nota a la que esta ligada
    */
-  private TGNoteImpl getNoteForTie() {
+  private TGNote getNoteForTie() {
     for (int i = getMeasureImpl().countBeats() - 1; i >= 0; i--) {
       TGBeat beat = getMeasureImpl().getBeat(i);
       TGVoice voice = beat.getVoice(getVoice().getIndex());
       if (beat.getStart() < getBeatImpl().getStart() && !voice.isRestVoice()) {
-        Iterator it = voice.getNotes().iterator();
-        while (it.hasNext()) {
-          TGNoteImpl note = (TGNoteImpl) it.next();
+        for (final TGNote note : voice.getNotes()) {
           if (note.getString() == getString()) {
             return note;
           }
@@ -349,7 +345,7 @@ public class TGNoteImpl extends TGNote {
 
       // ----------ligadura---------------------------------------
       if (isTiedNote()) {
-        TGNoteImpl noteForTie = getNoteForTie();
+        TGNoteImpl noteForTie = (TGNoteImpl) getNoteForTie();
         float tScale = (scale / 8.0f);
         float tX = x - (20.0f * tScale);
         float tY = y1 - (2.0f * tScale);
@@ -564,7 +560,7 @@ public class TGNoteImpl extends TGNote {
         float tY = 0;
         float tWidth = 0;
         float tHeight = (stringSpacing * 3);
-        TGNoteImpl noteForTie = getNoteForTie();
+        TGNoteImpl noteForTie = (TGNoteImpl) getNoteForTie();
         if (noteForTie != null) {
           tX = (fromX + noteForTie.getPosX() + noteForTie.getBeatImpl()
               .getSpacing());

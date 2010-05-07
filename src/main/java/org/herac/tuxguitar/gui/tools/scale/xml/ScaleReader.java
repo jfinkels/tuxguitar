@@ -31,7 +31,7 @@ public class ScaleReader {
     return document;
   }
 
-  private static void loadScales(List scales, Node node) {
+  private static void loadScales(List<ScaleInfo> scales, Node node) {
     NodeList nodeList = node.getChildNodes();
     for (int i = 0; i < nodeList.getLength(); i++) {
       Node child = nodeList.item(i);
@@ -53,7 +53,7 @@ public class ScaleReader {
     }
   }
 
-  public void loadScales(List scales, InputStream stream) {
+  public void loadScales(List<ScaleInfo> scales, InputStream stream) {
     try {
       if (stream != null) {
         Document doc = getDocument(stream);

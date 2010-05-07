@@ -8,7 +8,6 @@ package org.herac.tuxguitar.io.gtp;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.io.base.TGFileFormat;
@@ -150,8 +149,8 @@ public class GP3OutputStream extends GTPOutputStream {
     return (byte) ((s + 1) / 8);
   }
 
-  private List toCommentLines(String comments) {
-    List lines = new ArrayList();
+  private List<String> toCommentLines(String comments) {
+    List<String> lines = new ArrayList<String>();
 
     String line = comments;
     while (line.length() > Byte.MAX_VALUE) {
@@ -359,7 +358,7 @@ public class GP3OutputStream extends GTPOutputStream {
   }
 
   private void writeInfo(TGSong song) throws IOException {
-    List comments = toCommentLines(song.getComments());
+    List<String> comments = toCommentLines(song.getComments());
     writeStringByteSizeOfInteger(song.getName());
     writeStringByteSizeOfInteger("");
     writeStringByteSizeOfInteger(song.getArtist());

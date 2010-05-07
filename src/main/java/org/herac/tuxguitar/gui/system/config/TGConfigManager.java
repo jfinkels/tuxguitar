@@ -12,9 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.RGB;
@@ -205,9 +204,7 @@ public abstract class TGConfigManager {
 
   public void setDefaults() {
     Properties defaults = new TGConfigDefaults().getProperties();
-    Iterator it = defaults.entrySet().iterator();
-    while (it.hasNext()) {
-      Map.Entry property = (Map.Entry) it.next();
+    for (final Entry<Object, Object> property : defaults.entrySet()) {
       setProperty((String) property.getKey(), (String) property.getValue());
     }
     this.save();

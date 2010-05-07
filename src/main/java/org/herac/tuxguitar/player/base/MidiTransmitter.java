@@ -23,10 +23,10 @@ public class MidiTransmitter {
     }
   }
 
-  private List receivers;
+  private List<MidiReceiverItem> receivers;
 
   public MidiTransmitter() {
-    this.receivers = new ArrayList();
+    this.receivers = new ArrayList<MidiReceiverItem>();
   }
 
   public void addReceiver(String id, MidiReceiver receiver) {

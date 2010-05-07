@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.gui.editors.effects;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -27,6 +26,7 @@ import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
 
 /**
  * @author julian
@@ -61,7 +61,7 @@ public class BendEditor {
   protected DefaultBend[] defaultBends;
   protected Composite editor;
   private int height;
-  private List points;
+  private List<Point> points;
   protected TGEffectBend result;
   private int width;
   private int[] x;
@@ -105,9 +105,7 @@ public class BendEditor {
     if (this.points != null && !this.points.isEmpty()) {
       TGEffectBend bend = TuxGuitar.instance().getSongManager().getFactory()
           .newEffectBend();// new BendEffect();
-      Iterator it = this.points.iterator();
-      while (it.hasNext()) {
-        Point point = (Point) it.next();
+      for (final Point point : this.points) {
         addBendPoint(bend, point);
       }
       return bend;
@@ -160,7 +158,7 @@ public class BendEditor {
     this.y = new int[Y_LENGTH];
     this.width = ((X_SPACING * X_LENGTH) - X_SPACING);
     this.height = ((Y_SPACING * Y_LENGTH) - Y_SPACING);
-    this.points = new ArrayList();
+    this.points = new ArrayList<Point>();
 
     for (int i = 0; i < this.x.length; i++) {
       this.x[i] = ((i + 1) * X_SPACING);
@@ -218,16 +216,13 @@ public class BendEditor {
       painter.closePath();
     }
 
-    Iterator it = null;
     Point prevPoint = null;
     painter.setLineStyle(SWT.LINE_SOLID);
     painter.setLineWidth(2);
     painter.setForeground(this.editor.getDisplay().getSystemColor(
         SWT.COLOR_GRAY));
 
-    it = this.points.iterator();
-    while (it.hasNext()) {
-      Point point = (Point) it.next();
+    for (final Point point : this.points) {
       if (prevPoint != null) {
         painter.initPath();
         painter.moveTo(prevPoint.x, prevPoint.y);
@@ -241,9 +236,7 @@ public class BendEditor {
     painter.setForeground(this.editor.getDisplay().getSystemColor(
         SWT.COLOR_BLACK));
 
-    it = this.points.iterator();
-    while (it.hasNext()) {
-      Point point = (Point) it.next();
+    for (final Point point : this.points) {
       painter.initPath();
       painter.setAntialias(false);
       painter.addRectangle(point.x - 2, point.y - 2, 5, 5);
@@ -253,9 +246,7 @@ public class BendEditor {
   }
 
   protected boolean removePoint(Point point) {
-    Iterator it = this.points.iterator();
-    while (it.hasNext()) {
-      Point currPoint = (Point) it.next();
+    for (final Point currPoint : this.points) {
       if (currPoint.x == point.x && currPoint.y == point.y) {
         this.points.remove(point);
         return true;
@@ -265,9 +256,7 @@ public class BendEditor {
   }
 
   protected void removePointsAtXLine(int x) {
-    Iterator it = this.points.iterator();
-    while (it.hasNext()) {
-      Point point = (Point) it.next();
+    for (final Point point : this.points) {
       if (point.x == x) {
         this.points.remove(point);
         break;
@@ -339,9 +328,7 @@ public class BendEditor {
 
   public void setBend(TGEffectBend effect) {
     this.points.clear();
-    Iterator it = effect.getPoints().iterator();
-    while (it.hasNext()) {
-      TGEffectBend.BendPoint bendPoint = (TGEffectBend.BendPoint) it.next();
+    for (final BendPoint bendPoint : effect.getPoints()) {
       this.makePoint(bendPoint);
     }
   }

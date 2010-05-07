@@ -39,10 +39,10 @@ public class FileHistory {
   private boolean localFile;
   private boolean newFile;
   private boolean unsavedFile;
-  private List urls;
+  private List<URL> urls;
 
   public FileHistory() {
-    this.urls = new ArrayList();
+    this.urls = new ArrayList<URL>();
     this.loadHistory();
     this.reset(null);
   }
@@ -122,7 +122,7 @@ public class FileHistory {
     return (current != null ? current : this.chooserPath);
   }
 
-  public List getURLs() {
+  public List<URL> getURLs() {
     return this.urls;
   }
 

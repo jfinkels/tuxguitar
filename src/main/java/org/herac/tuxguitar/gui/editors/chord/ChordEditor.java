@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.gui.editors.chord;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;

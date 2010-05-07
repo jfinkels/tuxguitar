@@ -19,13 +19,13 @@ public class TGTable {
   private TGTableColumn columnNumber;
   private Composite rowControl;
   private int rowHeight;
-  private List rows;
+  private List<TGTableRow> rows;
   private ScrolledComposite sComposite;
   private int scrollIncrement;
   private Composite table;
 
   public TGTable(Composite parent) {
-    this.rows = new ArrayList();
+    this.rows = new ArrayList<TGTableRow>();
     this.newTable(parent);
   }
 

@@ -46,7 +46,7 @@ public class TGFileUtils {
       if (stream != null) {
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(stream));
-        List fileNameList = new ArrayList();
+        List<String> fileNameList = new ArrayList<String>();
         String fileName = null;
         while ((fileName = reader.readLine()) != null) {
           fileNameList.add(fileName);
@@ -123,27 +123,27 @@ public class TGFileUtils {
     return null;
   }
 
-  public static Enumeration getResourceUrls(String resource) {
+  public static List<URL> getResourceUrls(String resource) {
     try {
-      Vector vector = new Vector();
+      List<URL> vector = new Vector<URL>();
       if (TG_STATIC_SHARED_PATHS != null) {
         for (int i = 0; i < TG_STATIC_SHARED_PATHS.length; i++) {
           File file = new File(TG_STATIC_SHARED_PATHS[i] + File.separator
               + resource);
           if (file.exists()) {
-            vector.addElement(file.toURI().toURL());
+            vector.add(file.toURI().toURL());
           }
         }
       }
-      Enumeration resources = TGClassLoader.instance().getClassLoader()
+      Enumeration<URL> resources = TGClassLoader.instance().getClassLoader()
           .getResources(resource);
       while (resources.hasMoreElements()) {
         URL url = (URL) resources.nextElement();
         if (!vector.contains(url)) {
-          vector.addElement(url);
+          vector.add(url);
         }
       }
-      return vector.elements();
+      return vector;
     } catch (Throwable throwable) {
       throwable.printStackTrace();
     }

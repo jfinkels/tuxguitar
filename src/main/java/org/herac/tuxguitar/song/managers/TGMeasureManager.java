@@ -3,7 +3,6 @@ package org.herac.tuxguitar.song.managers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import org.herac.tuxguitar.song.factory.TGFactory;
@@ -750,9 +749,8 @@ public class TGMeasureManager {
    */
   public TGBeat getBeatIn(TGMeasure measure, long start) {
     TGBeat beatIn = null;
-    Iterator it = measure.getBeats().iterator();
-    while (it.hasNext()) {
-      TGBeat beat = (TGBeat) it.next();
+    
+    for (final TGBeat beat : measure.getBeats()){
       TGDuration duration = getMinimumDuration(beat);
       if (beat.getStart() <= start
           && (beat.getStart() + duration.getTime() > start)) {
@@ -1027,7 +1025,7 @@ public class TGMeasureManager {
   /**
    * Retorna el Componente Anterior
    */
-  public TGBeat getPreviousBeat(List beats, TGBeat beat) {
+  public TGBeat getPreviousBeat(List<TGBeat> beats, TGBeat beat) {
     TGBeat previous = null;
     for (int i = 0; i < beats.size(); i++) {
       TGBeat current = (TGBeat) beats.get(i);
@@ -1118,7 +1116,7 @@ public class TGMeasureManager {
     return this.songManager;
   }
 
-  public List getSortedStringsByValue(TGTrack track, final int direction) {
+  public List<TGString> getSortedStringsByValue(TGTrack track, final int direction) {
     List<TGString> strings = new ArrayList<TGString>();
     for (int number = 1; number <= track.stringCount(); number++) {
       strings.add(track.getString(number));
@@ -1499,7 +1497,7 @@ public class TGMeasureManager {
     }
   }
 
-  private void moveVoices(List voices, long theMove) {
+  private void moveVoices(List<TGVoice> voices, long theMove) {
     /*
      * Iterator it = voices.iterator(); while(it.hasNext()){ TGVoice voice =
      * (TGVoice)it.next(); moveVoice(voice,theMove); }
@@ -1872,9 +1870,8 @@ public class TGMeasureManager {
         }
       }
     }
-    Iterator it = voicesToRemove.iterator();
-    while (it.hasNext()) {
-      TGVoice voice = (TGVoice) it.next();
+    
+    for (final TGVoice voice :  voicesToRemove){
       this.removeVoice(voice);
     }
   }
@@ -1935,7 +1932,7 @@ public class TGMeasureManager {
   }
 
   private boolean transposeChordNote(TGChord chord, int chordString,
-      List strings, int transposition, boolean tryKeepString,
+      List<TGString> strings, int transposition, boolean tryKeepString,
       boolean forceChangeString) {
     boolean canTransposeFret = false;
 
@@ -2010,7 +2007,7 @@ public class TGMeasureManager {
     return false;
   }
 
-  private boolean transposeNote(TGNote note, List<TGNote> notes, List strings,
+  private boolean transposeNote(TGNote note, List<TGNote> notes, List<TGString> strings,
       int transposition, boolean tryKeepString, boolean forceChangeString) {
     boolean canTransposeFret = false;
 
@@ -2085,10 +2082,10 @@ public class TGMeasureManager {
     return false;
   }
 
-  public void transposeNotes(TGBeat beat, List strings, int transposition,
+  public void transposeNotes(TGBeat beat, List<TGString> strings, int transposition,
       boolean tryKeepString, boolean applyToChord, int applyToString) {
     if (transposition != 0) {
-      List notes = getNotes(beat);
+      List<TGNote> notes = getNotes(beat);
 
       int stringCount = strings.size();
       for (int i = 0; i < stringCount; i++) {
@@ -2126,7 +2123,7 @@ public class TGMeasureManager {
       if (measure != null) {
         TGTrack track = measure.getTrack();
         if (track != null) {
-          List strings = getSortedStringsByValue(track, (transposition > 0 ? 1
+          List<TGString> strings = getSortedStringsByValue(track, (transposition > 0 ? 1
               : -1));
           for (int i = 0; i < measure.countBeats(); i++) {
             TGBeat beat = measure.getBeat(i);
@@ -2158,7 +2155,7 @@ public class TGMeasureManager {
                 int transposition = transpositionStrings[i];
                 if (transposition != 0) {
                   int applyToString = notes[i].getString();
-                  List strings = getSortedStringsByValue(track,
+                  List<TGString> strings = getSortedStringsByValue(track,
                       (transposition > 0 ? 1 : -1));
                   transposeNotes(beat, strings, transposition, tryKeepString,
                       applyToChords, applyToString);
