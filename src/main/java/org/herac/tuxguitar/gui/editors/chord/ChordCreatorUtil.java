@@ -976,7 +976,7 @@ public class ChordCreatorUtil {
 
     // return getChords();
     if (isValidProcess()) {
-      List chords = getChords();
+      List<TGChord> chords = getChords();
       if (chords != null && isValidProcess()) {
         this.listener.notifyChords(this, chords);
       }

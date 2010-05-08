@@ -77,7 +77,7 @@ public class TrackPropertiesAction extends Action {
   protected Button stringTransposition;
   protected Button stringTranspositionApplyToChords;
   protected Button stringTranspositionTryKeepString;
-  protected List tempStrings;
+  protected List<TGString> tempStrings;
   protected TGColor trackColor;
 
   public TrackPropertiesAction() {
@@ -123,7 +123,7 @@ public class TrackPropertiesAction extends Action {
     return data;
   }
 
-  protected int[] getStringTranspositions(TGTrackImpl track, List newStrings) {
+  protected int[] getStringTranspositions(TGTrackImpl track, List<TGString> newStrings) {
     int[] transpositions = new int[newStrings.size()];
 
     TGString newString = null;
@@ -176,8 +176,8 @@ public class TrackPropertiesAction extends Action {
         .isPercussionTrack() != percussion));
   }
 
-  protected boolean hasTuningChanges(TGTrackImpl track, List newStrings) {
-    List oldStrings = track.getStrings();
+  protected boolean hasTuningChanges(TGTrackImpl track, List<TGString> newStrings) {
+    List<TGString> oldStrings = track.getStrings();
     // check the number of strings
     if (oldStrings.size() != newStrings.size()) {
       return true;
@@ -283,10 +283,10 @@ public class TrackPropertiesAction extends Action {
     // -----------------------------------------------------------
   }
 
-  protected void initTempStrings(List realStrings) {
-    this.tempStrings = new ArrayList();
+  protected void initTempStrings(List<TGString> realStrings) {
+    this.tempStrings = new ArrayList<TGString>();
     for (int i = 0; i < realStrings.size(); i++) {
-      TGString realString = (TGString) realStrings.get(i);
+      TGString realString = realStrings.get(i);
       this.tempStrings.add(realString.clone(getSongManager().getFactory()));
     }
   }
@@ -594,7 +594,7 @@ public class TrackPropertiesAction extends Action {
 
     final String trackName = this.nameText.getText();
 
-    final List strings = new ArrayList();
+    final List<TGString> strings = new ArrayList<TGString>();
     for (int i = 0; i < this.stringCount; i++) {
       strings.add(TGSongManager.newString(getSongManager().getFactory(),
           (i + 1), this.stringCombos[i].getSelectionIndex()));
@@ -694,7 +694,7 @@ public class TrackPropertiesAction extends Action {
     }
   }
 
-  protected void updateTrackTunings(TGTrackImpl track, List strings,
+  protected void updateTrackTunings(TGTrackImpl track, List<TGString> strings,
       boolean transposeStrings, boolean transposeTryKeepString,
       boolean transposeApplyToChords) {
     int[] transpositions = getStringTranspositions(track, strings);

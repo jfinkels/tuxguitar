@@ -199,10 +199,10 @@ public class PageViewLayout extends ViewLayout{
 		protected boolean fullLine;
 		protected int maxY = 0;
 		protected int minY = 0;
-		protected List measures;
+		protected List<Integer> measures;
 		
 		public TempLine(){
-			this.measures = new ArrayList();
+			this.measures = new ArrayList<Integer>();
 		}
 		
 		protected void addMeasure(int index){

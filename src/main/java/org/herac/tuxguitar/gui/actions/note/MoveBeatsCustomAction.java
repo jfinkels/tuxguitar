@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.actions.note;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -209,7 +208,7 @@ public class MoveBeatsCustomAction extends Action {
     directionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
     // -------move 1------------------------------------------
-    final List move1Controls = new ArrayList();
+    final List<Control> move1Controls = new ArrayList<Control>();
 
     Group move1 = new Group(dialog, SWT.SHADOW_ETCHED_IN);
     move1.setLayout(new GridLayout(2, false));
@@ -251,7 +250,7 @@ public class MoveBeatsCustomAction extends Action {
 
     updateControls(0, move1Controls);
     // -------move 2------------------------------------------
-    final List move2Controls = new ArrayList();
+    final List<Control> move2Controls = new ArrayList<Control>();
 
     Group move2 = new Group(dialog, SWT.SHADOW_ETCHED_IN);
     move2.setLayout(new GridLayout(2, false));
@@ -372,10 +371,8 @@ public class MoveBeatsCustomAction extends Action {
         | DialogUtils.OPEN_STYLE_PACK | DialogUtils.OPEN_STYLE_WAIT);
   }
 
-  protected void updateControls(int count, List controls) {
-    Iterator it = controls.iterator();
-    while (it.hasNext()) {
-      Control control = (Control) it.next();
+  protected void updateControls(int count, List<Control> controls) {
+    for (final Control control : controls) {
       control.setEnabled(count > 0);
     }
   }

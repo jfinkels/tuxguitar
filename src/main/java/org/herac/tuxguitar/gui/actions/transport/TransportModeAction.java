@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.gui.actions.transport;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -40,10 +39,10 @@ import org.herac.tuxguitar.song.models.TGSong;
 public class TransportModeAction extends Action {
   private class MHeaderCombo {
     private Combo combo;
-    private List values;
+    private List<Integer> values;
 
     public MHeaderCombo(Composite parent) {
-      this.values = new ArrayList();
+      this.values = new ArrayList<Integer>();
       this.combo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
       this.combo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     }
@@ -155,7 +154,7 @@ public class TransportModeAction extends Action {
 
   private class MHeaderRangeStatus extends SelectionAdapter {
 
-    private List controls;
+    private List<Control> controls;
     private Button customLoop;
 
     private boolean enabled;
@@ -164,7 +163,7 @@ public class TransportModeAction extends Action {
 
     public MHeaderRangeStatus(Button simpleMode, Button simpleLoop,
         Button customLoop) {
-      this.controls = new ArrayList();
+      this.controls = new ArrayList<Control>();
       this.enabled = false;
       this.simpleMode = simpleMode;
       this.simpleLoop = simpleLoop;
@@ -188,9 +187,7 @@ public class TransportModeAction extends Action {
       }
 
       // Update controls
-      Iterator it = this.controls.iterator();
-      while (it.hasNext()) {
-        Control control = (Control) it.next();
+      for (final Control control : this.controls){
         control.setEnabled(this.enabled);
       }
     }
@@ -202,10 +199,10 @@ public class TransportModeAction extends Action {
 
   private class RadioSelectionAdapter extends SelectionAdapter {
     private Button control;
-    private List controls;
+    private List<Control> controls;
 
     public RadioSelectionAdapter(Button control) {
-      this.controls = new ArrayList();
+      this.controls = new ArrayList<Control>();
       this.control = control;
       this.control.addSelectionListener(this);
     }
@@ -216,9 +213,7 @@ public class TransportModeAction extends Action {
 
     public void update() {
       boolean enabled = this.control.getSelection();
-      Iterator it = this.controls.iterator();
-      while (it.hasNext()) {
-        Control control = (Control) it.next();
+      for (final Control control : this.controls){
         control.setEnabled(enabled);
       }
     }
