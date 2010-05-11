@@ -1,3 +1,5 @@
 * unit tests
 * remove repeated code
 * add @Override annotations where appropriate
+* use built-in concurrency instead of custom-built locks
+* use jopt-simple for command-line argument parsing
