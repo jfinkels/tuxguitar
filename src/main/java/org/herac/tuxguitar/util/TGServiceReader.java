@@ -12,15 +12,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.apache.log4j.Logger;
+
 public class TGServiceReader {
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGServiceReader.class);
 
-  private static final class IteratorImpl implements Iterator {
-    private Iterator iterator;
+  private static final class IteratorImpl implements Iterator<Class<?>> {
+    private Iterator<String> iterator;
     private ClassLoader loader;
-    private Class spi;
-    private Enumeration urls;
+    private Class<?> spi;
+    private Enumeration<URL> urls;
 
-    public IteratorImpl(Class spi, ClassLoader loader, Enumeration urls) {
+    public IteratorImpl(Class<?> spi, ClassLoader loader, Enumeration<URL> urls) {
       this.spi = spi;
       this.loader = loader;
       this.urls = urls;
@@ -32,7 +37,7 @@ public class TGServiceReader {
     }
 
     private void initialize() {
-      List providers = new ArrayList();
+      List<String> providers = new ArrayList<String>();
       while (this.urls.hasMoreElements()) {
         URL url = (URL) this.urls.nextElement();
         try {
@@ -54,13 +59,13 @@ public class TGServiceReader {
       this.iterator = providers.iterator();
     }
 
-    public Object next() {
+    public Class<?> next() {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }
       try {
-        Object provider = this.loader.loadClass((String) this.iterator.next())
-            .newInstance();
+        Class<?> provider = (Class<?>) this.loader.loadClass(
+            this.iterator.next()).newInstance();
         if (this.spi.isInstance(provider)) {
           return provider;
         }
@@ -85,12 +90,12 @@ public class TGServiceReader {
 
   private static final String SERVICE_PATH = new String("META-INF/services/");
 
-  public static Iterator lookupProviders(Class spi) {
+  public static Iterator<Class<?>> lookupProviders(Class<?> spi) {
     return TGServiceReader.lookupProviders(spi, TGClassLoader.instance()
         .getClassLoader());
   }
 
-  public static Iterator lookupProviders(Class spi, ClassLoader loader) {
+  public static Iterator<Class<?>> lookupProviders(Class<?> spi, ClassLoader loader) {
     try {
       if (spi == null || loader == null) {
         throw new IllegalArgumentException();

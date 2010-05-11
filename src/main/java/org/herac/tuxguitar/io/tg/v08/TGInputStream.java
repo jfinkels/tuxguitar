@@ -11,6 +11,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureHeaderImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
@@ -43,6 +45,10 @@ import org.herac.tuxguitar.song.models.effects.BendingEffect;
  */
 public class TGInputStream extends TGStream implements TGInputStreamBase {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGInputStream.class);
+  
   private DataInputStream dataInputStream;
   // private TGFactory factory;
   private String version;

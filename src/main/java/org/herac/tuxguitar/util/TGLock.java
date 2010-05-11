@@ -2,13 +2,8 @@ package org.herac.tuxguitar.util;
 
 public class TGLock {
 
-  private Object lock;
-  private Thread lockThread;
-
-  public TGLock() {
-    this.lock = new Object();
-    this.lockThread = null;
-  }
+  private Object lock = new Object();
+  private Thread lockThread = null;
 
   public boolean isLocked() {
     return isLocked(Thread.currentThread());

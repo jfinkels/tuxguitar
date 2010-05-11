@@ -14,6 +14,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.system.keybindings.KeyBindingAction;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -39,6 +41,12 @@ public class KeyBindingWriter {
     return null;
   }
 
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(KeyBindingWriter.class);
+  
+  
   public static void saveDocument(Document document, File file) {
     try {
       FileOutputStream fs = new FileOutputStream(file);

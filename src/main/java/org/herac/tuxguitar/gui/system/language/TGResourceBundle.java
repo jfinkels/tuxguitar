@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
 
 public class TGResourceBundle {
@@ -56,6 +58,12 @@ public class TGResourceBundle {
       LOG.error(e);
     }
   }
+  
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGResourceBundle.class);
+  
 
   private Locale locale;
 

@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.herac.tuxguitar.community.TGCommunitySingleton;
 import org.herac.tuxguitar.community.auth.TGCommunityAuthDialog;
-import org.herac.tuxguitar.community.auth.utils.Base64Decoder;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.gui.util.MessageDialog;

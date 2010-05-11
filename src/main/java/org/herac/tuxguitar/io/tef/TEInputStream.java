@@ -3,6 +3,8 @@ package org.herac.tuxguitar.io.tef;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.tef.base.TEChord;
 import org.herac.tuxguitar.io.tef.base.TEComponentChord;
 import org.herac.tuxguitar.io.tef.base.TEComponentNote;
@@ -19,6 +21,10 @@ import org.herac.tuxguitar.io.tef.base.TETrack;
 
 public class TEInputStream {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TEInputStream.class);
+  
   private TESong song;
   private InputStream stream;
 

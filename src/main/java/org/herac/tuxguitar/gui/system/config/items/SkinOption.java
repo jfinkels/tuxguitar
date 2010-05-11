@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -18,6 +19,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.helper.SyncThread;
 import org.herac.tuxguitar.gui.system.config.TGConfigEditor;
 import org.herac.tuxguitar.gui.system.config.TGConfigKeys;
@@ -194,6 +196,10 @@ public class SkinOption extends Option {
     }
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(SkinOption.class);
+  
   protected void loadConfig() {
     new Thread(new Runnable() {
       public void run() {

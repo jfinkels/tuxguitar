@@ -3,9 +3,11 @@ package org.herac.tuxguitar.io.pdf;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 
 import com.itextpdf.text.BadElementException;
@@ -15,6 +17,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class PDFWriter {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(PDFWriter.class);
+  
   /**
    * Crea un com.lowagie.text.Image a partir de un
    * org.eclipse.swt.graphics.ImageData

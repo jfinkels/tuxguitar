@@ -1,4 +1,4 @@
-package org.herac.tuxguitar.community.auth.utils;
+package org.herac.tuxguitar.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -81,9 +81,10 @@ public class Base64Decoder {
 
     return bytes;
   }
-  
+
   /** The Logger for this class. */
-  public static final transient Logger LOG = Logger.getLogger(Base64Decoder.class);
+  public static final transient Logger LOG = Logger
+      .getLogger(Base64Decoder.class);
 
   private static int get1(byte buf[], int off) {
     return ((buf[off] & 0x3f) << 2) | ((buf[off + 1] & 0x30) >>> 4);

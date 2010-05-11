@@ -3,6 +3,8 @@ package org.herac.tuxguitar.gui.tools.browser;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.tools.browser.base.TGBrowser;
 import org.herac.tuxguitar.gui.tools.browser.base.TGBrowserElement;
 
@@ -15,6 +17,12 @@ public class TGBrowserConnection {
   public TGBrowserConnection(TGBrowserConnectionHandler handler) {
     this.handler = handler;
   }
+  
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGBrowserConnection.class);
+  
 
   public void cd(final int callId, final TGBrowserElement element) {
     if (!isLocked()) {

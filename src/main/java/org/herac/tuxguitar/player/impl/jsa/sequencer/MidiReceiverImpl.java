@@ -4,10 +4,14 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
+import org.herac.tuxguitar.player.impl.jsa.midiport.MidiPortSynthesizer;
 
 public class MidiReceiverImpl implements Receiver {
-
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiReceiverImpl.class);
   private MidiSequencerImpl sequencer;
 
   public MidiReceiverImpl(MidiSequencerImpl sequencer) {

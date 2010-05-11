@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -24,6 +25,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.ActionLock;
 import org.herac.tuxguitar.gui.editors.TablatureEditor;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.system.config.items.LanguageOption;
 import org.herac.tuxguitar.gui.system.config.items.MainOption;
 import org.herac.tuxguitar.gui.system.config.items.Option;
@@ -95,6 +97,10 @@ public class TGConfigEditor {
     }).start();
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGConfigEditor.class);
+  
   private Point computeOptionsSize(int minimumWidth, int minimumHeight) {
     int width = minimumWidth;
     int height = minimumHeight;

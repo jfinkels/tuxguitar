@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
@@ -33,6 +35,10 @@ import org.herac.tuxguitar.song.models.TGTrack;
 
 public class TESongImporter implements TGLocalFileImporter {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TESongImporter.class);
+  
   private static final int[][] PERCUSSION_TUNINGS = new int[][] {
       new int[] { 49, 41, 32 }, new int[] { 49, 51, 42, 50 },
       new int[] { 49, 42, 50, 37, 32 }, new int[] { 49, 51, 42, 50, 45, 37 },

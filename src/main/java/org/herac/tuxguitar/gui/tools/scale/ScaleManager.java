@@ -3,6 +3,8 @@ package org.herac.tuxguitar.gui.tools.scale;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.tools.scale.xml.ScaleReader;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
 import org.herac.tuxguitar.gui.util.TGMusicKeyUtils;
@@ -106,6 +108,12 @@ public class ScaleManager {
       LOG.error(e);
     }
   }
+  
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(ScaleManager.class);
+  
 
   public void removeListener(ScaleListener listener) {
     if (this.scaleListeners.contains(listener)) {

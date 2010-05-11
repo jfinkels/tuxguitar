@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FormAttachment;
@@ -25,6 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGUpdateListener;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.items.menu.BeatMenuItem;
 import org.herac.tuxguitar.gui.items.menu.CompositionMenuItem;
 import org.herac.tuxguitar.gui.items.menu.EditMenuItem;
@@ -275,6 +277,11 @@ public class ItemManager implements TGUpdateListener, IconLoader,
       LOG.error(e);
     }
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(ItemManager.class);
+  
 
   public void loadIcons() {
     this.loadItems();

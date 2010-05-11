@@ -1,6 +1,8 @@
 package org.herac.tuxguitar.gui.util;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.system.config.TGConfigKeys;
 import org.herac.tuxguitar.util.TGVersion;
 
@@ -51,6 +53,10 @@ public class WindowTitleUtil {
     return null;
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(WindowTitleUtil.class);
+  
   public static String parseTitle() {
     String title = parseString(TuxGuitar.instance().getConfig()
         .getStringConfigValue(TGConfigKeys.WINDOW_TITLE));
@@ -63,7 +69,7 @@ public class WindowTitleUtil {
     if (varName.equals(VAR_APP_NAME)) {
       varValue = TuxGuitar.APPLICATION_NAME;
     } else if (varName.equals(VAR_APP_VERSION)) {
-      varValue = TGVersion.CURRENT.getVersion();
+      varValue = TGVersion.CURRENT.toString();
     } else if (varName.equals(VAR_FILE_NAME)) {
       varValue = TuxGuitar.instance().getFileHistory().getCurrentFileName(
           FileChooser.DEFAULT_SAVE_FILENAME);

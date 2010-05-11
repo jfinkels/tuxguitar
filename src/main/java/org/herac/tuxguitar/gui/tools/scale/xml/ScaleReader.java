@@ -8,6 +8,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.tools.scale.ScaleInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -20,6 +22,10 @@ public class ScaleReader {
   private static final String NAME_ATTRIBUTE = "name";
   private static final String SCALE_TAG = "scale";
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(ScaleReader.class);
+  
   private static Document getDocument(InputStream stream)
       throws ParserConfigurationException, SAXException, IOException {
     Document document = null;

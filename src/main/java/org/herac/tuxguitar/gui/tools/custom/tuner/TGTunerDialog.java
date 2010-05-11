@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -17,6 +18,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.gui.util.MessageDialog;
 import org.herac.tuxguitar.util.TGSynchronizer;
@@ -90,6 +92,10 @@ public class TGTunerDialog implements TGTunerListener {
     }
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGTunerDialog.class);
+  
   public void fireFrequency(final double freq) {
     if (!this.dialog.isDisposed()) {
       try {

@@ -12,6 +12,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.player.base.MidiInstrument;
 import org.herac.tuxguitar.song.managers.TGSongManager;
@@ -32,6 +34,10 @@ import org.w3c.dom.Node;
 
 public class MusicXMLWriter {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MusicXMLWriter.class);
+  
   private static class TGVoiceJoiner {
     // private TGFactory factory;
     private TGMeasure measure;

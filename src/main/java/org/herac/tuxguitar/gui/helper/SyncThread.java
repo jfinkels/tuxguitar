@@ -6,6 +6,8 @@
  */
 package org.herac.tuxguitar.gui.helper;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.util.TGSynchronizer;
 
 /**
@@ -30,6 +32,11 @@ public class SyncThread extends Thread {
     this.runnable = runnable;
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(SyncThread.class);
+  
+  @Override
   public void run() {
     try {
       TGSynchronizer.instance().addRunnable(this.runnable);

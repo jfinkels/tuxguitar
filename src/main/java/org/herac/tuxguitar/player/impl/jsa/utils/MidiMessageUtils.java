@@ -5,10 +5,14 @@ import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.player.impl.jsa.midiport.MidiPortSynthesizer;
 import org.herac.tuxguitar.song.models.TGTimeSignature;
 
 public class MidiMessageUtils {
-
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiMessageUtils.class);
   public static final byte TICK_MOVE = 0x01;
 
   public static MidiMessage controlChange(int channel, int controller, int value) {

@@ -8,7 +8,6 @@ package org.herac.tuxguitar.gui.actions.edit;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.events.TypedEvent;
-import org.herac.tuxguitar.community.auth.utils.Base64Decoder;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.undo.CannotUndoException;
@@ -27,6 +26,7 @@ public class UndoAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     try {
       if (TuxGuitar.instance().getUndoableManager().canUndo()) {

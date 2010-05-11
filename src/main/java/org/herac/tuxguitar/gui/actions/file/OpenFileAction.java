@@ -12,7 +12,6 @@ import java.net.URL;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TypedEvent;
-import org.herac.tuxguitar.community.auth.utils.Base64Decoder;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.actions.ActionLock;

@@ -7,6 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.tools.browser.TGBrowserCollectionInfo;
 import org.herac.tuxguitar.gui.tools.browser.TGBrowserManager;
 import org.w3c.dom.Document;
@@ -20,6 +22,10 @@ public class TGBrowserReader {
   private static final String ATTRIBUTE_TYPE = "type";
   private static final String ITEM_TAG = "browser-collection";
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGBrowserReader.class);
+  
   private static Document getDocument(File file)
       throws ParserConfigurationException, SAXException, IOException {
     Document document = null;

@@ -11,6 +11,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGLocalFileExporter;
@@ -50,6 +52,10 @@ import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
  */
 public class TGOutputStream extends TGStream implements TGLocalFileExporter {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGOutputStream.class);
+  
   private DataOutputStream dataOutputStream;
 
   public boolean configure(boolean setDefaults) {

@@ -4,45 +4,31 @@ public class TGVersion {
 
   public static final TGVersion CURRENT = new TGVersion(1, 2, 0);
 
-  private int major;
-  private int minor;
-  private int revision;
+  private final int major;
+  private final int minor;
+  private final int revision;
 
-  public TGVersion(int major, int minor, int revision) {
+  public TGVersion(final int major, final int minor, final int revision) {
     this.major = major;
     this.minor = minor;
     this.revision = revision;
   }
 
-  public int getMajor() {
-    return this.major;
-  }
-
-  public int getMinor() {
-    return this.minor;
-  }
-
-  public int getRevision() {
-    return this.revision;
-  }
-
-  public String getVersion() {
-    String version = (getMajor() + "." + getMinor());
-    if (getRevision() > 0) {
-      version += ("." + getRevision());
+  @Override
+  public String toString() {
+    String version = this.major + "." + this.minor;
+    if (this.revision > 0) {
+      version += ("." + this.revision);
     }
     return version;
   }
 
-  public boolean isSameVersion(TGVersion version) {
+  public boolean isSameVersion(final TGVersion version) {
     if (version == null) {
       return false;
     }
-    return (version.getMajor() == getMajor()
-        && version.getMinor() == getMinor() && version.getRevision() == getRevision());
-  }
-
-  public String toString() {
-    return getVersion();
+    
+    return version.major == this.major && version.minor == this.minor
+        && version.revision == this.revision;
   }
 }

@@ -33,8 +33,7 @@ public class AboutDialog {
   private static final int IMAGE_WIDTH = 100;
 
   private static final String PROPERTY_PREFIX = ("help.about.");
-  private static final String RELEASE_NAME = (TuxGuitar.APPLICATION_NAME + " " + TGVersion.CURRENT
-      .getVersion());
+  private static final String RELEASE_NAME = (TuxGuitar.APPLICATION_NAME + " " + TGVersion.CURRENT);
 
   private static final int TAB_ITEM_HEIGHT = 300;
   private static final int TAB_ITEM_WIDTH = 660;
@@ -130,6 +129,7 @@ public class AboutDialog {
         AboutContentReader.LICENSE).toString());
 
     tabFolder.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         if (tabFolder.getSelectionIndex() == 0) {
           AboutDialog.this.image = TuxGuitar.instance().getIconManager()
@@ -154,6 +154,7 @@ public class AboutDialog {
     buttonClose.setLayoutData(getButtonData());
     buttonClose.setText(TuxGuitar.getProperty("close"));
     buttonClose.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         dialog.dispose();
       }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.sound.midi.MidiUnavailableException;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGDuration;
@@ -16,6 +17,10 @@ import org.herac.tuxguitar.util.TGLock;
 
 public class MidiPlayer {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiPlayer.class);
+  
   private static final int MAX_CHANNELS = 16;
 
   public static final int MAX_VOLUME = 10;
@@ -70,12 +75,7 @@ public class MidiPlayer {
 
   protected long tickPosition;
 
-  private int volume;
-
-  public MidiPlayer() {
-    this.lock = new TGLock();
-    this.volume = MAX_VOLUME;
-  }
+  private int volume = MAX_VOLUME;
 
   public void addListener(MidiPlayerListener listener) {
     if (!this.listeners.contains(listener)) {

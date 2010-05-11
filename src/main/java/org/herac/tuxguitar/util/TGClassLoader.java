@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import org.apache.log4j.Logger;
+
 public class TGClassLoader {
 
   private class URLClassLoaderImpl extends URLClassLoader {
@@ -13,6 +15,7 @@ public class TGClassLoader {
       super(new URL[] {}, TGClassLoader.class.getClassLoader());
     }
 
+    @Override
     public void addURL(URL url) {
       super.addURL(url);
     }
@@ -41,6 +44,10 @@ public class TGClassLoader {
       LOG.error(e);
     }
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGClassLoader.class);
 
   public void addPaths(File folder) {
     if (folder != null && folder.exists() && folder.isDirectory()) {

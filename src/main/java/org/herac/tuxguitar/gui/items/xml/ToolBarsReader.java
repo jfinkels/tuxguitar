@@ -7,6 +7,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.items.ItemManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -36,6 +38,12 @@ public class ToolBarsReader {
       LOG.error(throwable);
     }
   }
+  
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(ToolBarsReader.class);
+  
 
   private static void loadToolBars(ItemManager manager, Node node) {
     NodeList listNode = node.getChildNodes();

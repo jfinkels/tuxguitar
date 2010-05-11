@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
 
 /**
@@ -151,6 +153,10 @@ public class LanguageManager {
     }
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(LanguageManager.class);
+  
   public void setLanguage(String lang) {
     try {
       String baseName = (PACKAGE + "." + PREFIX);

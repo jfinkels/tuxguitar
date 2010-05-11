@@ -3,6 +3,7 @@ package org.herac.tuxguitar.player.impl.jsa.assistant;
 import java.io.File;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -18,6 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.eclipse.swt.widgets.Shell;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.gui.util.MessageDialog;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
@@ -26,6 +28,10 @@ import org.herac.tuxguitar.util.TGSynchronizer;
 
 public class SBInstallerGui implements SBInstallerlistener {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(SBInstallerGui.class);
+  
   private static final String SB_PATH = (TGFileUtils.PATH_USER_PLUGINS_CONFIG
       + File.separator + "tuxguitar-jsa");
 

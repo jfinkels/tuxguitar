@@ -103,9 +103,7 @@ public class ArgumentParser {
     for (int i = 0; i < this.arguments.length; i++) {
       for (int j = 0; j < OPTION_VERSION.length; j++) {
         if (this.arguments[i].equals(OPTION_VERSION[j])) {
-          print(TuxGuitar.APPLICATION_NAME + " - "
-              + TGVersion.CURRENT.getVersion());
-
+          print(TuxGuitar.APPLICATION_NAME + " - " + TGVersion.CURRENT);
           this.processAndExit = true;
         }
       }
@@ -143,8 +141,10 @@ public class ArgumentParser {
       LOG.error(throwable);
     }
   }
+
   /** The Logger for this class. */
-  public static final transient Logger LOG = Logger.getLogger(ArgumentParser.class);
+  public static final transient Logger LOG = Logger
+      .getLogger(ArgumentParser.class);
 
   protected void print(String s) {
     print(s, true);

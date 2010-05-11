@@ -8,6 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGFileFormatManager;
 import org.herac.tuxguitar.io.base.TGLocalFileExporter;
@@ -29,6 +31,10 @@ public class TGConverter {
   public static final int SLEEP_TIME = 20;
   public static final int UNKNOWN_ERROR = 666;
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGConverter.class);
+  
   private boolean cancelled;
   private String destinationFolder;
   private TGConverterFormat format;

@@ -1,12 +1,16 @@
 package org.herac.tuxguitar.player.impl.sequencer;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
 import org.herac.tuxguitar.player.base.MidiSequenceHandler;
 import org.herac.tuxguitar.player.base.MidiSequencer;
 import org.herac.tuxguitar.player.base.MidiTransmitter;
+import org.herac.tuxguitar.player.impl.jsa.midiport.MidiPortSynthesizer;
 
 public class MidiSequencerImpl implements MidiSequencer {
-
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiSequencerImpl.class);
   private class MidiTimer extends Thread {
 
     private static final int TIMER_DELAY = 15;

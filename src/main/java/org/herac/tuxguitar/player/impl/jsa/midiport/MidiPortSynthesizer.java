@@ -8,7 +8,9 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Soundbank;
 import javax.sound.midi.Synthesizer;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.player.base.MidiControllers;
 import org.herac.tuxguitar.player.base.MidiOutputPort;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
@@ -17,6 +19,10 @@ import org.herac.tuxguitar.player.impl.jsa.assistant.SBAssistant;
 import org.herac.tuxguitar.player.impl.jsa.utils.MidiConfigUtils;
 
 public class MidiPortSynthesizer implements MidiOutputPort {
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiPortSynthesizer.class);
 
   private String key;
   private String name;
@@ -105,9 +111,9 @@ public class MidiPortSynthesizer implements MidiOutputPort {
     try {
       return loadSoundbank(MidiSystem.getSoundbank(file));
     } catch (Throwable throwable) {
-      new MidiPlayerException(TuxGuitar
-          .getProperty("jsa.error.soundbank.custom"), throwable)
-          LOG.error();
+      LOG.error(new MidiPlayerException(TuxGuitar
+          .getProperty("jsa.error.soundbank.custom"), throwable));
+
     }
     return false;
   }

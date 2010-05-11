@@ -5,13 +5,17 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.Track;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.player.base.MidiSequenceHandler;
+import org.herac.tuxguitar.player.impl.jsa.midiport.MidiPortSynthesizer;
 import org.herac.tuxguitar.player.impl.jsa.utils.MidiMessageUtils;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGTimeSignature;
 
 public class MidiSequenceHandlerImpl extends MidiSequenceHandler {
-
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiSequenceHandler.class);
   private MidiSequenceLoader loader;
   private Track[] midiTracks;
   private Sequence sequence;

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -28,6 +29,7 @@ import org.herac.tuxguitar.gui.actions.file.PrintAction;
 import org.herac.tuxguitar.gui.actions.file.PrintPreviewAction;
 import org.herac.tuxguitar.gui.actions.file.SaveAsFileAction;
 import org.herac.tuxguitar.gui.actions.file.SaveFileAction;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.items.MenuItems;
 import org.herac.tuxguitar.io.base.TGFileFormatManager;
 import org.herac.tuxguitar.io.base.TGLocalFileExporter;
@@ -151,6 +153,10 @@ public class FileMenuItem extends MenuItems {
     return url;
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(FileMenuItem.class);
+  
   private void disposeHistoryFiles() {
     for (int i = 0; i < this.historyFiles.length; i++) {
       this.historyFiles[i].dispose();

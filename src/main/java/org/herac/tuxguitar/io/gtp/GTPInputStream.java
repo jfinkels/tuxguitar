@@ -3,6 +3,8 @@ package org.herac.tuxguitar.io.gtp;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
 
 public abstract class GTPInputStream extends GTPFileFormat implements
@@ -13,6 +15,10 @@ public abstract class GTPInputStream extends GTPFileFormat implements
   private int versionIndex;
   private String[] versions;
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(GTPInputStream.class);
+  
   public GTPInputStream(GTPSettings settings, String[] versions) {
     super(settings);
     this.versions = versions;

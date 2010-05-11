@@ -5,14 +5,18 @@ import javax.sound.midi.Sequencer;
 import javax.sound.midi.Track;
 import javax.sound.midi.Transmitter;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
 import org.herac.tuxguitar.player.base.MidiSequenceHandler;
 import org.herac.tuxguitar.player.base.MidiSequencer;
 import org.herac.tuxguitar.player.base.MidiTransmitter;
+import org.herac.tuxguitar.player.impl.jsa.midiport.MidiPortSynthesizer;
 
 public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
-
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiSequencerImpl.class);
   private static final int TICK_MOVE = 1;
 
   private Object lock;

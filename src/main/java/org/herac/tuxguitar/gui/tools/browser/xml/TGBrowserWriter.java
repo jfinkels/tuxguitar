@@ -18,6 +18,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.tools.browser.TGBrowserCollection;
 import org.herac.tuxguitar.gui.tools.browser.TGBrowserManager;
 import org.w3c.dom.Attr;
@@ -31,6 +33,10 @@ public class TGBrowserWriter {
   private static final String ITEM_LIST_TAG = "browser-collections";
   private static final String ITEM_TAG = "browser-collection";
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGBrowserWriter.class);
+  
   public static Document createDocument() {
     Document document = null;
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

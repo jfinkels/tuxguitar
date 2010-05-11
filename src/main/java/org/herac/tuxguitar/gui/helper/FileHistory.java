@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.system.config.TGConfigKeys;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
 
@@ -31,6 +33,10 @@ import org.herac.tuxguitar.gui.util.TGFileUtils;
  */
 public class FileHistory {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(FileHistory.class);
+  
   private static final int URL_LIMIT = TuxGuitar.instance().getConfig()
       .getIntConfigValue(TGConfigKeys.MAX_HISTORY_FILES);
 
@@ -212,9 +218,9 @@ public class FileHistory {
       properties.store(new FileOutputStream(getHistoryFileName()),
           "History Files");
     } catch (FileNotFoundException e1) {
-      e1LOG.error();
+      LOG.error(e1);
     } catch (IOException e1) {
-      e1LOG.error();
+      LOG.error(e1);
     }
   }
 

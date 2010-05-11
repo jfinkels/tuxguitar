@@ -129,7 +129,7 @@ public class TuxGuitar {
 
   private IconManager iconManager;
 
-  private boolean initialized;
+  private boolean initialized = false;
 
   private ItemManager itemManager;
 
@@ -137,7 +137,7 @@ public class TuxGuitar {
 
   private LanguageManager languageManager;
 
-  private TGLock lock;
+  private TGLock lock = new TGLock();
 
   private LyricEditor lyricEditor;
 
@@ -168,11 +168,6 @@ public class TuxGuitar {
   private TGTableViewer table;
 
   private UndoableManager undoableManager;
-
-  public TuxGuitar() {
-    this.lock = new TGLock();
-    this.initialized = false;
-  }
 
   public void createComposites(Composite composite) {
     FormData data = new FormData();

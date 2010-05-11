@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.song.models.TGBeat;
@@ -48,6 +50,10 @@ public class GP3OutputStream extends GTPOutputStream {
   private static final String GP3_FORMAT_EXTENSION = ".gp3";
   private static final String GP3_VERSION = "FICHIER GUITAR PRO v3.00";
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(GP3OutputStream.class);
+  
   public GP3OutputStream(GTPSettings settings) {
     super(settings);
   }

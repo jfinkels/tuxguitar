@@ -96,8 +96,7 @@ public class TGStream {
 
   public static final String TG_FORMAT_NAME = ("TuxGuitar File Format");
 
-  public static final String TG_FORMAT_VERSION = (TG_FORMAT_NAME + " - " + TGVersion.CURRENT
-      .getVersion());
+  public static final String TG_FORMAT_VERSION = TG_FORMAT_NAME + " - " + TGVersion.CURRENT;
 
   protected static final int TRACK_LYRICS = 0x04;
 

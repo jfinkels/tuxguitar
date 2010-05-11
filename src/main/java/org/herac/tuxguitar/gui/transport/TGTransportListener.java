@@ -1,6 +1,8 @@
 package org.herac.tuxguitar.gui.transport;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.player.base.MidiPlayerListener;
 import org.herac.tuxguitar.util.TGSynchronizer;
 
@@ -57,6 +59,11 @@ public class TGTransportListener implements MidiPlayerListener {
       }
     }).start();
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGTransportListener.class);
+  
 
   public void notifyStopped() {
     try {

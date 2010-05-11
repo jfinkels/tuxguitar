@@ -9,7 +9,9 @@ import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.system.config.TGConfigManager;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
 import org.herac.tuxguitar.player.impl.jsa.midiport.MidiPortSynthesizer;
@@ -17,6 +19,10 @@ import org.herac.tuxguitar.player.impl.jsa.utils.MidiConfigUtils;
 
 public class SBInstaller {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(SBInstaller.class);
+  
   private static final String SB_EXTENSION = ".gm";
   private static final String SB_PREFIX = "soundbank";
 

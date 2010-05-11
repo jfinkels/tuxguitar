@@ -3,6 +3,8 @@ package org.herac.tuxguitar.io.ptb;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
 import org.herac.tuxguitar.io.ptb.base.PTBar;
@@ -21,6 +23,10 @@ import org.herac.tuxguitar.song.models.TGSong;
 
 public class PTInputStream implements TGInputStreamBase {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(PTInputStream.class);
+  
   private static final String PTB_VERSION = "ptab-4";
 
   private PTSongParser parser;

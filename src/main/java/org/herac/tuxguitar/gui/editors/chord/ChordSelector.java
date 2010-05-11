@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.gui.editors.chord;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -525,6 +526,10 @@ public class ChordSelector extends Composite {
         this._11List.getSelectionIndex(), this.bassCombo.getSelectionIndex(),
         this.tonicList.getSelectionIndex(), this.sharpButton.getSelection());
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(ChordSelector.class);
 
   protected void updateWidget(Button widget, boolean enabled) {
     widget.setEnabled(enabled);

@@ -9,9 +9,11 @@ package org.herac.tuxguitar.gui.system.config;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.fretboard.FretBoardConfig;
 import org.herac.tuxguitar.gui.editors.tab.edit.EditorKit;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
@@ -62,6 +64,12 @@ public class TGConfigDefaults {
       LOG.error(e);
     }
   }
+  
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGConfigDefaults.class);
+  
 
   private void loadDefaults() {
     this.loadProperty(TGConfigKeys.SKIN, "Lavender");

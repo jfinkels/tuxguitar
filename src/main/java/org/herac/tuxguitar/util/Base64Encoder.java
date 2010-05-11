@@ -1,9 +1,15 @@
-package org.herac.tuxguitar.gui.tools.browser.ftp.utils;
+package org.herac.tuxguitar.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
+import org.apache.log4j.Logger;
+
 public class Base64Encoder {
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(Base64Encoder.class);
 
   private static final int BUFFER_SIZE = 1024;
 

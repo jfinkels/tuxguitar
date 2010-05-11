@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.gui.editors.tab;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -17,6 +18,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.tab.edit.EditorKit;
 import org.herac.tuxguitar.gui.editors.tab.layout.LinearViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.layout.PageViewLayout;
@@ -305,6 +307,9 @@ public class Tablature extends Composite {
       }
     }
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(Tablature.class);
 
   public void reloadStyles() {
     if (this.getViewLayout() != null) {

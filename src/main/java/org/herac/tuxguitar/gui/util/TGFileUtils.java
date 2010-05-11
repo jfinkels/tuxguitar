@@ -170,7 +170,7 @@ public class TGFileUtils {
     // Default System User Home
     if (configPath == null) {
       configPath = ((System.getProperty("user.home") + File.separator
-          + ".tuxguitar-" + TGVersion.CURRENT.getVersion()));
+          + ".tuxguitar-" + TGVersion.CURRENT));
     }
 
     // Check if the path exists

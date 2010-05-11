@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
@@ -51,6 +53,10 @@ public class GP5OutputStream extends GTPOutputStream {
   private static final String GP5_FORMAT_EXTENSION = ".gp5";
   private static final String GP5_VERSION = "FICHIER GUITAR PRO v5.00";
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(GP5OutputStream.class);
+  
   private static final String[] PAGE_SETUP_LINES = { "%TITLE%", "%SUBTITLE%",
       "%ARTIST%", "%ALBUM%", "Words by %WORDS%", "Music by %MUSIC%",
       "Words & Music by %WORDSMUSIC%", "Copyright %COPYRIGHT%",

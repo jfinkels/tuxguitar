@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.gui.tools.custom.tuner;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,6 +15,7 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.gui.util.MessageDialog;
 
@@ -126,6 +128,10 @@ public class TGTunerSettingsDialog {
     }
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGTunerSettingsDialog.class);
+  
   private int getBufferSize() {
     return Integer.parseInt(this.bufferSizeCombo.getText());
   }

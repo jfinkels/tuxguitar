@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.system.keybindings.xml.KeyBindingReader;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
 
@@ -28,4 +29,9 @@ public class KeyBindingActionDefaults {
     return list;
 
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(KeyBindingActionDefaults.class);
+  
 }

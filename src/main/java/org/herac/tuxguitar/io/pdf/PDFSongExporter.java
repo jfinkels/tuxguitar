@@ -4,11 +4,13 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.tab.Tablature;
 import org.herac.tuxguitar.gui.editors.tab.layout.PrinterViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
@@ -25,6 +27,10 @@ import org.herac.tuxguitar.util.TGSynchronizer;
 
 public class PDFSongExporter implements TGLocalFileExporter {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(PDFSongExporter.class);
+  
   private class PrintDocumentImpl implements PrintDocument {
 
     private Rectangle bounds;

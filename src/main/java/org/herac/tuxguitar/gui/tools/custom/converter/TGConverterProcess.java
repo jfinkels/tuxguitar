@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.gui.tools.custom.converter;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.system.icons.IconLoader;
 import org.herac.tuxguitar.gui.system.language.LanguageLoader;
 import org.herac.tuxguitar.gui.util.DialogUtils;
@@ -31,6 +33,10 @@ public class TGConverterProcess implements TGConverterListener, LanguageLoader,
 
   protected static final String EOL = ("\n");
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGConverterProcess.class);
+  
   private static final int SHELL_HEIGHT = 350;
   private static final int SHELL_WIDTH = 650;
 

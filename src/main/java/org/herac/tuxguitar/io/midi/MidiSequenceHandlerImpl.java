@@ -3,6 +3,8 @@ package org.herac.tuxguitar.io.midi;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.midi.base.MidiEvent;
 import org.herac.tuxguitar.io.midi.base.MidiSequence;
 import org.herac.tuxguitar.io.midi.base.MidiTrack;
@@ -21,6 +23,11 @@ public class MidiSequenceHandlerImpl extends MidiSequenceHandler {
     this.init();
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiSequenceHandlerImpl.class);
+  
+  @Override
   public void addControlChange(long tick, int track, int channel,
       int controller, int value) {
     addEvent(track, new MidiEvent(MidiMessageUtils.controlChange(channel,

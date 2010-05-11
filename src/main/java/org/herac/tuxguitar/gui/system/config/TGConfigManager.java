@@ -15,8 +15,10 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.RGB;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 
 /**
  * @author julian
@@ -28,9 +30,6 @@ public abstract class TGConfigManager {
 
   private Properties properties;
 
-  public TGConfigManager() {
-    super();
-  }
 
   public void clear() {
     this.properties.clear();
@@ -50,6 +49,11 @@ public abstract class TGConfigManager {
     }
     return defaultValue;
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGConfigManager.class);
+  
 
   public abstract Properties getDefaults();
 
@@ -196,9 +200,9 @@ public abstract class TGConfigManager {
       }
       this.properties.store(new FileOutputStream(file), getName());
     } catch (FileNotFoundException e1) {
-      e1LOG.error();
+      LOG.error(e1);
     } catch (IOException e1) {
-      e1LOG.error();
+      LOG.error(e1);
     }
   }
 

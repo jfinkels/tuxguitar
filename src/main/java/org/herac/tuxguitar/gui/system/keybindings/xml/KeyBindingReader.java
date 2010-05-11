@@ -10,6 +10,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.system.keybindings.KeyBinding;
 import org.herac.tuxguitar.gui.system.keybindings.KeyBindingAction;
 import org.w3c.dom.Document;
@@ -75,6 +77,10 @@ public class KeyBindingReader {
     return document;
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(KeyBindingReader.class);
+  
   private static Document getDocument(InputStream is) {
     Document document = null;
     DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

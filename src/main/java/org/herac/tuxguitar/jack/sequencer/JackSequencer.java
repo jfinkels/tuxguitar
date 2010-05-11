@@ -1,6 +1,8 @@
 package org.herac.tuxguitar.jack.sequencer;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.jack.JackClient;
 import org.herac.tuxguitar.player.base.MidiPlayerException;
 import org.herac.tuxguitar.player.base.MidiSequenceHandler;
@@ -9,6 +11,10 @@ import org.herac.tuxguitar.player.base.MidiTransmitter;
 
 public class JackSequencer implements MidiSequencer {
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(JackSequencer.class);
+  
   private class JackTimer implements Runnable {
 
     private static final int TIMER_DELAY = 10;
