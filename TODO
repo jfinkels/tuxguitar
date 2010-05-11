@@ -1,5 +1,9 @@
 * unit tests
 * remove repeated code
 * add @Override annotations where appropriate
-* use built-in concurrency instead of custom-built locks
-* use jopt-simple for command-line argument parsing
+* replace custom concurrency with built-in concurrency
+* replace custom command-line parsing with jopt-simple
+* replace custom resource bundle with built-in Resources
+* remove "skins"
+* remove "TG-" prefix from every class
+* replace arbitrary TG*Impl classes with actual interfaces and implementations
