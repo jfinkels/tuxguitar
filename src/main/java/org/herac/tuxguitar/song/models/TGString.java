@@ -6,25 +6,19 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
-
 /**
  * @author julian
  * 
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class TGString {
-  private int number;
-  private int value;
+public class TGString {
+  private int number = 0;
+  private int value = 0;
 
-  public TGString() {
-    this.number = 0;
-    this.value = 0;
-  }
-
-  public TGString clone(TGFactory factory) {
-    TGString string = factory.newString();
+  @Override
+  public TGString clone() {
+    TGString string = new TGString();
     copy(string);
     return string;
   }

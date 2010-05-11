@@ -1,8 +1,7 @@
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 
-public abstract class TGChannel {
+public class TGChannel {
   public static final short DEFAULT_BALANCE = 64;
 
   public static final short DEFAULT_CHORUS = 0;
@@ -17,8 +16,8 @@ public abstract class TGChannel {
     return (channel == DEFAULT_PERCUSSION_CHANNEL);
   }
 
-  public static TGChannel newPercussionChannel(TGFactory factory) {
-    TGChannel channel = factory.newChannel();
+  public static TGChannel newPercussionChannel() {
+    TGChannel channel = new TGChannel();
     TGChannel.setPercussionChannel(channel);
     return channel;
   }
@@ -28,33 +27,19 @@ public abstract class TGChannel {
     channel.setEffectChannel(DEFAULT_PERCUSSION_CHANNEL);
   }
 
-  private short balance;
-  private short channel;
-  private short chorus;
-  private short effectChannel;
-  private short instrument;
-  private short phaser;
+  private short balance = DEFAULT_BALANCE;
+  private short channel = 0;
+  private short chorus = DEFAULT_CHORUS;
+  private short effectChannel = 0;
+  private short instrument = DEFAULT_INSTRUMENT;
+  private short phaser = DEFAULT_PHASER;
+  private short reverb = DEFAULT_REVERB;
+  private short tremolo = DEFAULT_TREMOLO;
+  private short volume = DEFAULT_VOLUME;
 
-  private short reverb;
-
-  private short tremolo;
-
-  private short volume;
-
-  public TGChannel() {
-    this.channel = 0;
-    this.effectChannel = 0;
-    this.instrument = DEFAULT_INSTRUMENT;
-    this.volume = DEFAULT_VOLUME;
-    this.balance = DEFAULT_BALANCE;
-    this.chorus = DEFAULT_CHORUS;
-    this.reverb = DEFAULT_REVERB;
-    this.phaser = DEFAULT_PHASER;
-    this.tremolo = DEFAULT_TREMOLO;
-  }
-
-  public TGChannel clone(TGFactory factory) {
-    TGChannel channel = factory.newChannel();
+  @Override
+  public TGChannel clone() {
+    TGChannel channel = new TGChannel();
     copy(channel);
     return channel;
   }

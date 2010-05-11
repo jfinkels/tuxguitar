@@ -7,7 +7,6 @@
 package org.herac.tuxguitar.gui.editors.tab;
 
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGTrack;
 
@@ -21,11 +20,7 @@ public class TGTrackImpl extends TGTrack {
 
   private int scoreHeight;
   private int tabHeight;
-
-  public TGTrackImpl(TGFactory factory) {
-    super(factory);
-  }
-
+  
   /**
    * Calcula el el ancho de la partitura
    */

@@ -16,7 +16,6 @@ import org.herac.tuxguitar.io.ptb.base.PTSymbol;
 import org.herac.tuxguitar.io.ptb.base.PTTempo;
 import org.herac.tuxguitar.io.ptb.base.PTTrack;
 import org.herac.tuxguitar.io.ptb.base.PTTrackInfo;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGSong;
 
@@ -45,10 +44,10 @@ public class PTInputStream implements TGInputStreamBase {
     return new TGFileFormat("PowerTab", "*.ptb");
   }
 
-  public void init(TGFactory factory, InputStream stream) {
+  public void init(InputStream stream) {
     this.version = null;
     this.stream = stream;
-    this.parser = new PTSongParser(factory);
+    this.parser = new PTSongParser();
   }
 
   public boolean isSupportedVersion() {

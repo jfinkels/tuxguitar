@@ -52,11 +52,13 @@ public class TGLyricImpl extends TGLyric {
     }
   }
 
+  @Override
   public void setFrom(int from) {
     super.setFrom(from);
     this.update();
   }
 
+  @Override
   public void setLyrics(String lyrics) {
     super.setLyrics(lyrics);
     this.update();
@@ -71,6 +73,6 @@ public class TGLyricImpl extends TGLyric {
   }
 
   private void update() {
-    this.height = (this.isEmpty() ? 0 : 10);
+    this.height = (this.getLyrics().isEmpty() ? 0 : 10);
   }
 }

@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.gui.undo.undoables.track;
 
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.tab.TGLyricImpl;
 import org.herac.tuxguitar.gui.undo.CannotRedoException;
 import org.herac.tuxguitar.gui.undo.CannotUndoException;
 import org.herac.tuxguitar.gui.undo.UndoableEdit;
@@ -31,10 +32,8 @@ public class UndoableTrackLyric implements UndoableEdit {
   private TGLyric undoLyric;
 
   private UndoableTrackLyric() {
-    this.undoLyric = TuxGuitar.instance().getSongManager().getFactory()
-        .newLyric();
-    this.redoLyric = TuxGuitar.instance().getSongManager().getFactory()
-        .newLyric();
+    this.undoLyric = new TGLyricImpl();
+    this.redoLyric = new TGLyricImpl();
   }
 
   public boolean canRedo() {

@@ -6,10 +6,12 @@
  */
 package org.herac.tuxguitar.song.models;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 
 /**
  * @author julian
@@ -21,30 +23,17 @@ public abstract class TGTrack {
   public static final int MAX_OFFSET = 24;
   public static final int MIN_OFFSET = -24;
 
-  private TGChannel channel;
-  private TGColor color;
-  private TGLyric lyrics;
-  private List<TGMeasure> measures;
-  private boolean mute;
-  private String name;
-  private int number;
-  private int offset;
-  private boolean solo;
-  private TGSong song;
-  private List<TGString> strings;
-
-  public TGTrack(TGFactory factory) {
-    this.number = 0;
-    this.offset = 0;
-    this.solo = false;
-    this.mute = false;
-    this.name = new String();
-    this.measures = new ArrayList<TGMeasure>();
-    this.strings = new ArrayList<TGString>();
-    this.channel = factory.newChannel();
-    this.color = factory.newColor();
-    this.lyrics = factory.newLyric();
-  }
+  private TGChannel channel = TGFactoryImpl.newChannel();
+  private Color color = Color.BLACK;
+  private TGLyric lyrics = TGFactoryImpl.newLyric();
+  private List<TGMeasure> measures = new ArrayList<TGMeasure>();
+  private boolean mute = false;
+  private String name = "";
+  private int number = 0;
+  private int offset = 0;
+  private boolean solo = false;
+  private TGSong song = null;
+  private List<TGString> strings = new ArrayList<TGString>();
 
   public void addMeasure(int index, TGMeasure measure) {
     measure.setTrack(this);
@@ -61,27 +50,28 @@ public abstract class TGTrack {
     this.measures.clear();
   }
 
-  public TGTrack clone(TGFactory factory, TGSong song) {
-    TGTrack track = factory.newTrack();
-    copy(factory, song, track);
+  public TGTrack clone(TGSong song) {
+    TGTrack track = new TGTrackImpl();
+    copy(song, track);
     return track;
   }
 
-  public void copy(TGFactory factory, TGSong song, TGTrack track) {
+  public void copy(TGSong song, TGTrack track) {
     track.clear();
     track.setNumber(getNumber());
     track.setName(getName());
     track.setOffset(getOffset());
     getChannel().copy(track.getChannel());
-    getColor().copy(track.getColor());
+    this.color = track.getColor();
     getLyrics().copy(track.getLyrics());
-    for (int i = 0; i < getStrings().size(); i++) {
-      TGString string = (TGString) getStrings().get(i);
-      track.getStrings().add(string.clone(factory));
+    
+    for (final TGString string : this.strings) {
+      track.getStrings().add(string.clone());
     }
-    for (int i = 0; i < countMeasures(); i++) {
-      TGMeasure measure = getMeasure(i);
-      track.addMeasure(measure.clone(factory, song.getMeasureHeader(i)));
+    
+    int i = 0;
+    for (final TGMeasure measure : this.measures) {
+      track.addMeasure(measure.clone(song.getMeasureHeader(i++)));
     }
   }
 
@@ -93,7 +83,7 @@ public abstract class TGTrack {
     return this.channel;
   }
 
-  public TGColor getColor() {
+  public Color getColor() {
     return this.color;
   }
 
@@ -156,7 +146,7 @@ public abstract class TGTrack {
     this.channel = channel;
   }
 
-  public void setColor(TGColor color) {
+  public void setColor(Color color) {
     this.color = color;
   }
 

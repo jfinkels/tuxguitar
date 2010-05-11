@@ -6,12 +6,14 @@
  */
 package org.herac.tuxguitar.song.managers;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureHeaderImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMarker;
 import org.herac.tuxguitar.song.models.TGMeasure;
@@ -31,11 +33,10 @@ import org.herac.tuxguitar.song.models.TGTrack;
 public class TGSongManager {
   public static final short MAX_CHANNELS = 16;
 
-  public static List<TGString> createPercussionStrings(TGFactory factory,
-      int stringCount) {
+  public static List<TGString> createPercussionStrings(int stringCount) {
     List<TGString> strings = new ArrayList<TGString>();
     for (int i = 1; i <= stringCount; i++) {
-      strings.add(newString(factory, i, 0));
+      strings.add(newString(i, 0));
     }
     return strings;
   }
@@ -53,28 +54,18 @@ public class TGSongManager {
     return defaultLenght;
   }
 
-  public static TGString newString(TGFactory factory, int number, int value) {
-    TGString string = factory.newString();
+  public static TGString newString(int number, int value) {
+    TGString string = new TGString();
     string.setNumber(number);
     string.setValue(value);
     return string;
   }
-
-  private TGFactory factory;
 
   private TGMeasureManager measureManager;
 
   private TGSong song;
 
   private TGTrackManager trackManager;
-
-  public TGSongManager() {
-    this(new TGFactory());
-  }
-
-  public TGSongManager(TGFactory factory) {
-    this.factory = factory;
-  }
 
   /**
    * Agrega un Compas
@@ -94,9 +85,9 @@ public class TGSongManager {
     // Obtengo un clon para el nuevo Header.
     TGMeasureHeader header = null;
     if (number == 1) {
-      header = getMeasureHeader(number).clone(getFactory());
+      header = getMeasureHeader(number).clone();
     } else {
-      header = getMeasureHeader((number - 1)).clone(getFactory());
+      header = getMeasureHeader((number - 1)).clone();
       header.setStart(header.getStart() + header.getLength());
       header.setNumber(header.getNumber() + 1);
     }
@@ -123,7 +114,7 @@ public class TGSongManager {
 
   public TGMeasureHeader addNewMeasureBeforeEnd() {
     TGMeasureHeader lastHeader = getLastMeasureHeader();
-    TGMeasureHeader header = getFactory().newHeader();
+    TGMeasureHeader header = new TGMeasureHeaderImpl();
     header.setNumber((lastHeader.getNumber() + 1));
     header.setStart((lastHeader.getStart() + lastHeader.getLength()));
     header.setRepeatOpen(false);
@@ -267,7 +258,7 @@ public class TGSongManager {
   }
 
   public TGTrack cloneTrack(TGTrack track) {
-    TGTrack clone = track.clone(getFactory(), getSong());
+    TGTrack clone = track.clone(getSong());
     clone.setNumber(getNextTrackNumber());
     addTrack(clone);
     return clone;
@@ -286,12 +277,12 @@ public class TGSongManager {
 
   public List<TGString> createDefaultInstrumentStrings() {
     List<TGString> strings = new ArrayList<TGString>();
-    strings.add(newString(getFactory(), 1, 64));
-    strings.add(newString(getFactory(), 2, 59));
-    strings.add(newString(getFactory(), 3, 55));
-    strings.add(newString(getFactory(), 4, 50));
-    strings.add(newString(getFactory(), 5, 45));
-    strings.add(newString(getFactory(), 6, 40));
+    strings.add(newString(1, 64));
+    strings.add(newString(2, 59));
+    strings.add(newString(3, 55));
+    strings.add(newString(4, 50));
+    strings.add(newString(5, 45));
+    strings.add(newString(6, 40));
     return strings;
   }
 
@@ -303,10 +294,6 @@ public class TGSongManager {
     TGTrack track = makeNewTrack();
     addTrack(track);
     return track;
-  }
-
-  public TGFactory getFactory() {
-    return this.factory;
   }
 
   public TGMarker getFirstMarker() {
@@ -433,7 +420,7 @@ public class TGSongManager {
 
   public TGChannel getFreeChannel(short instrument, boolean isPercussion) {
     if (isPercussion) {
-      return TGChannel.newPercussionChannel(getFactory());
+      return TGChannel.newPercussionChannel();
     }
     short normalChannel = -1;
     short effectChannel = -1;
@@ -453,10 +440,10 @@ public class TGSongManager {
         effectChannel = normalChannel;
       } else {
         TGChannel songChannel = getLastTrack().getChannel();
-        return songChannel.clone(getFactory());
+        return songChannel.clone();
       }
     }
-    TGChannel channel = getFactory().newChannel();
+    TGChannel channel = new TGChannel();
     channel.setChannel(normalChannel);
     channel.setEffectChannel(effectChannel);
     channel.setInstrument(instrument);
@@ -656,7 +643,7 @@ public class TGSongManager {
     for (int i = 0; i < getSong().countTracks(); i++) {
       TGTrack track = getSong().getTrack(i);
       if (channel == track.getChannel().getChannel()) {
-        return track.getChannel().clone(getFactory());
+        return track.getChannel().clone();
       }
     }
     return null;
@@ -689,18 +676,18 @@ public class TGSongManager {
   }
 
   private TGTrack makeNewTrack() {
-    TGTrack track = getFactory().newTrack();
+    TGTrack track = new TGTrackImpl();
     track.setNumber(getNextTrackNumber());
     track.setName("Track " + track.getNumber());
     // measures
     for (final TGMeasureHeader header : getSong().getMeasureHeaders()) {
-      TGMeasure measure = getFactory().newMeasure(header);
+      TGMeasure measure = new TGMeasureImpl(header);
       track.addMeasure(measure);
     }
     track.setStrings(createDefaultInstrumentStrings());
     getFreeChannel(TGChannel.DEFAULT_INSTRUMENT, false)
         .copy(track.getChannel());
-    TGColor.RED.copy(track.getColor());
+    track.setColor(Color.RED);
     return track;
   }
 
@@ -765,25 +752,25 @@ public class TGSongManager {
   }
 
   public TGSong newSong() {
-    TGSong song = getFactory().newSong();
+    TGSong song = new TGSong();
 
-    TGMeasureHeader header = getFactory().newHeader();
+    TGMeasureHeader header = new TGMeasureHeaderImpl();
     header.setNumber(1);
     header.setStart(TGDuration.QUARTER_TIME);
     header.getTimeSignature().setNumerator(4);
     header.getTimeSignature().getDenominator().setValue(TGDuration.QUARTER);
     song.addMeasureHeader(header);
 
-    TGMeasure measure = getFactory().newMeasure(header);
+    TGMeasure measure = new TGMeasureImpl(header);
 
-    TGTrack track = getFactory().newTrack();
+    TGTrack track = new TGTrackImpl();
     track.setNumber(1);
     track.setName("Track 1");
     track.addMeasure(measure);
     track.getChannel().setChannel((short) 0);
     track.getChannel().setEffectChannel((short) 1);
     track.setStrings(createDefaultInstrumentStrings());
-    TGColor.RED.copy(track.getColor());
+    track.setColor(Color.RED);
     song.addTrack(track);
 
     return song;
@@ -898,20 +885,16 @@ public class TGSongManager {
 
   public TGMeasureHeader replaceMeasureHeader(TGMeasureHeader newMeasure) {
     TGMeasureHeader header = getMeasureHeaderAt(newMeasure.getStart());
-    header.makeEqual(newMeasure.clone(getFactory()));
+    header.makeEqual(newMeasure.clone());
     return header;
   }
 
   public TGTrack replaceTrack(TGTrack track) {
     TGTrack current = getTrack(track.getNumber());
     if (current != null) {
-      track.copy(getFactory(), getSong(), current);
+      track.copy(getSong(), current);
     }
     return current;
-  }
-
-  public void setFactory(TGFactory factory) {
-    this.factory = factory;
   }
 
   public void setProperties(String name, String artist, String album,
@@ -943,22 +926,20 @@ public class TGSongManager {
     for (int i = 0; i < getSong().countTracks(); i++) {
       TGTrack track = getSong().getTrack(i);
       if (channel.getChannel() == track.getChannel().getChannel()) {
-        track.setChannel(channel.clone(getFactory()));
+        track.setChannel(channel.clone());
       }
     }
   }
 
-  public TGMarker updateMarker(int measure, String title, TGColor color) {
+  public TGMarker updateMarker(int measure, String title, Color color) {
     TGMeasureHeader header = getMeasureHeader(measure);
     if (header != null) {
       if (!header.hasMarker()) {
-        header.setMarker(getFactory().newMarker());
+        header.setMarker(new TGMarker());
       }
       header.getMarker().setMeasure(measure);
       header.getMarker().setTitle(title);
-      header.getMarker().getColor().setR(color.getR());
-      header.getMarker().getColor().setG(color.getG());
-      header.getMarker().getColor().setB(color.getB());
+      header.getMarker().setColor(color);
       return header.getMarker();
     }
     return null;

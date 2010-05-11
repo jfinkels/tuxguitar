@@ -6,7 +6,8 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 
 /**
  * @author julian
@@ -18,34 +19,35 @@ public abstract class TGBeat {
 
   public static final int MAX_VOICES = 2;
 
-  private TGChord chord;
-  private TGMeasure measure;
-  private long start;
-  private TGStroke stroke;
-  private TGText text;
-  private TGVoice[] voices;
+  private TGChord chord =null;
+  private TGMeasure measure = null;
+  private long start = TGDuration.QUARTER_TIME;
+  private TGStroke stroke = new TGStroke();
+  private TGText text = null;
+  private TGVoice[] voices = new TGVoice[MAX_VOICES];
 
-  public TGBeat(TGFactory factory) {
-    this.start = TGDuration.QUARTER_TIME;
-    this.stroke = factory.newStroke();
-    this.voices = new TGVoice[MAX_VOICES];
+  public TGBeat() {
     for (int i = 0; i < MAX_VOICES; i++) {
-      this.setVoice(i, factory.newVoice(i));
+      this.setVoice(i, TGFactoryImpl.newVoice(i));
     }
   }
 
-  public TGBeat clone(TGFactory factory) {
-    TGBeat beat = factory.newBeat();
+  @Override
+  public TGBeat clone() {
+    TGBeat beat = new TGBeatImpl();
     beat.setStart(getStart());
-    getStroke().copy(beat.getStroke());
-    for (int i = 0; i < this.voices.length; i++) {
-      beat.setVoice(i, this.voices[i].clone(factory));
+    this.stroke.copy(beat.getStroke());
+    
+    for (int i =0; i < this.voices.length; ++i) {
+      beat.setVoice(i, this.voices[i].clone());
     }
+    
     if (this.chord != null) {
-      beat.setChord(this.chord.clone(factory));
+      beat.setChord(this.chord.clone());
     }
+    
     if (this.text != null) {
-      beat.setText(this.text.clone(factory));
+      beat.setText(this.text.clone());
     }
     return beat;
   }

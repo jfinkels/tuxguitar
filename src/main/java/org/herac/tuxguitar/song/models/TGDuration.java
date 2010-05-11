@@ -6,7 +6,7 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 
 /**
  * @author julian
@@ -14,7 +14,7 @@ import org.herac.tuxguitar.song.factory.TGFactory;
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class TGDuration {
+public class TGDuration {
   /**
    * Corchea.
    */
@@ -54,25 +54,23 @@ public abstract class TGDuration {
    */
   public static final int WHOLE = 1;
 
-  public static TGDuration fromTime(TGFactory factory, long time) {
-    TGDuration duration = factory.newDuration();
+  public static TGDuration fromTime(long time) {
+    TGDuration duration = new TGDuration();
     duration.setValue(TGDuration.SIXTY_FOURTH);
     duration.setDotted(false);
     duration.setDoubleDotted(false);
     duration.getDivision().setEnters(3);
     duration.getDivision().setTimes(2);
-    return fromTime(factory, time, duration);
+    return fromTime(time, duration);
   }
 
-  public static TGDuration fromTime(TGFactory factory, long time,
-      TGDuration minDuration) {
-    return fromTime(factory, time, minDuration, 10);
+  public static TGDuration fromTime(long time, TGDuration minDuration) {
+    return fromTime(time, minDuration, 10);
   }
 
-  public static TGDuration fromTime(TGFactory factory, long time,
-      TGDuration minimum, int diff) {
-    TGDuration duration = minimum.clone(factory);
-    TGDuration tmpDuration = factory.newDuration();
+  public static TGDuration fromTime(long time, TGDuration minimum, int diff) {
+    TGDuration duration = minimum.clone();
+    TGDuration tmpDuration = new TGDuration();
     tmpDuration.setValue(TGDuration.WHOLE);
     tmpDuration.setDotted(true);
     boolean finish = false;
@@ -81,7 +79,7 @@ public abstract class TGDuration {
       if (tmpTime - diff <= time) {
         // if(tmpTime > duration.getTime()){
         if (Math.abs(tmpTime - time) < Math.abs(duration.getTime() - time)) {
-          duration = tmpDuration.clone(factory);
+          duration = tmpDuration.clone();
         }
       }
       if (tmpDuration.isDotted()) {
@@ -105,32 +103,26 @@ public abstract class TGDuration {
   /**
    * DivisionType.
    */
-  private TGDivisionType divisionType;
+  private TGDivisionType divisionType = TGFactoryImpl.newDivisionType();
 
   /**
    * Puntillo.
    */
-  private boolean dotted;
+  private boolean dotted = false;
 
   /**
    * Doble Puntillo.
    */
-  private boolean doubleDotted;
+  private boolean doubleDotted = false;
 
   /**
    * Valor.
    */
-  private int value;
+  private int value = QUARTER;
 
-  public TGDuration(TGFactory factory) {
-    this.value = QUARTER;
-    this.dotted = false;
-    this.doubleDotted = false;
-    this.divisionType = factory.newDivisionType();
-  }
-
-  public TGDuration clone(TGFactory factory) {
-    TGDuration duration = factory.newDuration();
+  @Override
+  public TGDuration clone() {
+    TGDuration duration = new TGDuration();
     copy(duration);
     return duration;
   }

@@ -1,10 +1,11 @@
 package org.herac.tuxguitar.song.managers;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
 import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGString;
@@ -34,7 +35,7 @@ public class TGTrackManager {
   public void addNewMeasure(TGTrack track, TGMeasureHeader header) {
     TGMeasure previous = getMeasure(track, (header.getNumber() == 1) ? (header
         .getNumber() + 1) : header.getNumber() - 1);
-    TGMeasure newMeasure = getSongManager().getFactory().newMeasure(header);
+    TGMeasure newMeasure = new TGMeasureImpl(header);
     newMeasure.setTrack(track);
     newMeasure.setClef(previous.getClef());
     newMeasure.setKeySignature(previous.getKeySignature());
@@ -63,7 +64,7 @@ public class TGTrackManager {
    */
   public void addNewMeasureAfter(TGTrack track, TGMeasureHeader header,
       TGMeasure measure) {
-    TGMeasure newMeasure = getSongManager().getFactory().newMeasure(header);
+    TGMeasure newMeasure = new TGMeasureImpl(header);
     newMeasure.setClef(measure.getClef());
     newMeasure.setKeySignature(measure.getKeySignature());
     addMeasure(track, newMeasure);
@@ -99,20 +100,18 @@ public class TGTrackManager {
     }
   }
 
-  public void changeInfo(TGTrack track, String name, TGColor color, int offset) {
+  public void changeInfo(TGTrack track, String name, Color color, int offset) {
     track.setName(name);
     track.setOffset(offset);
-    track.getColor().setR(color.getR());
-    track.getColor().setG(color.getG());
-    track.getColor().setB(color.getB());
+    track.setColor(color);
   }
 
   public void changeInstrument(TGTrack track, int instrument, boolean percussion) {
     track.getChannel().setInstrument((short) instrument);
     if (percussion) {
       TGChannel.setPercussionChannel(track.getChannel());
-      track.setStrings(TGSongManager.createPercussionStrings(getSongManager()
-          .getFactory(), track.getStrings().size()));
+      track.setStrings(TGSongManager.createPercussionStrings(track.getStrings()
+          .size()));
     } else {
       if (track.getChannel().isPercussionChannel()) {
         TGChannel tempChannel = this.songManager.getFreeChannel(

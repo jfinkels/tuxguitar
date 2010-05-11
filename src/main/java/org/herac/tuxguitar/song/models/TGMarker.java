@@ -1,30 +1,25 @@
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import java.awt.Color;
 
-public abstract class TGMarker {
-  private static final TGColor DEFAULT_COLOR = TGColor.RED;
+public class TGMarker {
+  private static final Color DEFAULT_COLOR = Color.RED;
   private static final String DEFAULT_TITLE = "Untitled";
 
-  private TGColor color;
-  private int measure;
-  private String title;
+  private Color color = DEFAULT_COLOR;
+  private int measure = 0;
+  private String title = DEFAULT_TITLE;
 
-  public TGMarker(TGFactory factory) {
-    this.measure = 0;
-    this.title = DEFAULT_TITLE;
-    this.color = DEFAULT_COLOR.clone(factory);
-  }
-
-  public TGMarker clone(TGFactory factory) {
-    TGMarker marker = factory.newMarker();
+  @Override
+  public TGMarker clone() {
+    TGMarker marker = new TGMarker();
     marker.setMeasure(getMeasure());
     marker.setTitle(getTitle());
-    getColor().copy(marker.getColor());
+    marker.setColor(this.color);
     return marker;
   }
 
-  public TGColor getColor() {
+  public Color getColor() {
     return this.color;
   }
 
@@ -36,7 +31,7 @@ public abstract class TGMarker {
     return this.title;
   }
 
-  public void setColor(TGColor color) {
+  public void setColor(Color color) {
     this.color = color;
   }
 

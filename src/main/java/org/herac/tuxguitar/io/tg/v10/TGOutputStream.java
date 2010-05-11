@@ -1,11 +1,11 @@
 /*
- * Created on 16-dic-2005
  * 
- * TODO To change the template for this generated file go to Window -
- * Preferences - Java - Code Style - Code Templates
+ * Created on 16-dic-2005 TODO To change the template for this generated file go
+ * to Window - Preferences - Java - Code Style - Code Templates
  */
 package org.herac.tuxguitar.io.tg.v10;
 
+import java.awt.Color;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -13,10 +13,8 @@ import java.io.OutputStream;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGLocalFileExporter;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGLyric;
@@ -32,14 +30,13 @@ import org.herac.tuxguitar.song.models.TGText;
 import org.herac.tuxguitar.song.models.TGTimeSignature;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.EffectPoint;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar.TremoloBarPoint;
+import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
 
 /**
  * @author julian
@@ -50,12 +47,12 @@ import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar.TremoloBarPoin
 public class TGOutputStream extends TGStream implements TGLocalFileExporter {
 
   public class TGVoiceJoiner {
-    private TGFactory factory;
+    // private TGFactory factory;
     private TGMeasure measure;
 
-    public TGVoiceJoiner(TGFactory factory, TGMeasure measure) {
-      this.factory = factory;
-      this.measure = measure.clone(factory, measure.getHeader());
+    public TGVoiceJoiner(TGMeasure measure) {
+      // this.factory = factory;
+      this.measure = measure.clone(measure.getHeader());
       this.measure.setTrack(measure.getTrack());
     }
 
@@ -71,7 +68,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
         for (int v = 1; v < beat.countVoices(); v++) {
           TGVoice currentVoice = beat.getVoice(v);
           if (!currentVoice.isEmpty()) {
-            for (int n = 0; n < currentVoice.countNotes(); n++) {
+            for (int n = 0; n < currentVoice.getNotes().size(); n++) {
               TGNote note = currentVoice.getNote(n);
               voice.addNote(note);
             }
@@ -109,8 +106,8 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
               finish = false;
               break;
             }
-            TGDuration duration = TGDuration.fromTime(this.factory,
-                (beatStart - previousStart));
+            TGDuration duration = TGDuration
+                .fromTime((beatStart - previousStart));
             duration.copy(previous.getVoice(0).getDuration());
           }
         }
@@ -135,8 +132,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
             finish = false;
             break;
           }
-          TGDuration duration = TGDuration.fromTime(this.factory,
-              (measureEnd - beatStart));
+          TGDuration duration = TGDuration.fromTime((measureEnd - beatStart));
           duration.copy(voice.getDuration());
         }
         previous = beat;
@@ -191,7 +187,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     return new TGFileFormat("TuxGuitar", "*.tg");
   }
 
-  public void init(TGFactory factory, OutputStream stream) {
+  public void init(OutputStream stream) {
     this.dataOutputStream = new DataOutputStream(stream);
   }
 
@@ -290,11 +286,11 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     }
   }
 
-  private void writeBendEffect(TGEffectBend effect) {
+  private void writeBendEffect(BendingEffect effect) {
     // escribo la cantidad de puntos
     writeByte(effect.getPoints().size());
 
-    for (final BendPoint point : effect.getPoints()) {
+    for (final EffectPoint point : effect.getPoints()) {
 
       // escribo la posicion
       writeByte(point.getPosition());
@@ -411,10 +407,10 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
 
   private void writeHarmonicEffect(TGEffectHarmonic effect) {
     // excribo el tipo
-    writeByte(effect.getType());
+    writeByte(effect.getId());
 
     // excribo la data
-    if (effect.getType() != TGEffectHarmonic.TYPE_NATURAL) {
+    if (!(effect instanceof NaturalHarmonic)) {
       writeByte(effect.getData());
     }
   }
@@ -464,8 +460,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
   }
 
   private void writeMeasure(TGMeasure srcMeasure, TGMeasure lastMeasure) {
-    TGMeasure measure = new TGVoiceJoiner(new TGFactory(), srcMeasure)
-        .process();
+    TGMeasure measure = new TGVoiceJoiner(srcMeasure).process();
 
     int header = 0;
     if (lastMeasure == null) {
@@ -648,10 +643,10 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
   }
 
   private void writeNotes(TGVoice voice, TGBeatData data) {
-    for (int i = 0; i < voice.countNotes(); i++) {
+    for (int i = 0; i < voice.getNotes().size(); i++) {
       TGNote note = voice.getNote(i);
 
-      int header = (i + 1 < voice.countNotes() ? NOTE_HAS_NEXT : 0);
+      int header = (i + 1 < voice.getNotes().size() ? NOTE_HAS_NEXT : 0);
       header = (note.isTiedNote()) ? header |= NOTE_TIED : header;
       if (note.getVelocity() != data.getVelocity()) {
         data.setVelocity(note.getVelocity());
@@ -666,11 +661,11 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     }
   }
 
-  private void writeRGBColor(TGColor color) {
+  private void writeRGBColor(Color color) {
     // escribo el RGB
-    writeByte(color.getR());
-    writeByte(color.getG());
-    writeByte(color.getB());
+    writeByte(color.getRed());
+    writeByte(color.getGreen());
+    writeByte(color.getBlue());
   }
 
   public void writeShort(short v) {
@@ -702,7 +697,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
   private void writeTrack(TGTrack track) {
     // header
     int header = 0;
-    if (!track.getLyrics().isEmpty()) {
+    if (!track.getLyrics().getLyrics().isEmpty()) {
       header |= TRACK_LYRICS;
     }
     writeHeader(header);
@@ -740,16 +735,16 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     }
   }
 
-  private void writeTremoloBarEffect(TGEffectTremoloBar effect) {
+  private void writeTremoloBarEffect(BendingEffect effect) {
     // escribo la cantidad de puntos
     writeByte(effect.getPoints().size());
 
-    for (final TremoloBarPoint point : effect.getPoints()) {
+    for (final EffectPoint point : effect.getPoints()) {
       // escribo la posicion
       writeByte(point.getPosition());
 
       // escribo el valor
-      writeByte((point.getValue() + TGEffectTremoloBar.MAX_VALUE_LENGTH));
+      writeByte((point.getValue() + EffectPoint.MAX_VALUE_LENGTH));
     }
   }
 

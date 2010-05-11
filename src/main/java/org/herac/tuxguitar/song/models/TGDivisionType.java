@@ -6,7 +6,6 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 
 /**
  * @author julian
@@ -14,11 +13,11 @@ import org.herac.tuxguitar.song.factory.TGFactory;
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class TGDivisionType {
+public class TGDivisionType {
   public static final TGDivisionType NORMAL = newDivisionType(1, 1);
 
   private static TGDivisionType newDivisionType(int enters, int times) {
-    TGDivisionType divisionType = new TGFactory().newDivisionType();
+    TGDivisionType divisionType = new TGDivisionType();
     divisionType.setEnters(enters);
     divisionType.setTimes(times);
     return divisionType;
@@ -27,20 +26,16 @@ public abstract class TGDivisionType {
   /**
    * Cantidad de Duraciones que entran en los tiempos
    */
-  private int enters;
+  private int enters = 1;
 
   /**
    * Tiempos
    */
-  private int times;
+  private int times = 1;
 
-  public TGDivisionType() {
-    this.enters = 1;
-    this.times = 1;
-  }
-
-  public TGDivisionType clone(TGFactory factory) {
-    TGDivisionType divisionType = factory.newDivisionType();
+  @Override
+  public TGDivisionType clone() {
+    TGDivisionType divisionType = new TGDivisionType();
     copy(divisionType);
     return divisionType;
   }

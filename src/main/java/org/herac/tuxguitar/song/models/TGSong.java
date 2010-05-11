@@ -9,15 +9,13 @@ package org.herac.tuxguitar.song.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
-
 /**
  * @author julian
  * 
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class TGSong {
+public class TGSong {
 
   private String album;
   private String artist;
@@ -71,13 +69,14 @@ public abstract class TGSong {
     this.measureHeaders.clear();
   }
 
-  public TGSong clone(TGFactory factory) {
-    TGSong song = factory.newSong();
-    copy(factory, song);
+  @Override
+  public TGSong clone() {
+    TGSong song = new TGSong();
+    copy(song);
     return song;
   }
 
-  public void copy(TGFactory factory, TGSong song) {
+  public void copy(TGSong song) {
     song.clear();
     song.setName(getName());
     song.setArtist(getArtist());
@@ -90,11 +89,11 @@ public abstract class TGSong {
     song.setComments(getComments());
 
     for (final TGMeasureHeader header : this.measureHeaders) {
-      song.addMeasureHeader(header.clone(factory));
+      song.addMeasureHeader(header.clone());
     }
-    
+
     for (final TGTrack track : this.tracks) {
-      song.addTrack(track.clone(factory, song));
+      song.addTrack(track.clone(song));
     }
   }
 

@@ -166,12 +166,12 @@ public class MouseKit {
       // comienza el undoable
       UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
 
-      TGNote note = manager.getFactory().newNote();
+      TGNote note = new TGNoteImpl();
       note.setValue((value - track.getString(string).getValue()));
       note.setVelocity(caret.getVelocity());
       note.setString(string);
 
-      TGDuration duration = manager.getFactory().newDuration();
+      TGDuration duration = new TGDuration();
       caret.getDuration().copy(duration);
 
       manager.getMeasureManager().addNote(voice.getBeat(), note, duration,

@@ -9,7 +9,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -70,8 +70,7 @@ public class ChordXMLReader {
           String firstFret = chordAttributes.getNamedItem(
               ChordXML.CHORD_FIRST_FRET_ATTRIBUTE).getNodeValue();
 
-          TGChord chord = TuxGuitar.instance().getSongManager().getFactory()
-              .newChord(Integer.parseInt(strings));
+          TGChord chord = new TGChordImpl(Integer.parseInt(strings));
           chord.setName(name);
           chord.setFirstFret(Integer.parseInt(firstFret));
 

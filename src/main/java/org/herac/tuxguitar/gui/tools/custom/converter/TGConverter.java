@@ -14,7 +14,6 @@ import org.herac.tuxguitar.io.base.TGLocalFileExporter;
 import org.herac.tuxguitar.io.base.TGLocalFileImporter;
 import org.herac.tuxguitar.io.base.TGOutputStreamBase;
 import org.herac.tuxguitar.io.base.TGRawImporter;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGSong;
 
@@ -68,9 +67,9 @@ public class TGConverter {
       TGSong song = null;
       try {
         song = TGFileFormatManager.instance().getLoader().load(
-            manager.getFactory(), new FileInputStream(fileName));
+            new FileInputStream(fileName));
       } catch (TGFileFormatException e) {
-        song = importSong(manager.getFactory(), fileName);
+        song = importSong(fileName);
       }
 
       if (song != null) {
@@ -84,16 +83,16 @@ public class TGConverter {
             && this.format.getExporter() instanceof TGOutputStreamBase) {
           TGOutputStreamBase exporter = (TGOutputStreamBase) this.format
               .getExporter();
-          exporter.init(manager.getFactory(), new BufferedOutputStream(
-              new FileOutputStream(convertFileName)));
+          exporter.init(new BufferedOutputStream(new FileOutputStream(
+              convertFileName)));
           exporter.writeSong(song);
         } else if (this.format != null
             && this.format.getExporter() instanceof TGLocalFileExporter) {
           TGLocalFileExporter exporter = (TGLocalFileExporter) this.format
               .getExporter();
           exporter.configure(true);
-          exporter.init(manager.getFactory(), new BufferedOutputStream(
-              new FileOutputStream(convertFileName)));
+          exporter.init(new BufferedOutputStream(new FileOutputStream(
+              convertFileName)));
           exporter.exportSong(manager.getSong());
         }
         this.getListener().notifyFileResult(convertFileName, FILE_OK);
@@ -126,8 +125,9 @@ public class TGConverter {
     return this.listener;
   }
 
-  private TGSong importSong(TGFactory factory, String filename) {
-    for (final TGRawImporter rawImporter : TGFileFormatManager.instance().getImporters()) {
+  private TGSong importSong(String filename) {
+    for (final TGRawImporter rawImporter : TGFileFormatManager.instance()
+        .getImporters()) {
       try {
         if (rawImporter instanceof TGLocalFileImporter) {
           TGLocalFileImporter currentImporter = (TGLocalFileImporter) rawImporter;
@@ -135,7 +135,7 @@ public class TGConverter {
           if (isSupportedExtension(filename, currentImporter)) {
             InputStream input = new BufferedInputStream(new FileInputStream(
                 filename));
-            currentImporter.init(factory, input);
+            currentImporter.init(input);
             return currentImporter.importSong();
           }
         }

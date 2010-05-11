@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.io.gtp;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,6 @@ import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMarker;
@@ -31,9 +31,10 @@ import org.herac.tuxguitar.song.models.TGTimeSignature;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.EffectPoint;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
+import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
 
 /**
  * @author julian
@@ -87,7 +88,7 @@ public class GP3OutputStream extends GTPOutputStream {
   private TGChannel[] makeChannels(TGSong song) {
     TGChannel[] channels = new TGChannel[64];
     for (int i = 0; i < channels.length; i++) {
-      channels[i] = getFactory().newChannel();
+      channels[i] = new TGChannel();
       channels[i].setChannel((short) i);
       channels[i].setEffectChannel((short) i);
       channels[i].setInstrument((short) 24);
@@ -202,7 +203,7 @@ public class GP3OutputStream extends GTPOutputStream {
     TGNoteEffect effect = null;
     if (voice.isRestVoice()) {
       flags |= 0x40;
-    } else if (voice.countNotes() > 0) {
+    } else if (voice.getNotes().size() > 0) {
       TGNote note = voice.getNote(0);
       effect = note.getEffect();
       if (effect.isVibrato() || effect.isTremoloBar() || effect.isTapping()
@@ -232,7 +233,7 @@ public class GP3OutputStream extends GTPOutputStream {
     }
     int stringFlags = 0;
     if (!voice.isRestVoice()) {
-      for (int i = 0; i < voice.countNotes(); i++) {
+      for (int i = 0; i < voice.getNotes().size(); i++) {
         TGNote playedNote = voice.getNote(i);
         int string = (7 - playedNote.getString());
         stringFlags |= (1 << string);
@@ -241,7 +242,7 @@ public class GP3OutputStream extends GTPOutputStream {
     writeUnsignedByte(stringFlags);
     for (int i = 6; i >= 0; i--) {
       if ((stringFlags & (1 << i)) != 0) {
-        for (int n = 0; n < voice.countNotes(); n++) {
+        for (int n = 0; n < voice.getNotes().size(); n++) {
           TGNote playedNote = voice.getNote(n);
           if (playedNote.getString() == (6 - i + 1)) {
             writeNote(playedNote);
@@ -265,13 +266,12 @@ public class GP3OutputStream extends GTPOutputStream {
     if (beat.getStroke().getDirection() != TGStroke.STROKE_NONE) {
       flags |= 0x40;
     }
-    if (noteEffect.isHarmonic()
-        && noteEffect.getHarmonic().getType() == TGEffectHarmonic.TYPE_NATURAL) {
-      flags += 0x04;
-    }
-    if (noteEffect.isHarmonic()
-        && noteEffect.getHarmonic().getType() != TGEffectHarmonic.TYPE_NATURAL) {
-      flags += 0x08;
+    if (noteEffect.isHarmonic()) {
+      if (noteEffect.getHarmonic() instanceof NaturalHarmonic) {
+        flags += 0x04;
+      } else {
+        flags += 0x08;
+      }
     }
     if (noteEffect.isFadeIn()) {
       flags += 0x10;
@@ -303,16 +303,14 @@ public class GP3OutputStream extends GTPOutputStream {
     }
   }
 
-  private void writeBend(TGEffectBend bend) throws IOException {
+  private void writeBend(BendingEffect bend) throws IOException {
     int points = bend.getPoints().size();
     writeByte((byte) 1);
     writeInt(0);
     writeInt(points);
-    for (int i = 0; i < points; i++) {
-      TGEffectBend.BendPoint point = (TGEffectBend.BendPoint) bend.getPoints()
-          .get(i);
-      writeInt((point.getPosition() * GP_BEND_POSITION / TGEffectBend.MAX_POSITION_LENGTH));
-      writeInt((point.getValue() * GP_BEND_SEMITONE / TGEffectBend.SEMITONE_LENGTH));
+    for (final EffectPoint point : bend.getPoints()) {
+      writeInt((point.getPosition() * GP_BEND_POSITION / EffectPoint.MAX_POSITION_LENGTH));
+      writeInt((point.getValue() * GP_BEND_SEMITONE / EffectPoint.SEMITONE_LENGTH));
       writeByte((byte) 0);
     }
   }
@@ -331,10 +329,10 @@ public class GP3OutputStream extends GTPOutputStream {
     }
   }
 
-  private void writeColor(TGColor color) throws IOException {
-    writeUnsignedByte(color.getR());
-    writeUnsignedByte(color.getG());
-    writeUnsignedByte(color.getB());
+  private void writeColor(Color color) throws IOException {
+    writeUnsignedByte(color.getRed());
+    writeUnsignedByte(color.getGreen());
+    writeUnsignedByte(color.getBlue());
     writeByte((byte) 0);
   }
 
@@ -380,7 +378,7 @@ public class GP3OutputStream extends GTPOutputStream {
 
   private void writeMeasure(TGMeasure srcMeasure, boolean changeTempo)
       throws IOException {
-    TGMeasure measure = new GTPVoiceJoiner(getFactory(), srcMeasure).process();
+    TGMeasure measure = new GTPVoiceJoiner(srcMeasure).process();
 
     int beatCount = measure.countBeats();
     writeInt(beatCount);
@@ -429,7 +427,7 @@ public class GP3OutputStream extends GTPOutputStream {
   }
 
   private void writeMeasureHeaders(TGSong song) throws IOException {
-    TGTimeSignature timeSignature = getFactory().newTimeSignature();
+    TGTimeSignature timeSignature = new TGTimeSignature();
     if (song.countMeasureHeaders() > 0) {
       for (int i = 0; i < song.countMeasureHeaders(); i++) {
         TGMeasureHeader measure = song.getMeasureHeader(i);
@@ -536,7 +534,7 @@ public class GP3OutputStream extends GTPOutputStream {
       writeInt(song.countTracks());
       writeMeasureHeaders(song);
       writeTracks(song);
-      writeMeasures(song, header.getTempo().clone(getFactory()));
+      writeMeasures(song, header.getTempo().clone());
       close();
     } catch (Exception e) {
       e.printStackTrace();

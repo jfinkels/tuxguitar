@@ -6,7 +6,8 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureHeaderImpl;
 
 /**
  * @author julian
@@ -19,27 +20,18 @@ public abstract class TGMeasureHeader {
   public static final int TRIPLET_FEEL_NONE = 1;
   public static final int TRIPLET_FEEL_SIXTEENTH = 3;
 
-  private TGMarker marker;
-  private int number;
-  private int repeatAlternative;
-  private int repeatClose;
-  private boolean repeatOpen;
-  private TGSong song;
-  private long start;
-  private TGTempo tempo;
-  private TGTimeSignature timeSignature;
-  private int tripletFeel;
+  private TGMarker marker = null;
+  private int number = 0;
+  private int repeatAlternative = 0;
+  private int repeatClose = 0;
+  private boolean repeatOpen = false;
+  private TGSong song = null;
+  private long start = TGDuration.QUARTER_TIME;
+  private TGTempo tempo = TGFactoryImpl.newTempo();
+  private TGTimeSignature timeSignature = TGFactoryImpl.newTimeSignature();
+  private int tripletFeel = TRIPLET_FEEL_NONE;
 
-  public TGMeasureHeader(TGFactory factory) {
-    this.number = 0;
-    this.start = TGDuration.QUARTER_TIME;
-    this.timeSignature = factory.newTimeSignature();
-    this.tempo = factory.newTempo();
-    this.marker = null;
-    this.tripletFeel = TRIPLET_FEEL_NONE;
-    this.repeatOpen = false;
-    this.repeatClose = 0;
-    this.repeatAlternative = 0;
+  public TGMeasureHeader() {
     this.checkMarker();
   }
 
@@ -49,8 +41,9 @@ public abstract class TGMeasureHeader {
     }
   }
 
-  public TGMeasureHeader clone(TGFactory factory) {
-    TGMeasureHeader header = factory.newHeader();
+  @Override
+  public TGMeasureHeader clone() {
+    TGMeasureHeader header = new TGMeasureHeaderImpl();
     header.setNumber(getNumber());
     header.setStart(getStart());
     header.setRepeatOpen(isRepeatOpen());
@@ -59,8 +52,7 @@ public abstract class TGMeasureHeader {
     header.setTripletFeel(getTripletFeel());
     getTimeSignature().copy(header.getTimeSignature());
     getTempo().copy(header.getTempo());
-    header
-        .setMarker(hasMarker() ? (TGMarker) getMarker().clone(factory) : null);
+    header.setMarker(hasMarker() ? getMarker().clone() : null);
     return header;
   }
 

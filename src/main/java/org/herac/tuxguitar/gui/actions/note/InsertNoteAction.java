@@ -26,6 +26,7 @@ public class InsertNoteAction extends Action {
     super(NAME, AUTO_LOCK | AUTO_UNLOCK | AUTO_UPDATE | DISABLE_ON_PLAYING);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     Caret caret = getEditor().getTablature().getCaret();
     TGBeat beat = caret.getSelectedBeat();
@@ -36,8 +37,7 @@ public class InsertNoteAction extends Action {
 
       if (beat.getVoice(caret.getVoice()).isEmpty()) {
         getSongManager().getMeasureManager().addSilence(beat,
-            caret.getDuration().clone(getSongManager().getFactory()),
-            caret.getVoice());
+            caret.getDuration().clone(), caret.getVoice());
       } else {
         long start = beat.getStart();
         long length = beat.getVoice(caret.getVoice()).getDuration().getTime();
@@ -54,6 +54,7 @@ public class InsertNoteAction extends Action {
     return 0;
   }
 
+  @Override
   public void updateTablature() {
     fireUpdate(getEditor().getTablature().getCaret().getMeasure().getNumber());
   }

@@ -1,6 +1,5 @@
 package org.herac.tuxguitar.io.tg.v10;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGVelocities;
@@ -32,7 +31,7 @@ public class TGStream {
     private void init(TGMeasure measure) {
       this.setStart(measure.getStart());
       this.setVelocity(TGVelocities.DEFAULT);
-      this.setDuration(new TGFactory().newDuration());
+      this.setDuration(new TGDuration());
     }
 
     public void setDuration(TGDuration duration) {

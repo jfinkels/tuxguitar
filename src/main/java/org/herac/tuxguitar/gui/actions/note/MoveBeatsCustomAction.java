@@ -102,6 +102,7 @@ public class MoveBeatsCustomAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     this.showDialog(getEditor().getTablature().getShell());
     return 0;
@@ -123,7 +124,7 @@ public class MoveBeatsCustomAction extends Action {
 
   protected long getDuration1(int index, int count) {
     if (count > 0 && index >= 0 && index < MOVE_DURATIONS.length) {
-      TGDuration duration = getSongManager().getFactory().newDuration();
+      TGDuration duration = new TGDuration();
       duration
           .setValue(((Integer) MOVE_DURATIONS[index].getValue()).intValue());
       duration.setDotted(false);
@@ -141,7 +142,7 @@ public class MoveBeatsCustomAction extends Action {
       if (indexType >= 0 && indexType < MOVE_DURATION_TYPES.length
           && indexDivision >= 0
           && indexDivision < MOVE_DURATION_DIVISIONS.length) {
-        TGDuration duration = getSongManager().getFactory().newDuration();
+        TGDuration duration = new TGDuration();
         duration.setValue(((Integer) MOVE_DURATIONS[index].getValue())
             .intValue());
         duration.setDotted(((boolean[]) MOVE_DURATION_TYPES[indexType]
@@ -227,6 +228,7 @@ public class MoveBeatsCustomAction extends Action {
     count1Spinner.setIncrement(1);
     count1Spinner.setSelection(0);
     count1Spinner.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         updateControls(count1Spinner.getSelection(), move1Controls);
       }
@@ -266,6 +268,7 @@ public class MoveBeatsCustomAction extends Action {
     count2Spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     count2Spinner.setSelection(0);
     count2Spinner.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         updateControls(count2Spinner.getSelection(), move2Controls);
       }
@@ -328,6 +331,7 @@ public class MoveBeatsCustomAction extends Action {
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.setLayoutData(getButtonData());
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         final int directionValue = getDirection(directionCombo
             .getSelectionIndex());
@@ -360,6 +364,7 @@ public class MoveBeatsCustomAction extends Action {
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.setLayoutData(getButtonData());
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         dialog.dispose();
       }

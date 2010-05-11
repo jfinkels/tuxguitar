@@ -6,7 +6,6 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 
 /**
  * @author julian
@@ -14,24 +13,21 @@ import org.herac.tuxguitar.song.factory.TGFactory;
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class TGTempo {
+public class TGTempo {
   private static final int SECOND_IN_MILLIS = 1000;
 
-  public static TGTempo fromUSQ(TGFactory factory, int usq) {
+  public static TGTempo fromUSQ(int usq) {
     double value = ((60.00 * SECOND_IN_MILLIS) / (usq / 1000.00));
-    TGTempo tempo = factory.newTempo();
+    TGTempo tempo = new TGTempo();
     tempo.setValue((int) value);
     return tempo;
   }
 
-  private int value;
-
-  public TGTempo() {
-    this.value = 120;
-  }
-
-  public TGTempo clone(TGFactory factory) {
-    TGTempo tempo = factory.newTempo();
+  private int value = 120;
+  
+  @Override
+  public TGTempo clone() {
+    TGTempo tempo = new TGTempo();
     copy(tempo);
     return tempo;
   }

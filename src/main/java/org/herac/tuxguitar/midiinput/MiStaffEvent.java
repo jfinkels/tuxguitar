@@ -44,7 +44,7 @@ class MiStaffEvent {
     return (f_BeginTime);
   }
 
-  ArrayList getNotes() {
+  ArrayList<MiStaffNote> getNotes() {
     return (f_Notes);
   }
 

@@ -35,41 +35,41 @@ class MiRecorder {
 
   public void addNote(byte inString, byte inFret, byte inPitch,
       byte inVelocity, long inTimeStamp) {
-    f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
+    this.f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
   }
 
   int getTempo() // just for DEBUG
   {
-    return (f_Tempo);
+    return (this.f_Tempo);
   }
 
   public boolean isRecording() {
-    return (f_IsRecording);
+    return (this.f_IsRecording);
   }
 
   public void start() {
     TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
 
-    if (s_TESTING) {
-      TGTempo tempo = tgSongMgr.getFactory().newTempo();
+    if (this.s_TESTING) {
+      TGTempo tempo = new TGTempo();
 
       tempo.setValue(80);
       tgSongMgr.changeTempos(TGDuration.QUARTER_TIME, tempo, true);
     }
 
-    f_SavedMetronomeStatus = TuxGuitar.instance().getPlayer()
+    this.f_SavedMetronomeStatus = TuxGuitar.instance().getPlayer()
         .isMetronomeEnabled();
     TuxGuitar.instance().getPlayer().setMetronomeEnabled(true);
 
     TablatureEditor editor = TuxGuitar.instance().getTablatureEditor();
     Caret caret = editor.getTablature().getCaret();
 
-    f_Tempo = caret.getMeasure().getTempo().getValue();
-    f_StartPosition = caret.getMeasure().getStart();
+    this.f_Tempo = caret.getMeasure().getTempo().getValue();
+    this.f_StartPosition = caret.getMeasure().getStart();
 
-    f_TempTrack = tgSongMgr.createTrack();
+    this.f_TempTrack = tgSongMgr.createTrack();
 
-    f_TempTrack.setName("Traccia temporanea input MIDI");
+    this.f_TempTrack.setName("Traccia temporanea input MIDI");
     /*
      * // allocate measures int requestedMeasuresCount = 10, currMeasuresCount =
      * tgSongMgr.getSong().countMeasureHeaders();
@@ -83,26 +83,27 @@ class MiRecorder {
     TuxGuitar.instance().getAction(TransportPlayAction.NAME).process(null);
 
     // come si sincronizza il timestamp iniziale con il playback?
-    f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
-    f_IsRecording = true;
+    this.f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
+    this.f_IsRecording = true;
   }
 
   public void stop() {
     TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
 
-    f_Buffer.stopRecording(MiPort.getNotesPortTimeStamp());
-    f_IsRecording = false;
+    this.f_Buffer.stopRecording(MiPort.getNotesPortTimeStamp());
+    this.f_IsRecording = false;
 
     TuxGuitar.instance().getAction(TransportStopAction.NAME).process(null);
-    TuxGuitar.instance().getPlayer()
-        .setMetronomeEnabled(f_SavedMetronomeStatus);
+    TuxGuitar.instance().getPlayer().setMetronomeEnabled(
+        this.f_SavedMetronomeStatus);
 
     // qui deve cancellare la traccia di servizio...
-    tgSongMgr.removeTrack(f_TempTrack);
+    tgSongMgr.removeTrack(this.f_TempTrack);
 
-    if (f_Buffer.finalize((byte) MiConfig.instance().getMinVelocity(),
+    if (this.f_Buffer.finalize((byte) MiConfig.instance().getMinVelocity(),
         (long) MiConfig.instance().getMinDuration() * 1000) > 0) {
-      f_Buffer.toTrack(f_Tempo, f_StartPosition, "Nuovo input MIDI");
+      this.f_Buffer.toTrack(this.f_Tempo, this.f_StartPosition,
+          "Nuovo input MIDI");
     }
 
     TuxGuitar.instance().fireUpdate();

@@ -6,18 +6,24 @@
  */
 package org.herac.tuxguitar.io.tg;
 
+import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureHeaderImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGTextImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGLyric;
@@ -34,12 +40,17 @@ import org.herac.tuxguitar.song.models.TGText;
 import org.herac.tuxguitar.song.models.TGTimeSignature;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.EffectPoint;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
+import org.herac.tuxguitar.song.models.effects.harmonics.ArtificialHarmonic;
+import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
+import org.herac.tuxguitar.song.models.effects.harmonics.PinchHarmonic;
+import org.herac.tuxguitar.song.models.effects.harmonics.SemiHarmonic;
+import org.herac.tuxguitar.song.models.effects.harmonics.TappedHarmonic;
 
 /**
  * @author julian
@@ -50,19 +61,15 @@ import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
 public class TGInputStream extends TGStream implements TGInputStreamBase {
 
   private DataInputStream dataInputStream;
-  private TGFactory factory;
+  // private TGFactory factory;
   private String version;
-
-  public TGInputStream() {
-    super();
-  }
 
   public TGFileFormat getFileFormat() {
     return new TGFileFormat("TuxGuitar", "*.tg");
   }
 
-  public void init(TGFactory factory, InputStream stream) {
-    this.factory = factory;
+  public void init(InputStream stream) {
+    // this.factory = factory;
     this.dataInputStream = new DataInputStream(stream);
     this.version = null;
   }
@@ -81,7 +88,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGSong read() {
-    TGSong song = this.factory.newSong();
+    TGSong song = new TGSong();
 
     // leo el nombre
     song.setName(readUnsignedByteString());
@@ -135,7 +142,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private void readBeat(int header, TGMeasure measure, TGBeatData data) {
-    TGBeat beat = this.factory.newBeat();
+    TGBeat beat = new TGBeatImpl();
 
     beat.setStart(data.getCurrentStart());
 
@@ -167,8 +174,8 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     }
   }
 
-  private TGEffectBend readBendEffect() {
-    TGEffectBend bend = this.factory.newEffectBend();
+  private BendingEffect readBendEffect() {
+    BendingEffect bend = new BendingEffect();
 
     // leo la cantidad de puntos
     int count = readByte();
@@ -225,7 +232,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private void readChord(TGBeat beat) {
-    TGChord chord = this.factory.newChord(readByte());
+    TGChord chord = new TGChordImpl(readByte());
 
     // leo el nombre
     chord.setName(readUnsignedByteString());
@@ -271,7 +278,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   private TGEffectGrace readGraceEffect() {
     int header = readHeader();
 
-    TGEffectGrace effect = this.factory.newEffectGrace();
+    TGEffectGrace effect = new TGEffectGrace();
 
     effect.setDead((header & GRACE_FLAG_DEAD) != 0);
 
@@ -293,16 +300,35 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGEffectHarmonic readHarmonicEffect() {
-    TGEffectHarmonic effect = this.factory.newEffectHarmonic();
-
     // leo el tipo
-    effect.setType(readByte());
+    final int id = readByte();
+
+    TGEffectHarmonic harmonic = null;
+
+    switch (id) {
+    case ArtificialHarmonic.ID:
+      harmonic = new ArtificialHarmonic();
+      break;
+    case NaturalHarmonic.ID:
+      harmonic = new NaturalHarmonic();
+      break;
+    case PinchHarmonic.ID:
+      harmonic = new PinchHarmonic();
+      break;
+    case TappedHarmonic.ID:
+      harmonic = new TappedHarmonic();
+      break;
+    case SemiHarmonic.ID:
+      harmonic = new SemiHarmonic();
+      break;
+    }
 
     // leo la data
-    if (effect.getType() != TGEffectHarmonic.TYPE_NATURAL) {
-      effect.setData(readByte());
+    if (id != NaturalHarmonic.ID) {
+      harmonic.setData(readByte());
     }
-    return effect;
+
+    return harmonic;
   }
 
   private int readHeader() {
@@ -323,7 +349,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGString readInstrumentString(int number) {
-    TGString string = this.factory.newString();
+    TGString string = new TGString();
 
     string.setNumber(number);
 
@@ -351,7 +377,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGMarker readMarker(int measure) {
-    TGMarker marker = this.factory.newMarker();
+    TGMarker marker = new TGMarker();
 
     marker.setMeasure(measure);
 
@@ -359,7 +385,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     marker.setTitle(readUnsignedByteString());
 
     // leo el color
-    readRGBColor(marker.getColor());
+    marker.setColor(readRGBColor());
 
     return marker;
   }
@@ -368,7 +394,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
       TGMeasure lastMeasure) {
     int header = readHeader();
 
-    TGMeasure measure = this.factory.newMeasure(measureHeader);
+    TGMeasure measure = new TGMeasureImpl(measureHeader);
     TGBeatData data = new TGBeatData(measure);
 
     // leo la los beats
@@ -395,7 +421,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
       TGMeasureHeader lastMeasureHeader) {
     int header = readHeader();
 
-    TGMeasureHeader measureHeader = this.factory.newHeader();
+    TGMeasureHeader measureHeader = new TGMeasureHeaderImpl();
     measureHeader.setNumber(number);
     measureHeader.setStart(start);
 
@@ -443,7 +469,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private void readNote(int header, TGVoice voice, TGBeatData data) {
-    TGNote note = this.factory.newNote();
+    TGNote note = new TGNoteImpl();
 
     // leo el valor
     note.setValue(readByte());
@@ -552,11 +578,13 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     }
   }
 
-  private void readRGBColor(TGColor color) {
+  private Color readRGBColor() {
     // leo el RGB
-    color.setR((readByte() & 0xff));
-    color.setG((readByte() & 0xff));
-    color.setB((readByte() & 0xff));
+    final int red = readByte() & 0xff;
+    final int green = readByte() & 0xff;
+    final int blue = readByte() & 0xff;
+
+    return new Color(red, green, blue);
   }
 
   private short readShort() {
@@ -608,7 +636,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private void readText(TGBeat beat) {
-    TGText text = this.factory.newText();
+    TGText text = new TGTextImpl();
 
     // leo el texto
     text.setValue(readUnsignedByteString());
@@ -628,7 +656,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     // header
     int header = readHeader();
 
-    TGTrack track = this.factory.newTrack();
+    TGTrack track = new TGTrackImpl();
 
     track.setNumber(number);
 
@@ -667,7 +695,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     track.setOffset(TGTrack.MIN_OFFSET + readByte());
 
     // leo el color
-    readRGBColor(track.getColor());
+    track.setColor(readRGBColor());
 
     // leo el lyrics
     if (((header & TRACK_LYRICS) != 0)) {
@@ -677,8 +705,8 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     return track;
   }
 
-  private TGEffectTremoloBar readTremoloBarEffect() {
-    TGEffectTremoloBar tremoloBar = this.factory.newEffectTremoloBar();
+  private BendingEffect readTremoloBarEffect() {
+    BendingEffect tremoloBar = new BendingEffect();
 
     // leo la cantidad de puntos
     int count = readByte();
@@ -688,7 +716,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
       int position = readByte();
 
       // leo el valor
-      int value = (readByte() - TGEffectTremoloBar.MAX_VALUE_LENGTH);
+      int value = (readByte() - EffectPoint.MAX_VALUE_LENGTH);
 
       // agrego el punto
       tremoloBar.addPoint(position, value);
@@ -697,7 +725,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGEffectTremoloPicking readTremoloPickingEffect() {
-    TGEffectTremoloPicking effect = this.factory.newEffectTremoloPicking();
+    TGEffectTremoloPicking effect = new TGEffectTremoloPicking();
 
     // leo la duracion
     effect.getDuration().setValue(readByte());
@@ -706,7 +734,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGEffectTrill readTrillEffect() {
-    TGEffectTrill effect = this.factory.newEffectTrill();
+    TGEffectTrill effect = new TGEffectTrill();
 
     // leo el fret
     effect.setFret(readByte());

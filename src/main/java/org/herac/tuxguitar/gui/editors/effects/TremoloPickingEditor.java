@@ -39,8 +39,7 @@ public class TremoloPickingEditor extends SelectionAdapter {
   }
 
   public TGEffectTremoloPicking getTremoloPicking() {
-    TGEffectTremoloPicking effect = TuxGuitar.instance().getSongManager()
-        .getFactory().newEffectTremoloPicking();
+    TGEffectTremoloPicking effect = new TGEffectTremoloPicking();
     if (this.thirtySecondButton.getSelection()) {
       effect.getDuration().setValue(TGDuration.THIRTY_SECOND);
     } else if (this.sixTeenthButton.getSelection()) {
@@ -121,6 +120,7 @@ public class TremoloPickingEditor extends SelectionAdapter {
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.setLayoutData(getButtonData());
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         TremoloPickingEditor.this.result = getTremoloPicking();
         dialog.dispose();
@@ -131,6 +131,7 @@ public class TremoloPickingEditor extends SelectionAdapter {
     buttonClean.setText(TuxGuitar.getProperty("clean"));
     buttonClean.setLayoutData(getButtonData());
     buttonClean.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         TremoloPickingEditor.this.result = null;
         dialog.dispose();
@@ -141,6 +142,7 @@ public class TremoloPickingEditor extends SelectionAdapter {
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.setLayoutData(getButtonData());
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         TremoloPickingEditor.this.result = note.getEffect().getTremoloPicking();
         dialog.dispose();

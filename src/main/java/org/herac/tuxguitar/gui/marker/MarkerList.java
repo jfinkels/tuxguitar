@@ -193,13 +193,13 @@ public class MarkerList implements TGUpdateListener, IconLoader, LanguageLoader 
     this.buttonAdd = new Button(this.compositeButtons, SWT.PUSH);
     this.buttonAdd.setLayoutData(makeGridData(SWT.FILL, SWT.TOP, false));
     this.buttonAdd.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         if (!ActionLock.isLocked() && !TuxGuitar.instance().isLocked()) {
           ActionLock.lock();
           Caret caret = TuxGuitar.instance().getTablatureEditor()
               .getTablature().getCaret();
-          TGMarker marker = TuxGuitar.instance().getSongManager().getFactory()
-              .newMarker();
+          TGMarker marker = new TGMarker();
           marker.setMeasure(caret.getMeasure().getNumber());
           if (new MarkerEditor(marker, MarkerEditor.STATUS_NEW)
               .open(MarkerList.this.dialog)) {
@@ -214,6 +214,7 @@ public class MarkerList implements TGUpdateListener, IconLoader, LanguageLoader 
     this.buttonEdit = new Button(this.compositeButtons, SWT.PUSH);
     this.buttonEdit.setLayoutData(makeGridData(SWT.FILL, SWT.TOP, false));
     this.buttonEdit.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         if (!ActionLock.isLocked() && !TuxGuitar.instance().isLocked()) {
           ActionLock.lock();
@@ -233,6 +234,7 @@ public class MarkerList implements TGUpdateListener, IconLoader, LanguageLoader 
     this.buttonDelete = new Button(this.compositeButtons, SWT.PUSH);
     this.buttonDelete.setLayoutData(makeGridData(SWT.FILL, SWT.TOP, false));
     this.buttonDelete.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         if (!ActionLock.isLocked() && !TuxGuitar.instance().isLocked()) {
           ActionLock.lock();
@@ -257,6 +259,7 @@ public class MarkerList implements TGUpdateListener, IconLoader, LanguageLoader 
     this.buttonGo = new Button(this.compositeButtons, SWT.PUSH);
     this.buttonGo.setLayoutData(makeGridData(SWT.FILL, SWT.BOTTOM, true));
     this.buttonGo.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         if (!ActionLock.isLocked() && !TuxGuitar.instance().isLocked()) {
           ActionLock.lock();
@@ -270,6 +273,7 @@ public class MarkerList implements TGUpdateListener, IconLoader, LanguageLoader 
     this.buttonClose = new Button(this.compositeButtons, SWT.PUSH);
     this.buttonClose.setLayoutData(makeGridData(SWT.FILL, SWT.BOTTOM, false));
     this.buttonClose.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         MarkerList.this.dialog.dispose();
       }

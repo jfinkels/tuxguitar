@@ -1,24 +1,17 @@
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 
 public class TGText {
 
-  private TGBeat beat;
-  private String value;
+  private TGBeat beat = null;
+  private String value = null;
 
-  public TGText() {
-    super();
-  }
-
-  public TGText clone(TGFactory factory) {
-    TGText text = factory.newText();
-    copy(text);
+  @Override
+  public TGText clone() {
+    TGText text = new TGText();
+    text.setValue(this.value);
+    text.setBeat(this.beat);
     return text;
-  }
-
-  public void copy(TGText text) {
-    text.setValue(getValue());
   }
 
   public TGBeat getBeat() {
@@ -30,14 +23,14 @@ public class TGText {
   }
 
   public boolean isEmpty() {
-    return (this.value == null || this.value.length() == 0);
+    return (this.value == null || this.value.isEmpty());
   }
 
-  public void setBeat(TGBeat beat) {
+  public void setBeat(final TGBeat beat) {
     this.beat = beat;
   }
 
-  public void setValue(String value) {
+  public void setValue(final String value) {
     this.value = value;
   }
 

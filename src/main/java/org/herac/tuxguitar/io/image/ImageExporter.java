@@ -8,7 +8,6 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 import org.herac.tuxguitar.gui.editors.tab.Tablature;
 import org.herac.tuxguitar.gui.editors.tab.layout.PrinterViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
@@ -118,8 +117,8 @@ public class ImageExporter implements TGRawExporter {
       public void run() {
         try {
           TGSongManager manager = new TGSongManager();
-          manager.setFactory(new TGFactoryImpl());
-          manager.setSong(song.clone(manager.getFactory()));
+          // manager.setFactory(new TGFactoryImpl());
+          manager.setSong(song.clone());
 
           export(manager);
         } catch (Throwable throwable) {

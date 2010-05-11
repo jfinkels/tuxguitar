@@ -62,7 +62,7 @@ public class ChordDialog {
     TGSongManager manager = TuxGuitar.instance().getSongManager();
     TGChord chord = manager.getMeasureManager().getChord(measure, start);
     if (chord == null) {
-      chord = manager.getFactory().newChord(measure.getTrack().stringCount());
+      chord = new TGChordImpl(measure.getTrack().stringCount());
       chord.setFirstFret(1);
       List<TGNote> notes = manager.getMeasureManager().getNotes(measure, start);
       if (!notes.isEmpty()) {
@@ -207,6 +207,7 @@ public class ChordDialog {
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.setLayoutData(getButtonData());
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         setChord(getEditor().getChord());
         setResult(RESULT_SAVE);
@@ -218,6 +219,7 @@ public class ChordDialog {
     buttonClean.setText(TuxGuitar.getProperty("clean"));
     buttonClean.setLayoutData(getButtonData());
     buttonClean.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         setResult(RESULT_CLEAN);
         getDialog().dispose();
@@ -228,6 +230,7 @@ public class ChordDialog {
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.setLayoutData(getButtonData());
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         getDialog().dispose();
       }

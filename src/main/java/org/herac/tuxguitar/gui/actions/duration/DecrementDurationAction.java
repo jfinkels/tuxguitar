@@ -32,10 +32,10 @@ public class DecrementDurationAction extends Action {
     caret.getDuration().setValue(value);
     caret.getDuration().setDotted(false);
     caret.getDuration().setDoubleDotted(false);
-    caret.changeDuration(caret.getDuration().clone(
-        getSongManager().getFactory()));
+    caret.changeDuration(caret.getDuration().clone());
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     TGDuration duration = getEditor().getTablature().getCaret().getDuration();
     if (duration.getValue() > TGDuration.WHOLE) {
@@ -54,6 +54,7 @@ public class DecrementDurationAction extends Action {
     return 0;
   }
 
+  @Override
   public void updateTablature() {
     fireUpdate(getEditor().getTablature().getCaret().getMeasure().getNumber());
   }

@@ -41,7 +41,6 @@ import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.gui.util.TGMusicKeyUtils;
 import org.herac.tuxguitar.player.base.MidiInstrument;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGString;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.util.TGSynchronizer;
@@ -78,7 +77,7 @@ public class TrackPropertiesAction extends Action {
   protected Button stringTranspositionApplyToChords;
   protected Button stringTranspositionTryKeepString;
   protected List<TGString> tempStrings;
-  protected TGColor trackColor;
+  protected java.awt.Color trackColor;
 
   public TrackPropertiesAction() {
     super(NAME, AUTO_LOCK | AUTO_UNLOCK | AUTO_UPDATE | DISABLE_ON_PLAYING
@@ -92,6 +91,7 @@ public class TrackPropertiesAction extends Action {
     }
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     showDialog(getEditor().getTablature().getShell());
     return 0;
@@ -123,7 +123,8 @@ public class TrackPropertiesAction extends Action {
     return data;
   }
 
-  protected int[] getStringTranspositions(TGTrackImpl track, List<TGString> newStrings) {
+  protected int[] getStringTranspositions(TGTrackImpl track,
+      List<TGString> newStrings) {
     int[] transpositions = new int[newStrings.size()];
 
     TGString newString = null;
@@ -157,11 +158,11 @@ public class TrackPropertiesAction extends Action {
   }
 
   protected boolean hasInfoChanges(TGTrackImpl track, String name,
-      TGColor color, int offset) {
+      java.awt.Color color, int offset) {
     if (!name.equals(track.getName())) {
       return true;
     }
-    if (!color.isEqual(track.getColor())) {
+    if (!color.equals(track.getColor())) {
       return true;
     }
     if (offset != track.getOffset()) {
@@ -176,7 +177,8 @@ public class TrackPropertiesAction extends Action {
         .isPercussionTrack() != percussion));
   }
 
-  protected boolean hasTuningChanges(TGTrackImpl track, List<TGString> newStrings) {
+  protected boolean hasTuningChanges(TGTrackImpl track,
+      List<TGString> newStrings) {
     List<TGString> oldStrings = track.getStrings();
     // check the number of strings
     if (oldStrings.size() != newStrings.size()) {
@@ -204,6 +206,7 @@ public class TrackPropertiesAction extends Action {
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.setLayoutData(getButtonsData());
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         updateTrackProperties();
         TrackPropertiesAction.this.dialog.dispose();
@@ -214,6 +217,7 @@ public class TrackPropertiesAction extends Action {
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.setLayoutData(getButtonsData());
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         TrackPropertiesAction.this.dialog.dispose();
       }
@@ -267,6 +271,7 @@ public class TrackPropertiesAction extends Action {
     if (instruments != null) {
       this.percussionCheckBox.setSelection(track.isPercussionTrack());
       this.percussionCheckBox.addSelectionListener(new SelectionAdapter() {
+        @Override
         public void widgetSelected(SelectionEvent arg0) {
           TrackPropertiesAction.this.instrumentCombo
               .setEnabled(!TrackPropertiesAction.this.percussionCheckBox
@@ -287,7 +292,7 @@ public class TrackPropertiesAction extends Action {
     this.tempStrings = new ArrayList<TGString>();
     for (int i = 0; i < realStrings.size(); i++) {
       TGString realString = realStrings.get(i);
-      this.tempStrings.add(realString.clone(getSongManager().getFactory()));
+      this.tempStrings.add(realString.clone());
     }
   }
 
@@ -320,6 +325,7 @@ public class TrackPropertiesAction extends Action {
         SWT.FILL));
     colorButton.setText(TuxGuitar.getProperty("choose"));
     colorButton.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent event) {
         ColorDialog dlg = new ColorDialog(TrackPropertiesAction.this.dialog);
         dlg.setRGB(TrackPropertiesAction.this.dialog.getDisplay()
@@ -327,9 +333,8 @@ public class TrackPropertiesAction extends Action {
         dlg.setText(TuxGuitar.getProperty("choose-color"));
         RGB rgb = dlg.open();
         if (rgb != null) {
-          TrackPropertiesAction.this.trackColor.setR(rgb.red);
-          TrackPropertiesAction.this.trackColor.setG(rgb.green);
-          TrackPropertiesAction.this.trackColor.setB(rgb.blue);
+          TrackPropertiesAction.this.trackColor = new java.awt.Color(rgb.red,
+              rgb.green, rgb.blue);
           TrackPropertiesAction.this.setButtonColor(colorButton);
         }
       }
@@ -384,6 +389,7 @@ public class TrackPropertiesAction extends Action {
     this.stringCountSpinner.setMaximum(MAX_STRINGS);
     this.stringCountSpinner.setSelection(this.stringCount);
     this.stringCountSpinner.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         TrackPropertiesAction.this.stringCount = TrackPropertiesAction.this.stringCountSpinner
             .getSelection();
@@ -431,6 +437,7 @@ public class TrackPropertiesAction extends Action {
     this.stringTranspositionTryKeepString.setSelection(true);
 
     this.stringTransposition.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         Button stringTransposition = TrackPropertiesAction.this.stringTransposition;
         Button stringTranspositionApplyToChords = TrackPropertiesAction.this.stringTranspositionApplyToChords;
@@ -465,8 +472,8 @@ public class TrackPropertiesAction extends Action {
   }
 
   protected void setButtonColor(Button button) {
-    Color color = new Color(this.dialog.getDisplay(), this.trackColor.getR(),
-        this.trackColor.getG(), this.trackColor.getB());
+    Color color = new Color(this.dialog.getDisplay(), this.trackColor.getRed(),
+        this.trackColor.getGreen(), this.trackColor.getBlue());
     button.setForeground(color);
     this.disposeButtonColor();
     this.colorButtonValue = color;
@@ -476,67 +483,43 @@ public class TrackPropertiesAction extends Action {
     this.tempStrings.clear();
     if (this.percussionCheckBox.getSelection()) {
       for (int i = 1; i <= this.stringCount; i++) {
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), i, 0));
+        this.tempStrings.add(TGSongManager.newString(i, 0));
       }
     } else {
       switch (this.stringCount) {
       case 7:
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 1, 64));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 2, 59));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 3, 55));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 4, 50));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 5, 45));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 6, 40));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 7, 35));
+        this.tempStrings.add(TGSongManager.newString(1, 64));
+        this.tempStrings.add(TGSongManager.newString(2, 59));
+        this.tempStrings.add(TGSongManager.newString(3, 55));
+        this.tempStrings.add(TGSongManager.newString(4, 50));
+        this.tempStrings.add(TGSongManager.newString(5, 45));
+        this.tempStrings.add(TGSongManager.newString(6, 40));
+        this.tempStrings.add(TGSongManager.newString(7, 35));
         break;
       case 6:
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 1, 64));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 2, 59));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 3, 55));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 4, 50));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 5, 45));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 6, 40));
+        this.tempStrings.add(TGSongManager.newString(1, 64));
+        this.tempStrings.add(TGSongManager.newString(2, 59));
+        this.tempStrings.add(TGSongManager.newString(3, 55));
+        this.tempStrings.add(TGSongManager.newString(4, 50));
+        this.tempStrings.add(TGSongManager.newString(5, 45));
+        this.tempStrings.add(TGSongManager.newString(6, 40));
         break;
       case 5:
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 1, 43));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 2, 38));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 3, 33));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 4, 28));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 5, 23));
+        this.tempStrings.add(TGSongManager.newString(1, 43));
+        this.tempStrings.add(TGSongManager.newString(2, 38));
+        this.tempStrings.add(TGSongManager.newString(3, 33));
+        this.tempStrings.add(TGSongManager.newString(4, 28));
+        this.tempStrings.add(TGSongManager.newString(5, 23));
         break;
       case 4:
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 1, 43));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 2, 38));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 3, 33));
-        this.tempStrings.add(TGSongManager.newString(getSongManager()
-            .getFactory(), 4, 28));
+        this.tempStrings.add(TGSongManager.newString(1, 43));
+        this.tempStrings.add(TGSongManager.newString(2, 38));
+        this.tempStrings.add(TGSongManager.newString(3, 33));
+        this.tempStrings.add(TGSongManager.newString(4, 28));
         break;
       default:
         for (int i = 1; i <= this.stringCount; i++) {
-          this.tempStrings.add(TGSongManager.newString(getSongManager()
-              .getFactory(), i, 0));
+          this.tempStrings.add(TGSongManager.newString(i, 0));
         }
         break;
       }
@@ -547,7 +530,7 @@ public class TrackPropertiesAction extends Action {
     TGTrackImpl track = getEditor().getTablature().getCaret().getTrack();
     if (track != null) {
       this.stringCount = track.getStrings().size();
-      this.trackColor = track.getColor().clone(getSongManager().getFactory());
+      this.trackColor = track.getColor();
       this.initTempStrings(track.getStrings());
 
       this.dialog = DialogUtils.newDialog(shell, SWT.DIALOG_TRIM
@@ -596,8 +579,8 @@ public class TrackPropertiesAction extends Action {
 
     final List<TGString> strings = new ArrayList<TGString>();
     for (int i = 0; i < this.stringCount; i++) {
-      strings.add(TGSongManager.newString(getSongManager().getFactory(),
-          (i + 1), this.stringCombos[i].getSelectionIndex()));
+      strings.add(TGSongManager.newString(i + 1, this.stringCombos[i]
+          .getSelectionIndex()));
     }
 
     final boolean percussion = this.percussionCheckBox.getSelection();
@@ -607,7 +590,7 @@ public class TrackPropertiesAction extends Action {
         .getSelectionIndex()
         : 0);
 
-    final TGColor trackColor = this.trackColor;
+    final java.awt.Color trackColor = this.trackColor;
     final boolean infoChanges = hasInfoChanges(track, trackName, trackColor,
         offset);
     final boolean tuningChanges = hasTuningChanges(track, strings);

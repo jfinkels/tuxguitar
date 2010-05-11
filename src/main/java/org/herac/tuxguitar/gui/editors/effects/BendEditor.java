@@ -25,8 +25,8 @@ import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.EffectPoint;
 
 /**
  * @author julian
@@ -35,16 +35,17 @@ import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
  *         Window - Preferences - Java - Code Style - Code Templates
  */
 public class BendEditor {
+
   private class DefaultBend {
-    private TGEffectBend bend;
+    private BendingEffect bend;
     private String name;
 
-    public DefaultBend(String name, TGEffectBend bend) {
+    public DefaultBend(String name, BendingEffect bend) {
       this.name = name;
       this.bend = bend;
     }
 
-    public TGEffectBend getBend() {
+    public BendingEffect getBend() {
       return this.bend;
     }
 
@@ -53,16 +54,16 @@ public class BendEditor {
     }
   }
 
-  private static final int X_LENGTH = TGEffectBend.MAX_POSITION_LENGTH + 1;
+  private static final int X_LENGTH = EffectPoint.MAX_POSITION_LENGTH + 1;
   public static final int X_SPACING = 30;
-  private static final int Y_LENGTH = TGEffectBend.MAX_VALUE_LENGTH + 1;
+  private static final int Y_LENGTH = EffectPoint.MAX_VALUE_LENGTH + 1;
 
   public static final int Y_SPACING = 15;
   protected DefaultBend[] defaultBends;
   protected Composite editor;
   private int height;
   private List<Point> points;
-  protected TGEffectBend result;
+  protected BendingEffect result;
   private int width;
   private int[] x;
 
@@ -72,7 +73,7 @@ public class BendEditor {
     this.init();
   }
 
-  private void addBendPoint(TGEffectBend effect, Point point) {
+  private void addBendPoint(BendingEffect effect, Point point) {
     int position = 0;
     int value = 0;
     for (int i = 0; i < this.x.length; i++) {
@@ -101,10 +102,9 @@ public class BendEditor {
     }
   }
 
-  public TGEffectBend getBend() {
+  public BendingEffect getBend() {
     if (this.points != null && !this.points.isEmpty()) {
-      TGEffectBend bend = TuxGuitar.instance().getSongManager().getFactory()
-          .newEffectBend();// new BendEffect();
+      BendingEffect bend = new BendingEffect();
       for (final Point point : this.points) {
         addBendPoint(bend, point);
       }
@@ -172,7 +172,7 @@ public class BendEditor {
     return this.points.isEmpty();
   }
 
-  private void makePoint(TGEffectBend.BendPoint bendPoint) {
+  private void makePoint(EffectPoint bendPoint) {
     int indexX = bendPoint.getPosition();
     int indexY = (this.y.length - bendPoint.getValue()) - 1;
     if (indexX >= 0 && indexX < this.x.length && indexY >= 0
@@ -268,54 +268,50 @@ public class BendEditor {
     this.defaultBends = new DefaultBend[5];
 
     this.defaultBends[0] = new DefaultBend(TuxGuitar.getProperty("bend.bend"),
-        TuxGuitar.instance().getSongManager().getFactory().newEffectBend());
+        new BendingEffect());
     this.defaultBends[0].getBend().addPoint(0, 0);
     this.defaultBends[0].getBend().addPoint(6,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[0].getBend().addPoint(12,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
 
     this.defaultBends[1] = new DefaultBend(TuxGuitar
-        .getProperty("bend.bend-release"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectBend());
+        .getProperty("bend.bend-release"), new BendingEffect());
     this.defaultBends[1].getBend().addPoint(0, 0);
     this.defaultBends[1].getBend().addPoint(3,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[1].getBend().addPoint(6,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[1].getBend().addPoint(9, 0);
     this.defaultBends[1].getBend().addPoint(12, 0);
 
     this.defaultBends[2] = new DefaultBend(TuxGuitar
-        .getProperty("bend.bend-release-bend"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectBend());
+        .getProperty("bend.bend-release-bend"), new BendingEffect());
     this.defaultBends[2].getBend().addPoint(0, 0);
     this.defaultBends[2].getBend().addPoint(2,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[2].getBend().addPoint(4,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[2].getBend().addPoint(6, 0);
     this.defaultBends[2].getBend().addPoint(8, 0);
     this.defaultBends[2].getBend().addPoint(10,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[2].getBend().addPoint(12,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
 
     this.defaultBends[3] = new DefaultBend(TuxGuitar
-        .getProperty("bend.prebend"), TuxGuitar.instance().getSongManager()
-        .getFactory().newEffectBend());
+        .getProperty("bend.prebend"), new BendingEffect());
     this.defaultBends[3].getBend().addPoint(0,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[3].getBend().addPoint(12,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
 
     this.defaultBends[4] = new DefaultBend(TuxGuitar
-        .getProperty("bend.prebend-release"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectBend());
+        .getProperty("bend.prebend-release"), new BendingEffect());
     this.defaultBends[4].getBend().addPoint(0,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[4].getBend().addPoint(4,
-        (TGEffectBend.SEMITONE_LENGTH * 4));
+        (EffectPoint.SEMITONE_LENGTH * 4));
     this.defaultBends[4].getBend().addPoint(8, 0);
     this.defaultBends[4].getBend().addPoint(12, 0);
   }
@@ -326,9 +322,9 @@ public class BendEditor {
     return data;
   }
 
-  public void setBend(TGEffectBend effect) {
+  public void setBend(BendingEffect effect) {
     this.points.clear();
-    for (final BendPoint bendPoint : effect.getPoints()) {
+    for (final EffectPoint bendPoint : effect.getPoints()) {
       this.makePoint(bendPoint);
     }
   }
@@ -366,7 +362,7 @@ public class BendEditor {
     }
   }
 
-  public TGEffectBend show(Shell shell, final TGNote note) {
+  public BendingEffect show(Shell shell, final TGNote note) {
     final Shell dialog = DialogUtils.newDialog(shell, SWT.DIALOG_TRIM
         | SWT.APPLICATION_MODAL);
 
@@ -399,6 +395,7 @@ public class BendEditor {
       }
     });
     this.editor.addMouseListener(new MouseAdapter() {
+      @Override
       public void mouseUp(org.eclipse.swt.events.MouseEvent e) {
         checkPoint(e.x, e.y);
         BendEditor.this.editor.redraw();
@@ -417,6 +414,7 @@ public class BendEditor {
     defaultBendList.select(0);
     defaultBendList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     defaultBendList.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         int index = defaultBendList.getSelectionIndex();
         if (index >= 0 && index < BendEditor.this.defaultBends.length) {
@@ -433,6 +431,7 @@ public class BendEditor {
         true, true), 80, 25));
     buttonClean.setText(TuxGuitar.getProperty("clean"));
     buttonClean.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         BendEditor.this.result = null;
         dialog.dispose();
@@ -443,6 +442,7 @@ public class BendEditor {
         false), 80, 25));
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         BendEditor.this.result = getBend();
         dialog.dispose();
@@ -453,6 +453,7 @@ public class BendEditor {
         true, false), 80, 25));
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         BendEditor.this.result = note.getEffect().getBend();
         dialog.dispose();

@@ -289,7 +289,7 @@ public class TGBrowserDialog implements TGBrowserFactoryHandler,
         if (!TuxGuitar.isDisposed()) {
           try {
             TGSong song = TGFileFormatManager.instance().getLoader().load(
-                TuxGuitar.instance().getSongManager().getFactory(), stream);
+                stream);
             TuxGuitar.instance().fireNewSong(song, null);
           } catch (Throwable throwable) {
             TuxGuitar.instance().newSong();

@@ -1,18 +1,19 @@
 package org.herac.tuxguitar.song.models.effects;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 import org.herac.tuxguitar.song.models.TGDuration;
 
-public abstract class TGEffectTremoloPicking {
+public class TGEffectTremoloPicking {
 
   private TGDuration duration;
 
-  public TGEffectTremoloPicking(TGFactory factory) {
-    this.duration = factory.newDuration();
+  public TGEffectTremoloPicking() {
+    this.duration = TGFactoryImpl.newDuration();
   }
 
-  public TGEffectTremoloPicking clone(TGFactory factory) {
-    TGEffectTremoloPicking effect = factory.newEffectTremoloPicking();
+  @Override
+  public TGEffectTremoloPicking clone() {
+    TGEffectTremoloPicking effect = new TGEffectTremoloPicking();
     effect.getDuration().setValue(getDuration().getValue());
     effect.getDuration().setDotted(getDuration().isDotted());
     effect.getDuration().setDoubleDotted(getDuration().isDoubleDotted());

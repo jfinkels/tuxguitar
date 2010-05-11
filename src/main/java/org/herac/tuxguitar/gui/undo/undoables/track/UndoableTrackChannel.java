@@ -8,7 +8,6 @@ import org.herac.tuxguitar.gui.undo.CannotRedoException;
 import org.herac.tuxguitar.gui.undo.CannotUndoException;
 import org.herac.tuxguitar.gui.undo.UndoableEdit;
 import org.herac.tuxguitar.gui.undo.undoables.UndoableCaretHelper;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.song.models.TGTrack;
@@ -16,7 +15,7 @@ import org.herac.tuxguitar.song.models.TGTrack;
 public class UndoableTrackChannel implements UndoableEdit {
   public static UndoableTrackChannel startUndo() {
     TGSong song = TuxGuitar.instance().getSongManager().getSong();
-    TGFactory factory = TuxGuitar.instance().getSongManager().getFactory();
+    // TGFactory factory = TuxGuitar.instance().getSongManager().getFactory();
     int tracks = song.countTracks();
 
     UndoableTrackChannel undoable = new UndoableTrackChannel();
@@ -26,7 +25,7 @@ public class UndoableTrackChannel implements UndoableEdit {
 
     for (int i = 0; i < tracks; i++) {
       TGTrack track = song.getTrack(i);
-      undoable.undoChannels.add(track.getChannel().clone(factory));
+      undoable.undoChannels.add(track.getChannel().clone());
     }
     return undoable;
   }
@@ -52,15 +51,15 @@ public class UndoableTrackChannel implements UndoableEdit {
 
   public UndoableTrackChannel endUndo() {
     TGSong song = TuxGuitar.instance().getSongManager().getSong();
-    TGFactory factory = TuxGuitar.instance().getSongManager().getFactory();
+//    TGFactory factory = TuxGuitar.instance().getSongManager().getFactory();
     int tracks = song.countTracks();
 
     this.redoCaret = new UndoableCaretHelper();
-    this.redoChannels = new ArrayList();
+    this.redoChannels = new ArrayList<TGChannel>();
 
     for (int i = 0; i < tracks; i++) {
       TGTrack track = song.getTrack(i);
-      this.redoChannels.add(track.getChannel().clone(factory));
+      this.redoChannels.add(track.getChannel().clone());
     }
     return this;
   }

@@ -6,11 +6,9 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
 
@@ -20,53 +18,31 @@ import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class TGNoteEffect {
-  private boolean accentuatedNote;
-  private TGEffectBend bend;
-  private boolean deadNote;
-  private boolean fadeIn;
-  private boolean ghostNote;
-  private TGEffectGrace grace;
-  private boolean hammer;
-  private TGEffectHarmonic harmonic;
-  private boolean heavyAccentuatedNote;
-  private boolean letRing;
-  private boolean palmMute;
-  private boolean popping;
-  private boolean slapping;
-  private boolean slide;
-  private boolean staccato;
-  private boolean tapping;
-  private TGEffectTremoloBar tremoloBar;
-  private TGEffectTremoloPicking tremoloPicking;
-  private TGEffectTrill trill;
-  private boolean vibrato;
+public class TGNoteEffect {
+  private boolean accentuatedNote = false;
+  private BendingEffect bend = null;
+  private boolean deadNote = false;
+  private boolean fadeIn = false;
+  private boolean ghostNote = false;
+  private TGEffectGrace grace = null;
+  private boolean hammer = false;
+  private TGEffectHarmonic harmonic = null;
+  private boolean heavyAccentuatedNote = false;
+  private boolean letRing = false;
+  private boolean palmMute = false;
+  private boolean popping = false;
+  private boolean slapping = false;
+  private boolean slide = false;
+  private boolean staccato = false;
+  private boolean tapping = false;
+  private BendingEffect tremoloBar = null;
+  private TGEffectTremoloPicking tremoloPicking = null;
+  private TGEffectTrill trill = null;
+  private boolean vibrato = false;
 
-  public TGNoteEffect() {
-    this.bend = null;
-    this.tremoloBar = null;
-    this.harmonic = null;
-    this.grace = null;
-    this.trill = null;
-    this.tremoloPicking = null;
-    this.vibrato = false;
-    this.deadNote = false;
-    this.slide = false;
-    this.hammer = false;
-    this.ghostNote = false;
-    this.accentuatedNote = false;
-    this.heavyAccentuatedNote = false;
-    this.palmMute = false;
-    this.staccato = false;
-    this.tapping = false;
-    this.slapping = false;
-    this.popping = false;
-    this.fadeIn = false;
-    this.letRing = false;
-  }
-
-  public TGNoteEffect clone(TGFactory factory) {
-    TGNoteEffect effect = factory.newEffect();
+  @Override
+  public TGNoteEffect clone() {
+    TGNoteEffect effect = new TGNoteEffect();
     effect.setVibrato(isVibrato());
     effect.setDeadNote(isDeadNote());
     effect.setSlide(isSlide());
@@ -81,23 +57,17 @@ public abstract class TGNoteEffect {
     effect.setSlapping(isSlapping());
     effect.setPopping(isPopping());
     effect.setFadeIn(isFadeIn());
-    effect.setBend(isBend() ? (TGEffectBend) this.bend.clone(factory) : null);
-    effect.setTremoloBar(isTremoloBar() ? (TGEffectTremoloBar) this.tremoloBar
-        .clone(factory) : null);
-    effect.setHarmonic(isHarmonic() ? (TGEffectHarmonic) this.harmonic
-        .clone(factory) : null);
-    effect.setGrace(isGrace() ? (TGEffectGrace) this.grace.clone(factory)
+    effect.setBend(isBend() ? this.bend.clone() : null);
+    effect.setTremoloBar(isTremoloBar() ? this.tremoloBar.clone() : null);
+    effect.setHarmonic(isHarmonic() ? this.harmonic.clone() : null);
+    effect.setGrace(isGrace() ? this.grace.clone() : null);
+    effect.setTrill(isTrill() ? this.trill.clone() : null);
+    effect.setTremoloPicking(isTremoloPicking() ? this.tremoloPicking.clone()
         : null);
-    effect.setTrill(isTrill() ? (TGEffectTrill) this.trill.clone(factory)
-        : null);
-    effect
-        .setTremoloPicking(isTremoloPicking() ? (TGEffectTremoloPicking) this.tremoloPicking
-            .clone(factory)
-            : null);
     return effect;
   }
 
-  public TGEffectBend getBend() {
+  public BendingEffect getBend() {
     return this.bend;
   }
 
@@ -109,7 +79,7 @@ public abstract class TGNoteEffect {
     return this.harmonic;
   }
 
-  public TGEffectTremoloBar getTremoloBar() {
+  public BendingEffect getTremoloBar() {
     return this.tremoloBar;
   }
 
@@ -218,7 +188,7 @@ public abstract class TGNoteEffect {
     }
   }
 
-  public void setBend(TGEffectBend bend) {
+  public void setBend(BendingEffect bend) {
     this.bend = bend;
     // si no es null quito los efectos incompatibles
     if (this.isBend()) {
@@ -350,7 +320,7 @@ public abstract class TGNoteEffect {
     }
   }
 
-  public void setTremoloBar(TGEffectTremoloBar tremoloBar) {
+  public void setTremoloBar(BendingEffect tremoloBar) {
     this.tremoloBar = tremoloBar;
     // si no es null quito los efectos incompatibles
     if (this.isTremoloBar()) {

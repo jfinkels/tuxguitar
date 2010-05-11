@@ -119,8 +119,7 @@ public class ChordEditor extends Composite {
   }
 
   public TGChord getChord() {
-    TGChord chord = TuxGuitar.instance().getSongManager().getFactory()
-        .newChord(this.strings.length);
+    TGChord chord = new TGChordImpl(this.strings.length);
     chord.setName(this.chordName.getText());
     chord.setFirstFret(this.fret);
     for (int i = 0; i < chord.getStrings().length; i++) {
@@ -273,6 +272,7 @@ public class ChordEditor extends Composite {
     });
 
     this.composite.addMouseListener(new MouseAdapter() {
+      @Override
       public void mouseUp(org.eclipse.swt.events.MouseEvent e) {
         getComposite().setFocus();
         checkPoint(e.x, e.y);
@@ -287,6 +287,7 @@ public class ChordEditor extends Composite {
     this.composite.getVerticalBar().setThumb(1);
     this.composite.getVerticalBar().addSelectionListener(
         new SelectionAdapter() {
+          @Override
           public void widgetSelected(SelectionEvent e) {
             setFret((short) getComposite().getVerticalBar().getSelection(),
                 false, true);
@@ -419,6 +420,7 @@ public class ChordEditor extends Composite {
     }).start();
   }
 
+  @Override
   public void redraw() {
     super.redraw();
     this.composite.redraw();

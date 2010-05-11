@@ -1,10 +1,9 @@
 package org.herac.tuxguitar.song.models.effects;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGVelocities;
 
-public abstract class TGEffectGrace {
+public class TGEffectGrace extends ExtraNoteEffect {
 
   public static final int TRANSITION_BEND = 2;
 
@@ -14,24 +13,16 @@ public abstract class TGEffectGrace {
 
   public static final int TRANSITION_SLIDE = 1;
 
-  private boolean dead;
-  private int duration;
-  private int dynamic;
-  private int fret;
-  private boolean onBeat;
-  private int transition;
+  private boolean dead = false;
+  private int duration = 1;
+  private int dynamic = TGVelocities.DEFAULT;
+  private boolean onBeat = false;
+  // private Transition transition = Transition.NONE;
+  private int transition = 0;
 
-  public TGEffectGrace() {
-    this.fret = 0;
-    this.duration = 1;
-    this.dynamic = TGVelocities.DEFAULT;
-    this.transition = TRANSITION_NONE;
-    this.onBeat = false;
-    this.dead = false;
-  }
-
-  public TGEffectGrace clone(TGFactory factory) {
-    TGEffectGrace effect = factory.newEffectGrace();
+  @Override
+  public TGEffectGrace clone() {
+    TGEffectGrace effect = new TGEffectGrace();
     effect.setFret(getFret());
     effect.setDuration(getDuration());
     effect.setDynamic(getDynamic());
@@ -48,15 +39,11 @@ public abstract class TGEffectGrace {
   public int getDurationTime() {
     // return (int)(((float)TGDuration.QUARTER_TIME / 16.00 ) *
     // (float)getDuration());
-    return (int) ((TGDuration.QUARTER_TIME / 16.00) * getDuration());
+    return (int) ((TGDuration.QUARTER_TIME / 16.00) * this.duration);
   }
 
   public int getDynamic() {
     return this.dynamic;
-  }
-
-  public int getFret() {
-    return this.fret;
   }
 
   public int getTransition() {
@@ -81,10 +68,6 @@ public abstract class TGEffectGrace {
 
   public void setDynamic(int dynamic) {
     this.dynamic = dynamic;
-  }
-
-  public void setFret(int fret) {
-    this.fret = fret;
   }
 
   public void setOnBeat(boolean onBeat) {

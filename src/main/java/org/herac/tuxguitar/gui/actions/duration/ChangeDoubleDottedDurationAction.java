@@ -27,6 +27,7 @@ public class ChangeDoubleDottedDurationAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     // comienza el undoable
     UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
@@ -49,8 +50,7 @@ public class ChangeDoubleDottedDurationAction extends Action {
 
   private void setDurations() {
     Caret caret = getEditor().getTablature().getCaret();
-    caret.changeDuration(getSelectedDuration().clone(
-        getSongManager().getFactory()));
+    caret.changeDuration(getSelectedDuration().clone());
     TuxGuitar.instance().getFileHistory().setUnsavedFile();
     fireUpdate(getEditor().getTablature().getCaret().getMeasure().getNumber());
   }

@@ -5,6 +5,8 @@ package org.herac.tuxguitar.gui.editors.chord;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,63 +29,65 @@ public class ChordRecognizer extends Composite {
     int dontHaveGrade = -15;
 
     boolean filled[] = { false, false, false, false };
+
     /** counts the notes that are in chord but still not recognized */
     int missingCount;
 
     int[] missingNotes;
-    int[] params;
+    int[] params = new int[9];
 
     int plusminusValue[] = { 0, 0, 0 };
+
     /** grade for chord "unusualness" - Cm is less unusual than E7/9+/C */
     int unusualGrade = 0;
 
     private Proposal() {
-      super();
-      this.params = new int[9];
-      for (int i = 0; i < 9; i++)
-        this.params[i] = -1;
+      this(new ArrayList<Integer>());
     }
 
     /** initialize with needed notes */
     public Proposal(java.util.List<Integer> notes) {
-      this.params = new int[9];
-      for (int i = 0; i < 9; i++)
+
+      for (int i = 0; i < this.params.length; i++)
         this.params[i] = -1;
 
-      int length = notes.size();
-      this.missingNotes = new int[length];
-      for (int i = 0; i < length; i++) { // deep copy, because of clone() method
-        this.missingNotes[i] = notes.get(i).intValue();
+      final int numNotes = notes.size();
+      for (int i = 0; i < numNotes; i++) {
+        this.missingNotes[i++] = notes.get(i);
       }
-      this.missingCount = length;
+
+      this.missingCount = numNotes;
     }
 
     /** calls the Object.clone() method, since it is private (?!!??) */
+    @Override
     public Object clone() {
-      Proposal proposal = new Proposal();
-      for (int i = 0; i < 9; i++)
-        proposal.params[i] = this.params[i];
+      final Proposal proposal = new Proposal();
+
+      System.arraycopy(this.params, 0, proposal.params, 0, this.params.length);
+
       proposal.unusualGrade = this.unusualGrade;
       proposal.dontHaveGrade = this.dontHaveGrade;
       proposal.missingCount = this.missingCount;
+
       proposal.missingNotes = new int[this.missingNotes.length];
-      for (int i = 0; i < proposal.missingNotes.length; i++) {
-        proposal.missingNotes[i] = this.missingNotes[i];
-      }
+      System.arraycopy(this.missingNotes, 0, proposal.missingNotes, 0,
+          this.missingNotes.length);
+
       proposal.filled = new boolean[this.filled.length];
-      for (int i = 0; i < proposal.filled.length; i++)
-        proposal.filled[i] = this.filled[i];
+      System.arraycopy(this.filled, 0, proposal.filled, 0, this.filled.length);
 
       proposal.plusminusValue = new int[this.plusminusValue.length];
-      for (int i = 0; i < proposal.plusminusValue.length; i++)
-        proposal.plusminusValue[i] = this.plusminusValue[i];
+      System.arraycopy(this.plusminusValue, 0, proposal.plusminusValue, 0,
+          this.plusminusValue.length);
 
       return proposal;
     }
 
+    @Override
     public boolean equals(Object o) {
       Proposal another = (Proposal) o;
-      for (int i = 0; i < 9; i++)
+      for (int i = 0; i < this.params.length; i++)
         if (this.params[i] != another.params[i])
           return false;
       // not all attributes, but the rest is not needed YET!
@@ -92,7 +96,7 @@ public class ChordRecognizer extends Composite {
 
     /** if note is found, mark it as found in the Missing array */
     void foundNote(int value) {
-      int note = (value % 12);
+      int note = value % 12;
       if (this.missingCount != 0)
         for (int i = 0; i < this.missingCount; i++)
           if (this.missingNotes[i] == note) {
@@ -107,7 +111,7 @@ public class ChordRecognizer extends Composite {
 
     /** does note exist in a chord? (found or not found) */
     boolean isExisting(int value) {
-      int note = (value % 12);
+      int note = value % 12;
       for (int i = 0; i < this.missingNotes.length; i++)
         if (this.missingNotes[i] == note)
           return true;
@@ -116,7 +120,7 @@ public class ChordRecognizer extends Composite {
 
     /** is note already found? */
     boolean isFound(int value) {
-      int note = (value % 12);
+      int note = value % 12;
       for (int i = this.missingCount; i < this.missingNotes.length; i++)
         if (this.missingNotes[i] == note)
           return true;
@@ -301,6 +305,7 @@ public class ChordRecognizer extends Composite {
     this.proposalList
         .setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
     this.proposalList.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         if (getDialog().getEditor() != null) {
           showChord(getProposalList().getSelectionIndex());

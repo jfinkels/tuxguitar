@@ -10,7 +10,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGSong;
 
 /**
@@ -33,14 +32,13 @@ public class TGSongWriter {
     return false;
   }
 
-  public void write(TGFactory factory, TGSong song, String path)
-      throws TGFileFormatException {
+  public void write(TGSong song, String path) throws TGFileFormatException {
     try {
       for (final TGOutputStreamBase writer : TGFileFormatManager.instance()
           .getOutputStreams()) {
         if (isSupportedExtension(writer, path)) {
-          writer.init(factory, new BufferedOutputStream(new FileOutputStream(
-              new File(path))));
+          writer.init(new BufferedOutputStream(new FileOutputStream(new File(
+              path))));
           writer.writeSong(song);
           return;
         }

@@ -57,9 +57,8 @@ public class UndoableInsertMeasure implements UndoableEdit {
     }
     TGSongSegmentHelper helper = new TGSongSegmentHelper(TuxGuitar.instance()
         .getSongManager());
-    helper.insertMeasures(this.tracksMeasures.clone(TuxGuitar.instance()
-        .getSongManager().getFactory()), this.fromNumber, this.theMove,
-        this.toTrack);
+    helper.insertMeasures(this.tracksMeasures.clone(), this.fromNumber,
+        this.theMove, this.toTrack);
     TuxGuitar.instance().fireUpdate();
     this.redoCaret.update();
 

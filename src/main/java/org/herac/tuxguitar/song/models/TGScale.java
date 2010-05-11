@@ -1,18 +1,14 @@
 package org.herac.tuxguitar.song.models;
 
-public abstract class TGScale {
-  private int key;
+public class TGScale {
+  private int key = 0;
 
   private final boolean[] notes = new boolean[12];
 
-  public TGScale() {
-    this.clear();
-  }
-
   public void clear() {
-    this.setKey(0);
+    this.key = 0;
     for (int i = 0; i < this.notes.length; i++) {
-      this.setNote(i, false);
+      this.notes[i] = false;
     }
   }
 

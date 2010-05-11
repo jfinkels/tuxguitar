@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
+import org.herac.tuxguitar.gui.editors.tab.TGTextImpl;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.song.models.TGBeat;
@@ -39,6 +40,7 @@ public class InsertTextAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     final TGBeat beat = getEditor().getTablature().getCaret().getSelectedBeat();
 
@@ -65,7 +67,7 @@ public class InsertTextAction extends Action {
     // comienza el undoable
     UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
 
-    TGText text = getSongManager().getFactory().newText();
+    TGText text = new TGTextImpl();
     text.setValue(value);
     getSongManager().getMeasureManager().addText(beat, text);
     TuxGuitar.instance().getFileHistory().setUnsavedFile();
@@ -120,6 +122,7 @@ public class InsertTextAction extends Action {
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.setLayoutData(getButtonData());
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         insertText(beat, text.getText());
         dialog.dispose();
@@ -130,6 +133,7 @@ public class InsertTextAction extends Action {
     buttonClean.setText(TuxGuitar.getProperty("clean"));
     buttonClean.setLayoutData(getButtonData());
     buttonClean.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         removeText(beat);
         dialog.dispose();
@@ -140,6 +144,7 @@ public class InsertTextAction extends Action {
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.setLayoutData(getButtonData());
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         dialog.dispose();
       }
@@ -151,6 +156,7 @@ public class InsertTextAction extends Action {
         | DialogUtils.OPEN_STYLE_PACK | DialogUtils.OPEN_STYLE_WAIT);
   }
 
+  @Override
   public void updateTablature() {
     fireUpdate(getEditor().getTablature().getCaret().getMeasure().getNumber());
   }

@@ -6,17 +6,17 @@
  */
 package org.herac.tuxguitar.io.tg;
 
+import java.awt.Color;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGOutputStreamBase;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGLyric;
@@ -33,14 +33,13 @@ import org.herac.tuxguitar.song.models.TGText;
 import org.herac.tuxguitar.song.models.TGTimeSignature;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.EffectPoint;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend.BendPoint;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar.TremoloBarPoint;
+import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
 
 /**
  * @author julian
@@ -56,7 +55,7 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     return new TGFileFormat("TuxGuitar", "*.tg");
   }
 
-  public void init(TGFactory factory, OutputStream stream) {
+  public void init(OutputStream stream) {
     this.dataOutputStream = new DataOutputStream(stream);
   }
 
@@ -184,11 +183,11 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     }
   }
 
-  private void writeBendEffect(TGEffectBend effect) {
+  private void writeBendEffect(BendingEffect effect) {
     // escribo la cantidad de puntos
     writeByte(effect.getPoints().size());
 
-    for (final BendPoint point : effect.getPoints()) {
+    for (final EffectPoint point : effect.getPoints()) {
 
       // escribo la posicion
       writeByte(point.getPosition());
@@ -300,10 +299,10 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
 
   private void writeHarmonicEffect(TGEffectHarmonic effect) {
     // excribo el tipo
-    writeByte(effect.getType());
+    writeByte(effect.getId());
 
     // excribo la data
-    if (effect.getType() != TGEffectHarmonic.TYPE_NATURAL) {
+    if (!(effect instanceof NaturalHarmonic)) {
       writeByte(effect.getData());
     }
   }
@@ -312,10 +311,12 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     try {
       this.dataOutputStream.write(v);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
+  public static final transient Logger LOG = Logger.getLogger(TGOutputStream.class);
+  
   public void writeHeader(int v, int bCount) {
     for (int i = bCount; i > 0; i--) {
       writeHeader((v >>> ((8 * i) - 8)) & 0xFF);
@@ -332,7 +333,7 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
       this.dataOutputStream.writeInt(v.length());
       this.dataOutputStream.writeChars(v);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -535,10 +536,10 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
   }
 
   private void writeNotes(TGVoice voice, TGBeatData data) {
-    for (int i = 0; i < voice.countNotes(); i++) {
+    for (int i = 0; i < voice.getNotes().size(); i++) {
       TGNote note = voice.getNote(i);
 
-      int header = (i + 1 < voice.countNotes() ? NOTE_HAS_NEXT : 0);
+      int header = (i + 1 < voice.getNotes().size() ? NOTE_HAS_NEXT : 0);
       header = (note.isTiedNote()) ? header |= NOTE_TIED : header;
       if (note.getVelocity() != data.getVoice(voice.getIndex()).getVelocity()) {
         data.getVoice(voice.getIndex()).setVelocity(note.getVelocity());
@@ -553,11 +554,11 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     }
   }
 
-  private void writeRGBColor(TGColor color) {
+  private void writeRGBColor(Color color) {
     // escribo el RGB
-    writeByte(color.getR());
-    writeByte(color.getG());
-    writeByte(color.getB());
+    writeByte(color.getRed());
+    writeByte(color.getGreen());
+    writeByte(color.getBlue());
   }
 
   public void writeShort(short v) {
@@ -610,7 +611,7 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     if (track.isMute()) {
       header |= TRACK_MUTE;
     }
-    if (!track.getLyrics().isEmpty()) {
+    if (!track.getLyrics().getLyrics().isEmpty()) {
       header |= TRACK_LYRICS;
     }
     writeHeader(header);
@@ -632,7 +633,7 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     writeByte(track.getStrings().size());
 
     // escribo las cuerdas
-    for (final TGString string : track.getStrings()){
+    for (final TGString string : track.getStrings()) {
       writeInstrumentString(string);
     }
 
@@ -648,16 +649,16 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     }
   }
 
-  private void writeTremoloBarEffect(TGEffectTremoloBar effect) {
+  private void writeTremoloBarEffect(BendingEffect effect) {
     // escribo la cantidad de puntos
     writeByte(effect.getPoints().size());
 
-    for (final TremoloBarPoint point : effect.getPoints()) {
+    for (final EffectPoint point : effect.getPoints()) {
       // escribo la posicion
       writeByte(point.getPosition());
 
       // escribo el valor
-      writeByte((point.getValue() + TGEffectTremoloBar.MAX_VALUE_LENGTH));
+      writeByte((point.getValue() + EffectPoint.MAX_VALUE_LENGTH));
     }
   }
 

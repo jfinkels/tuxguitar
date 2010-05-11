@@ -6,16 +6,20 @@
  */
 package org.herac.tuxguitar.io.tg.v08;
 
+import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureHeaderImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGBeat;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMarker;
@@ -29,7 +33,7 @@ import org.herac.tuxguitar.song.models.TGTempo;
 import org.herac.tuxguitar.song.models.TGTimeSignature;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
 
 /**
  * @author julian
@@ -40,19 +44,14 @@ import org.herac.tuxguitar.song.models.effects.TGEffectBend;
 public class TGInputStream extends TGStream implements TGInputStreamBase {
 
   private DataInputStream dataInputStream;
-  private TGFactory factory;
+  // private TGFactory factory;
   private String version;
-
-  public TGInputStream() {
-    super();
-  }
 
   public TGFileFormat getFileFormat() {
     return new TGFileFormat("TuxGuitar", "*.tg");
   }
 
-  public void init(TGFactory factory, InputStream stream) {
-    this.factory = factory;
+  public void init(InputStream stream) {
     this.dataInputStream = new DataInputStream(stream);
     this.version = null;
   }
@@ -71,7 +70,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGSong read() {
-    TGSong song = this.factory.newSong();
+    TGSong song = new TGSong();
 
     // leo el nombre
     song.setName(readString());
@@ -109,8 +108,8 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     return song;
   }
 
-  private TGEffectBend readBendEffect() {
-    TGEffectBend bend = this.factory.newEffectBend();
+  private BendingEffect readBendEffect() {
+    BendingEffect bend = new BendingEffect();
 
     // leo la cantidad de puntos
     int count = readByte();
@@ -174,11 +173,11 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     track.setMute(((header & CHANNEL_MUTE) != 0));
   }
 
-  private void readColor(TGColor color) {
-    // escribo el RGB
-    color.setR(readShort());
-    color.setG(readShort());
-    color.setB(readShort());
+  private Color readColor() {
+    final int red = readShort();
+    final int green = readShort();
+    final int blue = readShort();
+    return new Color(red, green, blue);
   }
 
   private TGBeat readComponent(TGMeasure measure, TGBeat previous) {
@@ -188,11 +187,11 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
 
     // leo el start
     if (beat == null) {
-      beat = this.factory.newBeat();
+      beat = new TGBeatImpl();
       beat.setStart(measure.getStart());
       measure.addBeat(beat);
     } else if (((header & COMPONENT_NEXT_BEAT) != 0)) {
-      beat = this.factory.newBeat();
+      beat = new TGBeatImpl();
       beat.setStart(previous.getStart()
           + previous.getVoice(0).getDuration().getTime());
       measure.addBeat(beat);
@@ -208,7 +207,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     }
 
     if (((header & COMPONENT_NOTE) != 0)) {
-      TGNote note = this.factory.newNote();
+      TGNote note = new TGNoteImpl();
 
       // leo el valor
       note.setValue(readByte());
@@ -266,7 +265,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGString readInstrumentString(int number) {
-    TGString string = this.factory.newString();
+    TGString string = new TGString();
 
     // leo el numero
     string.setNumber(number);
@@ -278,7 +277,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGMarker readMarker(int measure) {
-    TGMarker marker = this.factory.newMarker();
+    TGMarker marker = new TGMarker();
 
     // leo el compas
     marker.setMeasure(measure);
@@ -287,7 +286,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     marker.setTitle(readString());
 
     // leo el color
-    readColor(marker.getColor());
+    marker.setColor(readColor());
 
     return marker;
   }
@@ -296,7 +295,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
       TGMeasure lastMeasure) {
     int header = readHeader();
 
-    TGMeasure measure = this.factory.newMeasure(measureHeader);
+    TGMeasure measure = new TGMeasureImpl(measureHeader);
 
     // leo la cantidad de componentes
     TGBeat previous = null;
@@ -326,7 +325,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
       TGMeasureHeader lastMeasureHeader) {
     int header = readHeader();
 
-    TGMeasureHeader measureHeader = this.factory.newHeader();
+    TGMeasureHeader measureHeader = new TGMeasureHeaderImpl();
     measureHeader.setNumber(number);
     measureHeader.setStart(start);
 
@@ -438,7 +437,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGTrack readTrack(int number, TGSong song) {
-    TGTrack track = this.factory.newTrack();
+    TGTrack track = new TGTrackImpl();
 
     track.setNumber(number);
 
@@ -471,7 +470,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     track.setOffset((TGTrack.MIN_OFFSET + readByte()));
 
     // leo el color
-    readColor(track.getColor());
+    track.setColor(readColor());
 
     return track;
   }

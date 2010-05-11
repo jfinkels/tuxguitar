@@ -44,6 +44,7 @@ public class ChangeTimeSignatureAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     showDialog(getEditor().getTablature().getShell());
     return 0;
@@ -62,6 +63,7 @@ public class ChangeTimeSignatureAction extends Action {
     return data;
   }
 
+  @Override
   public TGSongManager getSongManager() {
     return super.getSongManager();
   }
@@ -146,6 +148,7 @@ public class ChangeTimeSignatureAction extends Action {
       buttonOk.setText(TuxGuitar.getProperty("ok"));
       buttonOk.setLayoutData(getButtonData());
       buttonOk.addSelectionListener(new SelectionAdapter() {
+        @Override
         public void widgetSelected(SelectionEvent arg0) {
           final boolean toEndValue = toEnd.getSelection();
           final int numeratorValue = Integer.parseInt(numerator.getText());
@@ -157,8 +160,7 @@ public class ChangeTimeSignatureAction extends Action {
               public void run() throws Throwable {
                 ActionLock.lock();
                 TuxGuitar.instance().loadCursor(SWT.CURSOR_WAIT);
-                TGTimeSignature timeSignature = getSongManager().getFactory()
-                    .newTimeSignature();
+                TGTimeSignature timeSignature = new TGTimeSignature();
                 timeSignature.setNumerator(numeratorValue);
                 timeSignature.getDenominator().setValue(denominatorValue);
                 setTimeSignature(timeSignature, toEndValue);
@@ -177,6 +179,7 @@ public class ChangeTimeSignatureAction extends Action {
       buttonCancel.setLayoutData(getButtonData());
       buttonCancel.setText(TuxGuitar.getProperty("cancel"));
       buttonCancel.addSelectionListener(new SelectionAdapter() {
+        @Override
         public void widgetSelected(SelectionEvent arg0) {
           dialog.dispose();
         }

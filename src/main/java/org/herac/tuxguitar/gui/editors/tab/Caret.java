@@ -41,7 +41,7 @@ public class Caret {
 
   public Caret(Tablature tablature) {
     this.tablature = tablature;
-    this.selectedDuration = getSongManager().getFactory().newDuration();
+    this.selectedDuration = new TGDuration();
     this.string = 1;
     this.velocity = TGVelocities.DEFAULT;
     this.changes = false;

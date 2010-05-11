@@ -49,6 +49,7 @@ public class ChangeTempoAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     showDialog(getEditor().getTablature().getShell());
     return 0;
@@ -61,6 +62,7 @@ public class ChangeTempoAction extends Action {
     return data;
   }
 
+  @Override
   public TGSongManager getSongManager() {
     return super.getSongManager();
   }
@@ -74,7 +76,7 @@ public class ChangeTempoAction extends Action {
   protected void setTempo(int tempoValue, boolean applyToAllMeasures,
       boolean applyToEnd) {
     if (tempoValue >= MIN_TEMPO && MAX_TEMPO <= 320) {
-      TGTempo tempo = getSongManager().getFactory().newTempo();
+      TGTempo tempo = new TGTempo();
       tempo.setValue(tempoValue);
 
       long start = (applyToAllMeasures ? TGDuration.QUARTER_TIME : getEditor()
@@ -149,6 +151,7 @@ public class ChangeTempoAction extends Action {
       buttonOK.setText(TuxGuitar.getProperty("ok"));
       buttonOK.setLayoutData(getButtonData());
       buttonOK.addSelectionListener(new SelectionAdapter() {
+        @Override
         public void widgetSelected(SelectionEvent arg0) {
           final int tempoValue = tempo.getSelection();
           final boolean applyToEndValue = applyToEnd.getSelection();
@@ -177,6 +180,7 @@ public class ChangeTempoAction extends Action {
       buttonCancel.setText(TuxGuitar.getProperty("cancel"));
       buttonCancel.setLayoutData(getButtonData());
       buttonCancel.addSelectionListener(new SelectionAdapter() {
+        @Override
         public void widgetSelected(SelectionEvent arg0) {
           dialog.dispose();
         }

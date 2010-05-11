@@ -30,13 +30,13 @@ public class ChangeDivisionTypeAction extends Action {
   }
 
   private TGDivisionType defaultDivisionType() {
-    TGDivisionType divisionType = getSongManager().getFactory()
-        .newDivisionType();
+    TGDivisionType divisionType = new TGDivisionType();
     divisionType.setEnters(3);
     divisionType.setTimes(2);
     return divisionType;
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     // comienza el undoable
     UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
@@ -77,8 +77,7 @@ public class ChangeDivisionTypeAction extends Action {
   }
 
   private TGDivisionType noTuplet() {
-    TGDivisionType divisionType = getSongManager().getFactory()
-        .newDivisionType();
+    TGDivisionType divisionType = new TGDivisionType();
     divisionType.setEnters(1);
     divisionType.setTimes(1);
     return divisionType;
@@ -91,8 +90,7 @@ public class ChangeDivisionTypeAction extends Action {
 
   private void setDurations() {
     Caret caret = getEditor().getTablature().getCaret();
-    caret.changeDuration(getSelectedDuration().clone(
-        getSongManager().getFactory()));
+    caret.changeDuration(getSelectedDuration().clone());
     TuxGuitar.instance().getFileHistory().setUnsavedFile();
     fireUpdate(getEditor().getTablature().getCaret().getMeasure().getNumber());
   }

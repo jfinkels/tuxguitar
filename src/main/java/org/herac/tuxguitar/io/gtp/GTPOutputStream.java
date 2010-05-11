@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.herac.tuxguitar.io.base.TGOutputStreamBase;
-import org.herac.tuxguitar.song.factory.TGFactory;
 
 public abstract class GTPOutputStream extends GTPFileFormat implements
     TGOutputStreamBase {
@@ -20,8 +19,7 @@ public abstract class GTPOutputStream extends GTPFileFormat implements
     this.outputStream.close();
   }
 
-  public void init(TGFactory factory, OutputStream stream) {
-    super.init(factory);
+  public void init(OutputStream stream) {
     this.outputStream = stream;
   }
 

@@ -26,6 +26,7 @@ public class AddMarkerAction extends Action {
     super(NAME, AUTO_LOCK | AUTO_UNLOCK | AUTO_UPDATE | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     if (new MarkerEditor(getMarker()).open(getEditor().getTablature()
         .getShell())) {
@@ -39,7 +40,7 @@ public class AddMarkerAction extends Action {
     if (measure != null) {
       TGMarker marker = getSongManager().getMarker(measure.getNumber());
       if (marker == null) {
-        marker = getSongManager().getFactory().newMarker();
+        marker = new TGMarker();
         marker.setMeasure(measure.getNumber());
       }
       return marker;

@@ -13,7 +13,7 @@ import org.herac.tuxguitar.gui.editors.effects.TremoloBarEditor;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
 
 /**
  * @author julian
@@ -29,7 +29,7 @@ public class ChangeTremoloBarAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
-  private void changeTremoloBar(TGEffectTremoloBar effect) {
+  private void changeTremoloBar(BendingEffect effect) {
     // comienza el undoable
     UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
 

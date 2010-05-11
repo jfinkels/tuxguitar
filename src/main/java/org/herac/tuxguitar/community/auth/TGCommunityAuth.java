@@ -71,9 +71,9 @@ public class TGCommunityAuth {
         MessageDigest md = MessageDigest.getInstance("md5");
         md.update(this.password.getBytes());
         byte[] digest = md.digest();
-        for (int i = 0; i < digest.length; i++) {
-          passwordMD5 += Integer.toHexString((digest[i] >> 4) & 0xf);
-          passwordMD5 += Integer.toHexString((digest[i] & 0xf));
+        for (byte digestByte : digest) {
+          passwordMD5 += Integer.toHexString((digestByte >> 4) & 0xf);
+          passwordMD5 += Integer.toHexString((digestByte & 0xf));
         }
       }
       this.authCode = new String(Base64Encoder.encode(new String(this.username

@@ -26,7 +26,8 @@ import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.EffectPoint;
 
 /**
  * @author julian
@@ -37,9 +38,9 @@ import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 public class TremoloBarEditor {
   private class DefaultTremoloBar {
     private String name;
-    private TGEffectTremoloBar tremoloBar;
+    private BendingEffect tremoloBar;
 
-    public DefaultTremoloBar(String name, TGEffectTremoloBar tremoloBar) {
+    public DefaultTremoloBar(String name, BendingEffect tremoloBar) {
       this.name = name;
       this.tremoloBar = tremoloBar;
     }
@@ -48,21 +49,21 @@ public class TremoloBarEditor {
       return this.name;
     }
 
-    public TGEffectTremoloBar getTremoloBar() {
+    public BendingEffect getTremoloBar() {
       return this.tremoloBar;
     }
   }
 
-  private static final int X_LENGTH = TGEffectTremoloBar.MAX_POSITION_LENGTH + 1;
+  private static final int X_LENGTH = EffectPoint.MAX_POSITION_LENGTH + 1;
   public static final int X_SPACING = 30;
-  private static final int Y_LENGTH = (TGEffectTremoloBar.MAX_VALUE_LENGTH * 2) + 1;
+  private static final int Y_LENGTH = (EffectPoint.MAX_VALUE_LENGTH * 2) + 1;
 
   public static final int Y_SPACING = 10;
   protected DefaultTremoloBar[] defaultTremoloBars;
   protected Composite editor;
   private int height;
-  private List points;
-  protected TGEffectTremoloBar result;
+  private List<Point> points;
+  protected BendingEffect result;
   private int width;
   private int[] x;
 
@@ -76,7 +77,7 @@ public class TremoloBarEditor {
     this.points.add(point);
   }
 
-  private void addTremoloBarPoint(TGEffectTremoloBar effect, Point point) {
+  private void addTremoloBarPoint(BendingEffect effect, Point point) {
     int position = 0;
     int value = 0;
     for (int i = 0; i < this.x.length; i++) {
@@ -86,7 +87,7 @@ public class TremoloBarEditor {
     }
     for (int i = 0; i < this.y.length; i++) {
       if (point.y == this.y[i]) {
-        value = (TGEffectTremoloBar.MAX_VALUE_LENGTH - i);
+        value = (EffectPoint.MAX_VALUE_LENGTH - i);
       }
     }
     effect.addPoint(position, value);
@@ -105,13 +106,10 @@ public class TremoloBarEditor {
     return this.height;
   }
 
-  public TGEffectTremoloBar getTremoloBar() {
+  public BendingEffect getTremoloBar() {
     if (this.points != null && !this.points.isEmpty()) {
-      TGEffectTremoloBar tremoloBar = TuxGuitar.instance().getSongManager()
-          .getFactory().newEffectTremoloBar();// new TremoloBarEffect();
-      Iterator it = this.points.iterator();
-      while (it.hasNext()) {
-        Point point = (Point) it.next();
+      BendingEffect tremoloBar = new BendingEffect();
+      for (final Point point : this.points) {
         addTremoloBarPoint(tremoloBar, point);
       }
       return tremoloBar;
@@ -160,7 +158,7 @@ public class TremoloBarEditor {
     this.y = new int[Y_LENGTH];
     this.width = ((X_SPACING * X_LENGTH) - X_SPACING);
     this.height = ((Y_SPACING * Y_LENGTH) - Y_SPACING);
-    this.points = new ArrayList();
+    this.points = new ArrayList<Point>();
 
     for (int i = 0; i < this.x.length; i++) {
       this.x[i] = ((i + 1) * X_SPACING);
@@ -174,9 +172,9 @@ public class TremoloBarEditor {
     return this.points.isEmpty();
   }
 
-  private void makePoint(TGEffectTremoloBar.TremoloBarPoint tremoloBarPoint) {
+  private void makePoint(EffectPoint tremoloBarPoint) {
     int indexX = tremoloBarPoint.getPosition();
-    int indexY = ((this.y.length - TGEffectTremoloBar.MAX_VALUE_LENGTH) - tremoloBarPoint
+    int indexY = ((this.y.length - EffectPoint.MAX_VALUE_LENGTH) - tremoloBarPoint
         .getValue()) - 1;
     if (indexX >= 0 && indexX < this.x.length && indexY >= 0
         && indexY < this.y.length) {
@@ -219,15 +217,12 @@ public class TremoloBarEditor {
       painter.closePath();
     }
 
-    Iterator it = null;
     Point prevPoint = null;
     painter.setLineStyle(SWT.LINE_SOLID);
     painter.setLineWidth(2);
     painter.setForeground(this.editor.getDisplay().getSystemColor(
         SWT.COLOR_GRAY));
-    it = this.points.iterator();
-    while (it.hasNext()) {
-      Point point = (Point) it.next();
+    for (final Point point : this.points) {
       if (prevPoint != null) {
         painter.initPath();
         painter.moveTo(prevPoint.x, prevPoint.y);
@@ -240,9 +235,7 @@ public class TremoloBarEditor {
     painter.setLineWidth(5);
     painter.setForeground(this.editor.getDisplay().getSystemColor(
         SWT.COLOR_BLACK));
-    it = this.points.iterator();
-    while (it.hasNext()) {
-      Point point = (Point) it.next();
+    for (final Point point : this.points) {
       painter.initPath();
       painter.setAntialias(false);
       painter.addRectangle(point.x - 2, point.y - 2, 5, 5);
@@ -252,9 +245,9 @@ public class TremoloBarEditor {
   }
 
   private boolean removePoint(Point point) {
-    Iterator it = this.points.iterator();
+    Iterator<Point> it = this.points.iterator();
     while (it.hasNext()) {
-      Point currPoint = (Point) it.next();
+      Point currPoint = it.next();
       if (currPoint.x == point.x && currPoint.y == point.y) {
         this.points.remove(point);
         return true;
@@ -264,9 +257,9 @@ public class TremoloBarEditor {
   }
 
   private void removePointsAtXLine(int x) {
-    Iterator it = this.points.iterator();
+    Iterator<Point> it = this.points.iterator();
     while (it.hasNext()) {
-      Point point = (Point) it.next();
+      Point point = it.next();
       if (point.x == x) {
         this.points.remove(point);
         break;
@@ -278,43 +271,37 @@ public class TremoloBarEditor {
     this.defaultTremoloBars = new DefaultTremoloBar[6];
 
     this.defaultTremoloBars[0] = new DefaultTremoloBar(TuxGuitar
-        .getProperty("effects.tremolo-bar.dip"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectTremoloBar());
+        .getProperty("effects.tremolo-bar.dip"), new BendingEffect());
     this.defaultTremoloBars[0].getTremoloBar().addPoint(0, 0);
     this.defaultTremoloBars[0].getTremoloBar().addPoint(6, -2);
     this.defaultTremoloBars[0].getTremoloBar().addPoint(12, 0);
 
     this.defaultTremoloBars[1] = new DefaultTremoloBar(TuxGuitar
-        .getProperty("effects.tremolo-bar.dive"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectTremoloBar());
+        .getProperty("effects.tremolo-bar.dive"), new BendingEffect());
     this.defaultTremoloBars[1].getTremoloBar().addPoint(0, 0);
     this.defaultTremoloBars[1].getTremoloBar().addPoint(9, -2);
     this.defaultTremoloBars[1].getTremoloBar().addPoint(12, -2);
 
     this.defaultTremoloBars[2] = new DefaultTremoloBar(TuxGuitar
-        .getProperty("effects.tremolo-bar.release-up"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectTremoloBar());
+        .getProperty("effects.tremolo-bar.release-up"), new BendingEffect());
     this.defaultTremoloBars[2].getTremoloBar().addPoint(0, -2);
     this.defaultTremoloBars[2].getTremoloBar().addPoint(9, -2);
     this.defaultTremoloBars[2].getTremoloBar().addPoint(12, 0);
 
     this.defaultTremoloBars[3] = new DefaultTremoloBar(TuxGuitar
-        .getProperty("effects.tremolo-bar.inverted-dip"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectTremoloBar());
+        .getProperty("effects.tremolo-bar.inverted-dip"), new BendingEffect());
     this.defaultTremoloBars[3].getTremoloBar().addPoint(0, 0);
     this.defaultTremoloBars[3].getTremoloBar().addPoint(6, 2);
     this.defaultTremoloBars[3].getTremoloBar().addPoint(12, 0);
 
     this.defaultTremoloBars[4] = new DefaultTremoloBar(TuxGuitar
-        .getProperty("effects.tremolo-bar.return"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectTremoloBar());
+        .getProperty("effects.tremolo-bar.return"), new BendingEffect());
     this.defaultTremoloBars[4].getTremoloBar().addPoint(0, 0);
     this.defaultTremoloBars[4].getTremoloBar().addPoint(9, 2);
     this.defaultTremoloBars[4].getTremoloBar().addPoint(12, 2);
 
     this.defaultTremoloBars[5] = new DefaultTremoloBar(TuxGuitar
-        .getProperty("effects.tremolo-bar.release-down"), TuxGuitar.instance()
-        .getSongManager().getFactory().newEffectTremoloBar());
+        .getProperty("effects.tremolo-bar.release-down"), new BendingEffect());
     this.defaultTremoloBars[5].getTremoloBar().addPoint(0, 2);
     this.defaultTremoloBars[5].getTremoloBar().addPoint(9, 2);
     this.defaultTremoloBars[5].getTremoloBar().addPoint(12, 0);
@@ -345,7 +332,7 @@ public class TremoloBarEditor {
     if (i == 0 || i == (Y_LENGTH - 1)) {
       painter.setForeground(this.editor.getDisplay().getSystemColor(
           SWT.COLOR_BLACK));
-    } else if (i == (TGEffectTremoloBar.MAX_VALUE_LENGTH)) {
+    } else if (i == (EffectPoint.MAX_VALUE_LENGTH)) {
       painter.setForeground(this.editor.getDisplay().getSystemColor(
           SWT.COLOR_BLACK));
     } else {
@@ -359,17 +346,14 @@ public class TremoloBarEditor {
     }
   }
 
-  public void setTremoloBar(TGEffectTremoloBar effect) {
+  public void setTremoloBar(BendingEffect effect) {
     this.points.clear();
-    Iterator it = effect.getPoints().iterator();
-    while (it.hasNext()) {
-      TGEffectTremoloBar.TremoloBarPoint tremoloBarPoint = (TGEffectTremoloBar.TremoloBarPoint) it
-          .next();
-      this.makePoint(tremoloBarPoint);
+    for (final EffectPoint point : effect.getPoints()) {
+      this.makePoint(point);
     }
   }
 
-  public TGEffectTremoloBar show(Shell shell, final TGNote note) {
+  public BendingEffect show(Shell shell, final TGNote note) {
     final Shell dialog = DialogUtils.newDialog(shell, SWT.DIALOG_TRIM
         | SWT.APPLICATION_MODAL);
 
@@ -402,6 +386,7 @@ public class TremoloBarEditor {
       }
     });
     this.editor.addMouseListener(new MouseAdapter() {
+      @Override
       public void mouseUp(org.eclipse.swt.events.MouseEvent e) {
         checkPoint(e.x, e.y);
         TremoloBarEditor.this.editor.redraw();
@@ -420,6 +405,7 @@ public class TremoloBarEditor {
     defaultTremoloBarList.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
         true));
     defaultTremoloBarList.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         int index = defaultTremoloBarList.getSelectionIndex();
         if (index >= 0
@@ -437,6 +423,7 @@ public class TremoloBarEditor {
         true, true), 80, 25));
     buttonClean.setText(TuxGuitar.getProperty("clean"));
     buttonClean.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         TremoloBarEditor.this.result = null;
         dialog.dispose();
@@ -447,6 +434,7 @@ public class TremoloBarEditor {
         false), 80, 25));
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         TremoloBarEditor.this.result = getTremoloBar();
         dialog.dispose();
@@ -457,6 +445,7 @@ public class TremoloBarEditor {
         true, false), 80, 25));
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         TremoloBarEditor.this.result = note.getEffect().getTremoloBar();
         dialog.dispose();

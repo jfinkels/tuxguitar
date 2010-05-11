@@ -6,7 +6,8 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 
 /**
  * @author julian
@@ -15,28 +16,21 @@ import org.herac.tuxguitar.song.factory.TGFactory;
  *         Window - Preferences - Java - Code Style - Code Templates
  */
 public abstract class TGNote {
-  private TGNoteEffect effect;
-  private int string;
-  private boolean tiedNote;
-  private int value;
-  private int velocity;
-  private TGVoice voice;
+  private TGNoteEffect effect = TGFactoryImpl.newEffect();
+  private int string = 1;
+  private boolean tiedNote = false;
+  private int value = 0;
+  private int velocity = TGVelocities.DEFAULT;
+  private TGVoice voice = null;
 
-  public TGNote(TGFactory factory) {
-    this.value = 0;
-    this.velocity = TGVelocities.DEFAULT;
-    this.string = 1;
-    this.tiedNote = false;
-    this.effect = factory.newEffect();
-  }
-
-  public TGNote clone(TGFactory factory) {
-    TGNote note = factory.newNote();
-    note.setValue(getValue());
-    note.setVelocity(getVelocity());
-    note.setString(getString());
-    note.setTiedNote(isTiedNote());
-    note.setEffect(getEffect().clone(factory));
+  @Override
+  public TGNote clone() {
+    TGNote note = new TGNoteImpl();
+    note.setValue(this.value);
+    note.setVelocity(this.velocity);
+    note.setString(this.string);
+    note.setTiedNote(this.tiedNote);
+    note.setEffect(this.effect.clone());
     return note;
   }
 

@@ -60,8 +60,7 @@ public class GraceEditor extends SelectionAdapter {
   }
 
   public TGEffectGrace getGrace() {
-    TGEffectGrace effect = TuxGuitar.instance().getSongManager().getFactory()
-        .newEffectGrace();
+    TGEffectGrace effect = new TGEffectGrace();
 
     effect.setFret(this.fretSpinner.getSelection());
     effect.setDead(this.deadButton.getSelection());
@@ -307,6 +306,7 @@ public class GraceEditor extends SelectionAdapter {
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.setLayoutData(getButtonData());
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         GraceEditor.this.result = getGrace();
         dialog.dispose();
@@ -317,6 +317,7 @@ public class GraceEditor extends SelectionAdapter {
     buttonClean.setText(TuxGuitar.getProperty("clean"));
     buttonClean.setLayoutData(getButtonData());
     buttonClean.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         GraceEditor.this.result = null;
         dialog.dispose();
@@ -327,6 +328,7 @@ public class GraceEditor extends SelectionAdapter {
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.setLayoutData(getButtonData());
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         GraceEditor.this.result = note.getEffect().getGrace();
         dialog.dispose();

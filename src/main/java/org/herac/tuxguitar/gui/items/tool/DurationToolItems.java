@@ -105,8 +105,7 @@ public class DurationToolItems extends ToolItems {
     }
 
     private TGDivisionType newDivisionType(int enters, int times) {
-      TGDivisionType divisionType = TuxGuitar.instance().getSongManager()
-          .getFactory().newDivisionType();
+      TGDivisionType divisionType = new TGDivisionType();
       divisionType.setEnters(enters);
       divisionType.setTimes(times);
       return divisionType;
@@ -135,6 +134,7 @@ public class DurationToolItems extends ToolItems {
       }
     }
 
+    @Override
     public void widgetSelected(SelectionEvent event) {
       if (event.detail == SWT.ARROW) {
         ToolItem item = (ToolItem) event.widget;
@@ -170,6 +170,7 @@ public class DurationToolItems extends ToolItems {
     super(NAME);
   }
 
+  @Override
   protected TablatureEditor getEditor() {
     return super.getEditor();
   }
@@ -219,6 +220,7 @@ public class DurationToolItems extends ToolItems {
         .getProperty("duration.division-type"));
   }
 
+  @Override
   public void showItems(ToolBar toolBar) {
     this.toolBar = toolBar;
     this.durationItems = new ToolItem[7];

@@ -12,6 +12,7 @@ import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.system.keybindings.KeyBindingConstants;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.song.models.TGDuration;
@@ -43,7 +44,7 @@ public class ChangeNoteAction extends Action {
 
   private void addNote(TGMeasureImpl measure, TGDuration duration, long start,
       int value, int string, int velocity) {
-    TGNote note = getSongManager().getFactory().newNote();
+    TGNote note = new TGNoteImpl();
     note.setValue(value);
     note.setVelocity(velocity);
     note.setString(string);
@@ -55,7 +56,7 @@ public class ChangeNoteAction extends Action {
     // getSongManager().getMeasureManager().addNote(measure,start,note,duration.clone(getSongManager().getFactory())
     // );
     getSongManager().getMeasureManager().addNote(measure, start, note,
-        duration.clone(getSongManager().getFactory()),
+        duration.clone(),
         getEditor().getTablature().getCaret().getVoice());
 
     // termia el undoable
@@ -65,6 +66,7 @@ public class ChangeNoteAction extends Action {
     getEditor().getTablature().getCaret().getSelectedBeat().play();
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     if (e instanceof KeyEvent) {
       int value = getValueOf(((KeyEvent) e).keyCode);

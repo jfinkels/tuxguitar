@@ -9,7 +9,7 @@ package org.herac.tuxguitar.song.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
 
 /**
  * @author julian
@@ -46,13 +46,12 @@ public abstract class TGMeasure {
     this.beats.add(beat);
   }
 
-  public TGMeasure clone(TGFactory factory, TGMeasureHeader header) {
-    TGMeasure measure = factory.newMeasure(header);
+  public TGMeasure clone(TGMeasureHeader header) {
+    TGMeasure measure = new TGMeasureImpl(header);
     measure.setClef(getClef());
     measure.setKeySignature(getKeySignature());
-    for (int i = 0; i < countBeats(); i++) {
-      TGBeat beat = (TGBeat) this.beats.get(i);
-      measure.addBeat(beat.clone(factory));
+    for (final TGBeat beat : this.beats){
+      measure.addBeat(beat.clone());
     }
     return measure;
   }

@@ -13,7 +13,7 @@ import org.herac.tuxguitar.gui.editors.effects.BendEditor;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
 
 /**
  * @author julian
@@ -29,7 +29,7 @@ public class ChangeBendNoteAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
-  private void changeBend(TGEffectBend effect) {
+  private void changeBend(BendingEffect effect) {
     // comienza el undoable
     UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
 

@@ -72,7 +72,7 @@ public class FileActionUtils {
       OutputStream stream = new BufferedOutputStream(new FileOutputStream(
           new File(path)));
       TGSongManager manager = TuxGuitar.instance().getSongManager();
-      exporter.init(manager.getFactory(), stream);
+      exporter.init(stream);
       exporter.exportSong(manager.getSong());
     } catch (Throwable throwable) {
       MessageDialog.errorMessage(new TGFileFormatException(TuxGuitar
@@ -119,7 +119,7 @@ public class FileActionUtils {
     try {
       InputStream stream = new BufferedInputStream(new FileInputStream(
           new File(path)));
-      importer.init(TuxGuitar.instance().getSongManager().getFactory(), stream);
+      importer.init(stream);
       TGSong song = importer.importSong();
       TuxGuitar.instance().fireNewSong(song, null);
     } catch (Throwable throwable) {
@@ -170,8 +170,8 @@ public class FileActionUtils {
   public static void open(final String fileName) {
     try {
       TGSong song = TGFileFormatManager.instance().getLoader().load(
-          TuxGuitar.instance().getSongManager().getFactory(),
-          new FileInputStream(fileName));
+
+      new FileInputStream(fileName));
       TuxGuitar.instance()
           .fireNewSong(song, new File(fileName).toURI().toURL());
     } catch (Throwable throwable) {
@@ -186,8 +186,7 @@ public class FileActionUtils {
     try {
       InputStream stream = (isLocalFile(url) ? url.openStream()
           : getInputStream(url.openStream()));
-      TGSong song = TGFileFormatManager.instance().getLoader().load(
-          TuxGuitar.instance().getSongManager().getFactory(), stream);
+      TGSong song = TGFileFormatManager.instance().getLoader().load(stream);
       TuxGuitar.instance().fireNewSong(song, url);
     } catch (Throwable throwable) {
       TuxGuitar.instance().newSong();
@@ -200,8 +199,8 @@ public class FileActionUtils {
   public static void save(final String fileName) {
     try {
       TGSongManager manager = TuxGuitar.instance().getSongManager();
-      TGFileFormatManager.instance().getWriter().write(manager.getFactory(),
-          manager.getSong(), fileName);
+      TGFileFormatManager.instance().getWriter().write(manager.getSong(),
+          fileName);
       TuxGuitar.instance().fireSaveSong(new File(fileName).toURI().toURL());
     } catch (Throwable throwable) {
       MessageDialog

@@ -6,16 +6,17 @@
  */
 package org.herac.tuxguitar.io.gtp;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMarker;
@@ -32,9 +33,9 @@ import org.herac.tuxguitar.song.models.TGTimeSignature;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.EffectPoint;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectTremoloBar;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
 
@@ -89,7 +90,7 @@ public class GP5OutputStream extends GTPOutputStream {
   private TGChannel[] makeChannels(TGSong song) {
     TGChannel[] channels = new TGChannel[64];
     for (int i = 0; i < channels.length; i++) {
-      channels[i] = getFactory().newChannel();
+      channels[i] = new TGChannel();
       channels[i].setChannel((short) i);
       channels[i].setEffectChannel((short) i);
       channels[i].setInstrument((short) 24);
@@ -187,16 +188,15 @@ public class GP5OutputStream extends GTPOutputStream {
   private void writeBeat(TGVoice voice, TGBeat beat, TGMeasure measure,
       boolean changeTempo) throws IOException {
     TGDuration duration = voice.getDuration();
-    TGNoteEffect effect = getFactory().newEffect();
-    for (int i = 0; i < voice.countNotes(); i++) {
+    TGNoteEffect effect = new TGNoteEffect();
+    for (int i = 0; i < voice.getNotes().size(); i++) {
       TGNote playedNote = voice.getNote(i);
 
       if (playedNote.getEffect().isFadeIn()) {
         effect.setFadeIn(true);
       }
       if (playedNote.getEffect().isTremoloBar()) {
-        effect.setTremoloBar(playedNote.getEffect().getTremoloBar().clone(
-            getFactory()));
+        effect.setTremoloBar(playedNote.getEffect().getTremoloBar().clone());
       }
       if (playedNote.getEffect().isTapping()) {
         effect.setTapping(true);
@@ -262,7 +262,7 @@ public class GP5OutputStream extends GTPOutputStream {
     }
     int stringFlags = 0;
     if (!voice.isRestVoice()) {
-      for (int i = 0; i < voice.countNotes(); i++) {
+      for (int i = 0; i < voice.getNotes().size(); i++) {
         TGNote playedNote = voice.getNote(i);
         int string = (7 - playedNote.getString());
         stringFlags |= (1 << string);
@@ -271,7 +271,7 @@ public class GP5OutputStream extends GTPOutputStream {
     writeUnsignedByte(stringFlags);
     for (int i = 6; i >= 0; i--) {
       if ((stringFlags & (1 << i)) != 0) {
-        for (int n = 0; n < voice.countNotes(); n++) {
+        for (int n = 0; n < voice.getNotes().size(); n++) {
           TGNote playedNote = voice.getNote(n);
           if (playedNote.getString() == (6 - i + 1)) {
             writeNote(playedNote);
@@ -326,16 +326,14 @@ public class GP5OutputStream extends GTPOutputStream {
     }
   }
 
-  private void writeBend(TGEffectBend bend) throws IOException {
+  private void writeBend(BendingEffect bend) throws IOException {
     int points = bend.getPoints().size();
     writeByte((byte) 1);
     writeInt(0);
     writeInt(points);
-    for (int i = 0; i < points; i++) {
-      TGEffectBend.BendPoint point = (TGEffectBend.BendPoint) bend.getPoints()
-          .get(i);
-      writeInt((point.getPosition() * GP_BEND_POSITION / TGEffectBend.MAX_POSITION_LENGTH));
-      writeInt((point.getValue() * GP_BEND_SEMITONE / TGEffectBend.SEMITONE_LENGTH));
+    for (final EffectPoint point : bend.getPoints()) {
+      writeInt((point.getPosition() * GP_BEND_POSITION / EffectPoint.MAX_POSITION_LENGTH));
+      writeInt((point.getValue() * GP_BEND_SEMITONE / EffectPoint.SEMITONE_LENGTH));
       writeByte((byte) 0);
     }
   }
@@ -366,10 +364,10 @@ public class GP5OutputStream extends GTPOutputStream {
     this.skipBytes(32);
   }
 
-  private void writeColor(TGColor color) throws IOException {
-    writeUnsignedByte(color.getR());
-    writeUnsignedByte(color.getG());
-    writeUnsignedByte(color.getB());
+  private void writeColor(Color color) throws IOException {
+    writeUnsignedByte(color.getRed());
+    writeUnsignedByte(color.getGreen());
+    writeUnsignedByte(color.getBlue());
     writeByte((byte) 0);
   }
 
@@ -410,7 +408,7 @@ public class GP5OutputStream extends GTPOutputStream {
   private void writeLyrics(TGSong song) throws IOException {
     TGTrack lyricTrack = null;
     for (final TGTrack track : song.getTracks()) {
-      if (!track.getLyrics().isEmpty()) {
+      if (!track.getLyrics().getLyrics().isEmpty()) {
         lyricTrack = track;
         break;
       }
@@ -452,7 +450,7 @@ public class GP5OutputStream extends GTPOutputStream {
       } else {
         // Fill empty voices.
         int count = measure.getTimeSignature().getNumerator();
-        TGBeat beat = getFactory().newBeat();
+        TGBeat beat = new TGBeatImpl();
         if (v < beat.countVoices()) {
           TGVoice voice = beat.getVoice(v);
           voice.getDuration().setValue(
@@ -527,7 +525,7 @@ public class GP5OutputStream extends GTPOutputStream {
   }
 
   private void writeMeasureHeaders(TGSong song) throws IOException {
-    TGTimeSignature timeSignature = getFactory().newTimeSignature();
+    TGTimeSignature timeSignature = new TGTimeSignature();
     if (song.countMeasureHeaders() > 0) {
       for (int i = 0; i < song.countMeasureHeaders(); i++) {
         if (i > 0) {
@@ -725,7 +723,7 @@ public class GP5OutputStream extends GTPOutputStream {
       writeMeasureHeaders(song);
       writeTracks(song);
       skipBytes(2);
-      writeMeasures(song, header.getTempo().clone(getFactory()));
+      writeMeasures(song, header.getTempo().clone());
       close();
     } catch (Exception e) {
       e.printStackTrace();
@@ -771,16 +769,13 @@ public class GP5OutputStream extends GTPOutputStream {
     }
   }
 
-  private void writeTremoloBar(TGEffectTremoloBar tremoloBar)
-      throws IOException {
+  private void writeTremoloBar(BendingEffect tremoloBar) throws IOException {
     int points = tremoloBar.getPoints().size();
     writeByte((byte) 1);
     writeInt(0);
     writeInt(points);
-    for (int i = 0; i < points; i++) {
-      TGEffectTremoloBar.TremoloBarPoint point = (TGEffectTremoloBar.TremoloBarPoint) tremoloBar
-          .getPoints().get(i);
-      writeInt((point.getPosition() * GP_BEND_POSITION / TGEffectBend.MAX_POSITION_LENGTH));
+    for (final EffectPoint point : tremoloBar.getPoints()) {
+      writeInt((point.getPosition() * GP_BEND_POSITION / EffectPoint.MAX_POSITION_LENGTH));
       writeInt((point.getValue() * (GP_BEND_SEMITONE * 2)));
       writeByte((byte) 0);
     }

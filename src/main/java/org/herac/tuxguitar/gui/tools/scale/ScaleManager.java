@@ -3,7 +3,6 @@ package org.herac.tuxguitar.gui.tools.scale;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.tools.scale.xml.ScaleReader;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
 import org.herac.tuxguitar.gui.util.TGMusicKeyUtils;
@@ -30,7 +29,7 @@ public class ScaleManager {
   public ScaleManager() {
     this.scales = new ArrayList<ScaleInfo>();
     this.scaleListeners = new ArrayList<ScaleListener>();
-    this.scale = TuxGuitar.instance().getSongManager().getFactory().newScale();
+    this.scale = new TGScale();
     this.selectionKey = 0;
     this.selectionIndex = NONE_SELECTION;
     this.loadScales();

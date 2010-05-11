@@ -52,8 +52,8 @@ public class TGTableCanvasPainter implements PaintListener {
       painter.closePath();
 
       Color trackColor = new Color(painter.getGC().getDevice(), this.track
-          .getColor().getR(), this.track.getColor().getG(), this.track
-          .getColor().getB());
+          .getColor().getRed(), this.track.getColor().getGreen(), this.track
+          .getColor().getBlue());
       painter.setBackground(trackColor);
       painter.setForeground(trackColor);
 

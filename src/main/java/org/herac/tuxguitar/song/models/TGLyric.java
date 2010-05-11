@@ -11,6 +11,10 @@ public abstract class TGLyric {
     this.lyrics = new String();
   }
 
+  /*
+   * public static void copy(TGLyric source, TGLyric destination) {
+   * destination.setFrom(source.from); destination.setLyrics(source.lyrics); }
+   */
   public void copy(TGLyric lyric) {
     lyric.setFrom(getFrom());
     lyric.setLyrics(getLyrics());
@@ -29,10 +33,6 @@ public abstract class TGLyric {
 
   public String getLyrics() {
     return this.lyrics;
-  }
-
-  public boolean isEmpty() {
-    return (getLyrics().length() == 0);
   }
 
   public void setFrom(int from) {

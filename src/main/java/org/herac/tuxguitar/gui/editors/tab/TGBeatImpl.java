@@ -6,7 +6,6 @@ import java.util.List;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGNoteEffect;
@@ -57,10 +56,6 @@ public class TGBeatImpl extends TGBeat {
   private boolean[] usedStrings;
   private boolean vibrato;
   private int width;
-
-  public TGBeatImpl(TGFactory factory) {
-    super(factory);
-  }
 
   public void check(ViewLayout layout, TGNoteImpl note) {
     int value = note.getRealValue();

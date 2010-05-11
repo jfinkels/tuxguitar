@@ -3,11 +3,13 @@ package org.herac.tuxguitar.midiinput;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.TuxGuitar;
-import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -239,34 +241,32 @@ class MiBuffer {
   }
 
   public TGBeat toBeat() {
-    TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
-    TGBeat tgBeat = tgSongMgr.getFactory().newBeat();
+    TGBeat tgBeat = new TGBeatImpl();
 
     for (final MiNote note : this.f_Notes) {
 
-      TGNote tgNote = tgSongMgr.getFactory().newNote();
+      TGNote tgNote = new TGNoteImpl();
 
       tgNote.setString(note.getString());
       tgNote.setValue(note.getFret());
       tgBeat.getVoice(0).addNote(tgNote);
     }
 
-    return (tgBeat);
+    return tgBeat;
   }
 
   public TGChord toChord(int inStringsCount) {
-    TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
-    TGChord tgChord = tgSongMgr.getFactory().newChord(inStringsCount);
+    TGChord tgChord = new TGChordImpl(inStringsCount);
 
     for (final MiNote note : this.f_Notes) {
       tgChord.addFretValue(note.getString() - 1, note.getFret());
     }
 
-    return (tgChord);
+    return tgChord;
   }
 
-  public TreeSet<Byte> toPitchesSet() {
-    TreeSet<Byte> pitches = new TreeSet<Byte>();
+  public SortedSet<Byte> toPitchesSet() {
+    SortedSet<Byte> pitches = new TreeSet<Byte>();
 
     for (final MiNote note : this.f_Notes) {
       pitches.add(new Byte(note.getPitch()));

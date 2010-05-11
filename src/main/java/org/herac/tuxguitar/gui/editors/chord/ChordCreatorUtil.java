@@ -14,9 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
 import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGNote;
 
 /**
  * 
@@ -184,7 +183,7 @@ public class ChordCreatorUtil {
    * @return true if it can be reached
    * 
    */
-  private boolean checkCombination(ArrayList<StringValue> combination) {
+  private boolean checkCombination(List<StringValue> combination) {
 
     int maxLeft, maxRight;
 
@@ -319,19 +318,14 @@ public class ChordCreatorUtil {
     for (int string = 0; string < this.tuning.length; string++) {
       // we have to go string-by-string because of the octave
 
-      Iterator it = stringValueCombination.iterator();
       StringValue current = null;
-      boolean found = false;
 
-      while (it.hasNext() && !found) {
-        StringValue sv = (StringValue) it.next();
-        if (sv.getString() == string && !found && sv.getFret() != -1) { // stumbled
-          // upon
-          // next
-          // string
+      for (final StringValue sv : stringValueCombination) {
+        // stumbled upon next string
+        if (sv.getString() == string && sv.getFret() != -1) {
           current = sv;
-          found = true;
           stringDepth++;
+          break;
         }
       }
 
@@ -687,8 +681,7 @@ public class ChordCreatorUtil {
     List<TGChord> chords = new ArrayList<TGChord>(top.size());
 
     for (final List<StringValue> stringValues : top) {
-      TGChord chord = TuxGuitar.instance().getSongManager().getFactory()
-          .newChord(this.tuning.length);
+      TGChord chord = new TGChordImpl(this.tuning.length);
 
       for (final StringValue stringValue : stringValues) {
         int string = ((chord.getStrings().length - 1) - (stringValue
@@ -1005,8 +998,8 @@ public class ChordCreatorUtil {
     }
 
     // COMBINATIONS of strings used in a chord
-    List stringCombination = new ArrayList(60);
-    List<List<StringValue>> lastLevelCombination = null;
+    List<List<Integer>> stringCombination = new ArrayList<List<Integer>>(60);
+    List<List<Integer>> lastLevelCombination = null;
 
     for (int i = 0; i < this.tuning.length - 1; i++) {
       lastLevelCombination = makeStringCombination(lastLevelCombination);
@@ -1019,38 +1012,40 @@ public class ChordCreatorUtil {
       stringCombination.addAll(lastLevelCombination);
     }
 
-    List combinations = new ArrayList(800);
+    List<List<StringValue>> combinations = new ArrayList<List<StringValue>>(800);
 
     // --- combine the StringValues according to strings combination
     // ----------------------=======
 
-    Iterator iterator = stringCombination.iterator();
+    // Iterator<List<Integer>> iterator = stringCombination.iterator();
 
-    while (iterator.hasNext()) { // go through all string combinations list
+    List<List<StringValue>> lastLevelCombination2 = null;
+
+    for (final List<Integer> currentStringCombination : stringCombination) {
+      // go through all string combinations list
       // take a string combinations
-      ArrayList currentStringCombination = (ArrayList) iterator.next();
-      lastLevelCombination = null;
+
+      lastLevelCombination2 = null;
 
       // go through all the strings in one combination
       for (int level = 0; level < currentStringCombination.size(); level++) {
 
         // take the string index
-        int currentString = ((Integer) currentStringCombination.get(level))
-            .intValue();
+        int currentString = currentStringCombination.get(level).intValue();
 
         // take all the potential notes from currentString and combine
         // them with potential notes from other strings
 
-        lastLevelCombination = makeStringValueCombination(lastLevelCombination,
-            potentialNotes.get(currentString));
+        lastLevelCombination2 = makeStringValueCombination(
+            lastLevelCombination2, potentialNotes.get(currentString));
 
         // the structure of combinations is AL { AL(StringValue,SV,SV),
         // AL(SV), AL(SV,SV),AL(SV,SV,SV,SV,SV,SV) }
 
       }
 
-      if (lastLevelCombination != null) {
-        combinations.addAll(lastLevelCombination);
+      if (lastLevelCombination2 != null) {
+        combinations.addAll(lastLevelCombination2);
       }
     }
 
@@ -1096,36 +1091,39 @@ public class ChordCreatorUtil {
    * @return structure of stringCombination is AL { AL(0), AL(0,1),
    *         AL(0,2),AL(0,1,3,4),AL(0,1,2,3,4,5) }
    */
-  private List makeStringCombination(List lastLevelCombinationRef) {
+  private List<List<Integer>> makeStringCombination(
+      List<List<Integer>> lastLevelCombinationRef) {
     if (!isValidProcess()) {
       return null;
     }
 
-    List lastLevelCombination = lastLevelCombinationRef;
+    List<List<Integer>> lastLevelCombination = lastLevelCombinationRef;
 
     if (lastLevelCombination == null) {
       // first combination is AL { AL(0), AL(1), AL(2), AL(3), AL(4),
       // ...AL(tuning.length) }
-      lastLevelCombination = new ArrayList();
+      lastLevelCombination = new ArrayList<List<Integer>>();
 
       for (int i = 0; i < this.tuning.length; i++) {
-        lastLevelCombination.add(new ArrayList());
-        ((ArrayList) lastLevelCombination.get(i)).add(new Integer(i));
+        lastLevelCombination.add(new ArrayList<Integer>());
+        lastLevelCombination.get(i).add(new Integer(i));
       }
     }
 
-    ArrayList thisLevelCombination = new ArrayList();
+    ArrayList<List<Integer>> thisLevelCombination = new ArrayList<List<Integer>>();
     for (int current = 1; current < this.tuning.length; current++) {
-      Iterator it = lastLevelCombination.iterator();
 
-      while (it.hasNext()) {
-        ArrayList combination = (ArrayList) it.next();
-        Integer currentInteger = new Integer(current);
-        if (((Integer) combination.get(combination.size() - 1)).intValue() < current
+      Integer currentInteger = new Integer(current);
+
+      for (final List<Integer> combination : lastLevelCombination) {
+
+        if (combination.get(combination.size() - 1).intValue() < current
             && !combination.contains(currentInteger)) {
 
           // check if the string is already in combination
-          ArrayList newCombination = (ArrayList) combination.clone();
+          // (clone the list)
+          List<Integer> newCombination = new ArrayList<Integer>();
+          newCombination.addAll(combination);
           newCombination.add(currentInteger);
           thisLevelCombination.add(newCombination);
         }
@@ -1154,38 +1152,32 @@ public class ChordCreatorUtil {
    *         AL(SV), AL(SV,SV),AL(SV,SV,SV,SV,SV,SV) }
    * 
    */
-  private List makeStringValueCombination(
+  private List<List<StringValue>> makeStringValueCombination(
       List<List<StringValue>> lastLevelCombination, List<StringValue> notes) {
     if (!isValidProcess()) {
       return null;
     }
-    ArrayList thisLevelCombination = null;
+    List<List<StringValue>> thisLevelCombination = null;
 
     if (lastLevelCombination == null) { // initial combination
-
-      thisLevelCombination = new ArrayList(notes.size());
-
+      thisLevelCombination = new ArrayList<List<StringValue>>(notes.size());
       for (int i = 0; i < notes.size(); i++) {
-
-        thisLevelCombination.add(new ArrayList(6));
-
-        ((ArrayList) thisLevelCombination.get(i)).add(notes.get(i));
-
+        thisLevelCombination.add(new ArrayList<StringValue>(6));
+        thisLevelCombination.get(i).add(notes.get(i));
       }
-
       // first combination is AL { AL(firstOne), AL(anotherFret) }
-
     }
 
     else {
 
-      thisLevelCombination = new ArrayList();
+      thisLevelCombination = new ArrayList<List<StringValue>>();
 
       for (int i = 0; i < notes.size(); i++)
-        for (int j = 0; j < lastLevelCombination.size(); j++) { // cartesian
-          // multiplication
-          ArrayList currentCombination = (ArrayList) ((ArrayList) lastLevelCombination
-              .get(j)).clone();
+        for (int j = 0; j < lastLevelCombination.size(); j++) {
+          // cartesian multiplication
+          List<StringValue> currentCombination = new ArrayList<StringValue>();
+
+          currentCombination.addAll(lastLevelCombination.get(j));
           currentCombination.add(notes.get(i));
 
           // if the distance maximum between the existing frets

@@ -1,12 +1,13 @@
 package org.herac.tuxguitar.gui.undo.undoables.track;
 
+import java.awt.Color;
+
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.undo.CannotRedoException;
 import org.herac.tuxguitar.gui.undo.CannotUndoException;
 import org.herac.tuxguitar.gui.undo.UndoableEdit;
 import org.herac.tuxguitar.gui.undo.undoables.UndoableCaretHelper;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGTrack;
 
 public class UndoableTrackInfo implements UndoableEdit {
@@ -16,8 +17,7 @@ public class UndoableTrackInfo implements UndoableEdit {
     undoable.trackNumber = track.getNumber();
     undoable.undoCaret = new UndoableCaretHelper();
     undoable.undoName = track.getName();
-    undoable.undoColor = track.getColor().clone(
-        TuxGuitar.instance().getSongManager().getFactory());
+    undoable.undoColor = track.getColor();
     undoable.undoOffset = track.getOffset();
 
     return undoable;
@@ -25,12 +25,12 @@ public class UndoableTrackInfo implements UndoableEdit {
 
   private int doAction;
   private UndoableCaretHelper redoCaret;
-  private TGColor redoColor;
+  private Color redoColor;
   private String redoName;
   private int redoOffset;
   private int trackNumber;
   private UndoableCaretHelper undoCaret;
-  private TGColor undoColor;
+  private Color undoColor;
   private String undoName;
 
   private int undoOffset;
@@ -50,8 +50,7 @@ public class UndoableTrackInfo implements UndoableEdit {
   public UndoableTrackInfo endUndo(TGTrack track) {
     this.redoCaret = new UndoableCaretHelper();
     this.redoName = track.getName();
-    this.redoColor = track.getColor().clone(
-        TuxGuitar.instance().getSongManager().getFactory());
+    this.redoColor = track.getColor();
     this.redoOffset = track.getOffset();
 
     return this;
@@ -63,8 +62,7 @@ public class UndoableTrackInfo implements UndoableEdit {
     }
     TGSongManager manager = TuxGuitar.instance().getSongManager();
     manager.getTrackManager().changeInfo(manager.getTrack(this.trackNumber),
-        this.redoName, this.redoColor.clone(manager.getFactory()),
-        this.redoOffset);
+        this.redoName, this.redoColor, this.redoOffset);
     TuxGuitar.instance().fireUpdate();
     TuxGuitar.instance().getMixer().update();
     this.redoCaret.update();
@@ -77,8 +75,7 @@ public class UndoableTrackInfo implements UndoableEdit {
     }
     TGSongManager manager = TuxGuitar.instance().getSongManager();
     manager.getTrackManager().changeInfo(manager.getTrack(this.trackNumber),
-        this.undoName, this.undoColor.clone(manager.getFactory()),
-        this.undoOffset);
+        this.undoName, this.undoColor, this.undoOffset);
     TuxGuitar.instance().fireUpdate();
     TuxGuitar.instance().getMixer().update();
     this.undoCaret.update();

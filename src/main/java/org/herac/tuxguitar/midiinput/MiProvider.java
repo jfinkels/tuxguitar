@@ -3,7 +3,7 @@ package org.herac.tuxguitar.midiinput;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.SortedSet;
 
 import javax.sound.midi.ShortMessage;
 import javax.swing.Timer;
@@ -14,7 +14,9 @@ import org.herac.tuxguitar.gui.actions.ActionLock;
 import org.herac.tuxguitar.gui.editors.TablatureEditor;
 import org.herac.tuxguitar.gui.editors.fretboard.FretBoard;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
+import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.gui.tools.scale.ScaleManager;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
@@ -72,45 +74,45 @@ public class MiProvider {
   }
 
   private final int DEVICE_CHANNELS_COUNT = 6; // number of MIDI channels
-                                               // supported by the input device
+  // supported by the input device
 
   private int f_BaseChannel = 0; // 0-based MIDI channel corresponding to the
-                                 // first string
+  // first string
   private MiBuffer f_Buffer = new MiBuffer(); // input notes buffer
   private int f_ChordMode = MiConfig.CHORD_MODE_DIAGRAM; // current chord mode
   private TGBeat f_EchoBeat = null; // beat for echo rendering
   private boolean f_EchoLastWasOn = false; // indicates if last note message was
-                                           // NOTE_ON
+  // NOTE_ON
 
   private int[] f_EchoNotes = new int[6]; // list of notes for echo
   private int f_EchoTimeOut = MiConfig.DEF_ECHO_TIMEOUT; // time out for echo
-                                                         // rendering [msec]
+  // rendering [msec]
 
   private Timer f_EchoTimer = null; // timer for echo rendering
 
   private int f_InputTimeOut = MiConfig.DEF_INPUT_TIMEOUT; // time out for
-                                                           // chord/scale input
-                                                           // [msec]
+  // chord/scale input
+  // [msec]
 
   private Timer f_InputTimer = null; // timer for chord/scale input
 
   private long f_MinDuration = MiConfig.DEF_DURATION_THRESHOLD; // notes with
-                                                                // duration
-                                                                // lower than
-                                                                // this
-                                                                // threshold are
-                                                                // considered
-                                                                // unwanted
-                                                                // noise
+  // duration
+  // lower than
+  // this
+  // threshold are
+  // considered
+  // unwanted
+  // noise
 
   private byte f_MinVelocity = MiConfig.DEF_VELOCITY_THRESHOLD; // notes with
-                                                                // velocity
-                                                                // lower than
-                                                                // this
-                                                                // threshold are
-                                                                // considered
-                                                                // unwanted
-                                                                // noise
+  // velocity
+  // lower than
+  // this
+  // threshold are
+  // considered
+  // unwanted
+  // noise
 
   private int f_Mode = MiConfig.MODE_FRETBOARD_ECHO; // current mode
 
@@ -120,7 +122,7 @@ public class MiProvider {
 
   private void chord_AddNote(byte inString, byte inFret, byte inPitch,
       byte inVelocity, long inTimeStamp) {
-    if (f_InputTimer == null) {
+    if (this.f_InputTimer == null) {
       ActionListener taskPerformer = new ActionListener() {
         public void actionPerformed(ActionEvent evt) {
           f_InputTimer.stop();
@@ -142,7 +144,7 @@ public class MiProvider {
 
               TGChord chord = f_Buffer
                   .toChord(measure.getTrack().stringCount());
-              // TGBeat _beat = f_Buffer.toBeat();
+              // TGBeat _beat = this.f_Buffer.toBeat();
 
               // emulates InsertChordAction
               ActionLock.lock();
@@ -161,13 +163,13 @@ public class MiProvider {
                   int value = chord.getFretValue(string.getNumber() - 1);
 
                   if (value >= 0) {
-                    TGNote note = songMgr.getFactory().newNote();
+                    TGNote note = new TGNoteImpl();
                     note.setValue(value);
                     note.setVelocity(editor.getTablature().getCaret()
                         .getVelocity());
                     note.setString(string.getNumber());
 
-                    TGDuration duration = songMgr.getFactory().newDuration();
+                    TGDuration duration = new TGDuration();
                     voice.getDuration().copy(duration);
 
                     songMgr.getMeasureManager().addNote(beat, note, duration,
@@ -194,17 +196,19 @@ public class MiProvider {
       if (inVelocity > 0) {
         // LOG.debug("New chord");
 
-        f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
-        f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
+        this.f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
+        this.f_Buffer.addEvent(inString, inFret, inPitch, inVelocity,
+            inTimeStamp);
 
-        f_InputTimer = new Timer(f_InputTimeOut, taskPerformer);
-        f_InputTimer.start();
+        this.f_InputTimer = new Timer(f_InputTimeOut, taskPerformer);
+        this.f_InputTimer.start();
       }
     } else {
-      f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
+      this.f_Buffer
+          .addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
 
       if (inVelocity > 0)
-        f_InputTimer.restart();
+        this.f_InputTimer.restart();
     }
   }
 
@@ -226,32 +230,33 @@ public class MiProvider {
 
       echo_ResetNotes();
       echo_BuildAndShowBeat(inString, inFret, inIsNoteOn);
-      f_EchoTimer = new Timer(f_EchoTimeOut, taskPerformer);
-      f_EchoTimer.start();
+      this.f_EchoTimer = new Timer(this.f_EchoTimeOut, taskPerformer);
+      this.f_EchoTimer.start();
     } else {
       echo_BuildAndShowBeat(inString, inFret, inIsNoteOn);
-      f_EchoTimer.restart();
+      this.f_EchoTimer.restart();
     }
   }
 
   private void echo_BuildAndShowBeat(int inString, int inFret, boolean inIsOn) {
-    if (f_Mode == MiConfig.MODE_SCALES_RECOGNITION && f_InputTimer == null)
+    if (this.f_Mode == MiConfig.MODE_SCALES_RECOGNITION
+        && this.f_InputTimer == null)
       return;
 
-    f_EchoNotes[inString - 1] = (inIsOn ? inFret : -1);
-    f_EchoLastWasOn = inIsOn;
+    this.f_EchoNotes[inString - 1] = (inIsOn ? inFret : -1);
+    this.f_EchoLastWasOn = inIsOn;
 
     TGSongManager songMgr = TuxGuitar.instance().getSongManager();
 
-    f_EchoBeat = songMgr.getFactory().newBeat();
+    this.f_EchoBeat = new TGBeatImpl();
 
-    for (int s = 0; s < f_EchoNotes.length; s++) {
-      if (f_EchoNotes[s] != -1) {
-        TGNote note = songMgr.getFactory().newNote();
+    for (int s = 0; s < this.f_EchoNotes.length; s++) {
+      if (this.f_EchoNotes[s] != -1) {
+        TGNote note = new TGNoteImpl();
 
         note.setString(s + 1);
-        note.setValue(f_EchoNotes[s]);
-        f_EchoBeat.getVoice(0).addNote(note);
+        note.setValue(this.f_EchoNotes[s]);
+        this.f_EchoBeat.getVoice(0).addNote(note);
       }
     }
 
@@ -259,10 +264,10 @@ public class MiProvider {
   }
 
   public void echo_ResetNotes() {
-    f_EchoLastWasOn = false;
+    this.f_EchoLastWasOn = false;
 
-    for (int s = 0; s < f_EchoNotes.length; s++)
-      f_EchoNotes[s] = -1;
+    for (int s = 0; s < this.f_EchoNotes.length; s++)
+      this.f_EchoNotes[s] = -1;
   }
 
   private void echo_UpdateExternalBeat(boolean inIsEmpty) {
@@ -290,7 +295,7 @@ public class MiProvider {
   }
 
   int getMode() {
-    return f_Mode;
+    return this.f_Mode;
   }
 
   private int getString(int inChannel) {
@@ -303,7 +308,8 @@ public class MiProvider {
 
     if (track != null) {
       int stringsCount = track.getStrings().size(), stringIndex = inChannel
-          - (f_BaseChannel + (DEVICE_CHANNELS_COUNT - stringsCount)) + 1;
+          - (this.f_BaseChannel + (this.DEVICE_CHANNELS_COUNT - stringsCount))
+          + 1;
 
       if (stringIndex > 0 && stringIndex <= stringsCount)
         return (stringIndex);
@@ -322,32 +328,32 @@ public class MiProvider {
       if (fretIndex != -1) {
         switch (inMessage.getCommand()) {
         case ShortMessage.NOTE_ON: {
-          switch (f_Mode) {
+          switch (this.f_Mode) {
           case MiConfig.MODE_FRETBOARD_ECHO:
-            if (velocity == 0 || velocity > f_MinVelocity) // questo VA
-                                                           // MODIFICATO!!!
+            if (velocity == 0 || velocity > this.f_MinVelocity) // questo VA
+              // MODIFICATO!!!
               echo(stringIndex, fretIndex, velocity > 0);
             break;
 
           case MiConfig.MODE_CHORDS_RECORDING:
-            if (velocity == 0 || velocity > f_MinVelocity) // questo VA
-                                                           // MODIFICATO!!!
+            if (velocity == 0 || velocity > this.f_MinVelocity) // questo VA
+              // MODIFICATO!!!
               echo(stringIndex, fretIndex, velocity > 0);
 
             chord_AddNote(stringIndex, fretIndex, pitch, velocity, inTimeStamp);
             break;
 
           case MiConfig.MODE_SCALES_RECOGNITION:
-            if (velocity == 0 || velocity > f_MinVelocity) // questo VA
-                                                           // MODIFICATO!!!
+            if (velocity == 0 || velocity > this.f_MinVelocity) // questo VA
+              // MODIFICATO!!!
               echo(stringIndex, fretIndex, velocity > 0);
 
             scale_AddNote(stringIndex, fretIndex, pitch, velocity, inTimeStamp);
             break;
 
           case MiConfig.MODE_SONG_RECORDING:
-            if (velocity == 0 || velocity > f_MinVelocity) // questo VA
-                                                           // MODIFICATO!!!
+            if (velocity == 0 || velocity > this.f_MinVelocity) // questo VA
+              // MODIFICATO!!!
               echo(stringIndex, fretIndex, velocity > 0);
 
             MiRecorder.instance().addNote(stringIndex, fretIndex, pitch,
@@ -358,7 +364,7 @@ public class MiProvider {
           break;
 
         case ShortMessage.NOTE_OFF:
-          switch (f_Mode) {
+          switch (this.f_Mode) {
           case MiConfig.MODE_FRETBOARD_ECHO:
             echo(stringIndex, fretIndex, false);
             break;
@@ -398,7 +404,7 @@ public class MiProvider {
 
           if (f_Buffer.finalize(f_MinVelocity, f_MinDuration * 1000) > 0) {
             TGBeat beat = f_Buffer.toBeat();
-            TreeSet pitches = f_Buffer.toPitchesSet();
+            SortedSet<Byte> pitches = f_Buffer.toPitchesSet();
 
             MiScaleFinder.findMatchingScale(pitches);
             TuxGuitar.instance().showExternalBeat(beat);
@@ -414,46 +420,48 @@ public class MiProvider {
       if (inVelocity > 0) {
         // LOG.debug("New scale");
 
-        f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
-        f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
+        this.f_Buffer.startRecording(MiPort.getNotesPortTimeStamp());
+        this.f_Buffer.addEvent(inString, inFret, inPitch, inVelocity,
+            inTimeStamp);
 
-        f_InputTimer = new Timer(f_InputTimeOut, taskPerformer);
-        f_InputTimer.start();
+        this.f_InputTimer = new Timer(f_InputTimeOut, taskPerformer);
+        this.f_InputTimer.start();
       }
     } else {
-      f_Buffer.addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
+      this.f_Buffer
+          .addEvent(inString, inFret, inPitch, inVelocity, inTimeStamp);
 
       if (inVelocity > 0)
-        f_InputTimer.restart();
+        this.f_InputTimer.restart();
     }
   }
 
   public void setBaseChannel(int inValue) {
-    f_BaseChannel = inValue;
+    this.f_BaseChannel = inValue;
   }
 
   public void setChordMode(int inValue) {
-    f_ChordMode = inValue;
+    this.f_ChordMode = inValue;
   }
 
   public void setEchoTimeOut(int inValue) {
-    f_EchoTimeOut = inValue;
+    this.f_EchoTimeOut = inValue;
   }
 
   public void setInputTimeOut(int inValue) {
-    f_InputTimeOut = inValue;
+    this.f_InputTimeOut = inValue;
   }
 
   public void setMinDuration(long inValue) {
-    f_MinDuration = inValue;
+    this.f_MinDuration = inValue;
   }
 
   public void setMinVelocity(byte inValue) {
-    f_MinVelocity = inValue;
+    this.f_MinVelocity = inValue;
   }
 
   public void setMode(int inValue) {
-    f_Mode = inValue;
+    this.f_Mode = inValue;
     echo_ResetNotes();
   }
 

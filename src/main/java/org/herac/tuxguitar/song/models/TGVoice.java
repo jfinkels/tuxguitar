@@ -9,7 +9,8 @@ package org.herac.tuxguitar.song.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
 
 /**
  * @author julian
@@ -23,19 +24,15 @@ public abstract class TGVoice {
   public static final int DIRECTION_NONE = 0;
   public static final int DIRECTION_UP = 1;
 
-  private TGBeat beat;
-  private int direction;
-  private TGDuration duration;
-  private boolean empty;
-  private int index;
-  private List<TGNote> notes;
+  private TGBeat beat = null;
+  private int direction = DIRECTION_NONE;
+  private TGDuration duration = TGFactoryImpl.newDuration();
+  private boolean empty = true;
+  private int index = 0;
+  private List<TGNote> notes = new ArrayList<TGNote>();
 
-  public TGVoice(TGFactory factory, int index) {
-    this.duration = factory.newDuration();
-    this.notes = new ArrayList<TGNote>();
+  public TGVoice(int index) {
     this.index = index;
-    this.empty = true;
-    this.direction = DIRECTION_NONE;
   }
 
   public void addNote(TGNote note) {
@@ -44,20 +41,17 @@ public abstract class TGVoice {
     this.setEmpty(false);
   }
 
-  public TGVoice clone(TGFactory factory) {
-    TGVoice voice = factory.newVoice(getIndex());
+  @Override
+  public TGVoice clone() {
+    TGVoice voice = new TGVoiceImpl(this.index);
+    
     voice.setEmpty(isEmpty());
     voice.setDirection(getDirection());
     getDuration().copy(voice.getDuration());
-    for (int i = 0; i < countNotes(); i++) {
-      TGNote note = (TGNote) this.notes.get(i);
-      voice.addNote(note.clone(factory));
+    for (final TGNote note : this.notes) {
+      voice.addNote(note.clone());
     }
     return voice;
-  }
-
-  public int countNotes() {
-    return this.notes.size();
   }
 
   public TGBeat getBeat() {
@@ -77,8 +71,8 @@ public abstract class TGVoice {
   }
 
   public TGNote getNote(int index) {
-    if (index >= 0 && index < countNotes()) {
-      return (TGNote) this.notes.get(index);
+    if (index >= 0 && index < this.notes.size()) {
+      return this.notes.get(index);
     }
     return null;
   }

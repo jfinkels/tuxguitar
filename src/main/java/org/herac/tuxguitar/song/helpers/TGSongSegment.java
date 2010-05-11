@@ -3,34 +3,29 @@ package org.herac.tuxguitar.song.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 
 public class TGSongSegment {
-  private List<TGMeasureHeader> headers;
-  private List<TGTrackSegment> tracks;
-
-  public TGSongSegment() {
-    this.headers = new ArrayList<TGMeasureHeader>();
-    this.tracks = new ArrayList<TGTrackSegment>();
-  }
+  private List<TGMeasureHeader> headers = new ArrayList<TGMeasureHeader>();
+  private List<TGTrackSegment> tracks = new ArrayList<TGTrackSegment>();
 
   public void addTrack(int track, List<TGMeasure> measures) {
     this.tracks.add(new TGTrackSegment(track, measures));
   }
 
-  public TGSongSegment clone(TGFactory factory) {
+  @Override
+  public TGSongSegment clone() {
     TGSongSegment segment = new TGSongSegment();
-    for (int i = 0; i < getHeaders().size(); i++) {
-      TGMeasureHeader header = (TGMeasureHeader) getHeaders().get(i);
-      segment.getHeaders().add(header.clone(factory));
+
+    for (final TGMeasureHeader header : this.headers) {
+      segment.headers.add(header.clone());
     }
-    for (int i = 0; i < getTracks().size(); i++) {
-      TGTrackSegment trackMeasure = (TGTrackSegment) getTracks().get(i);
-      segment.getTracks()
-          .add(trackMeasure.clone(factory, segment.getHeaders()));
+
+    for (final TGTrackSegment trackMeasure : this.tracks) {
+      segment.tracks.add(trackMeasure.clone(segment.headers));
     }
+
     return segment;
   }
 

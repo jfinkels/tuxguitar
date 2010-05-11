@@ -6,7 +6,7 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 
 /**
  * @author julian
@@ -14,17 +14,13 @@ import org.herac.tuxguitar.song.factory.TGFactory;
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public abstract class TGTimeSignature {
-  private TGDuration denominator;
-  private int numerator;
+public class TGTimeSignature {
+  private TGDuration denominator = TGFactoryImpl.newDuration();
+  private int numerator = 4;
 
-  public TGTimeSignature(TGFactory factory) {
-    this.numerator = 4;
-    this.denominator = factory.newDuration();
-  }
-
-  public TGTimeSignature clone(TGFactory factory) {
-    TGTimeSignature timeSignature = factory.newTimeSignature();
+  @Override
+  public TGTimeSignature clone() {
+    TGTimeSignature timeSignature = new TGTimeSignature();
     copy(timeSignature);
     return timeSignature;
   }

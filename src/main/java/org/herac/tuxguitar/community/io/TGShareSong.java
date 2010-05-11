@@ -2,7 +2,6 @@ package org.herac.tuxguitar.community.io;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -12,7 +11,6 @@ import org.herac.tuxguitar.gui.actions.ActionLock;
 import org.herac.tuxguitar.gui.util.MessageDialog;
 import org.herac.tuxguitar.io.base.TGOutputStreamBase;
 import org.herac.tuxguitar.io.tg.TGOutputStream;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.util.TGSynchronizer;
 
@@ -25,7 +23,7 @@ public class TGShareSong {
   private byte[] getSongBytes(TGSong song) throws Throwable {
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     TGOutputStreamBase tgStream = new TGOutputStream();
-    tgStream.init(new TGFactory(), out);
+    tgStream.init(out);
     tgStream.writeSong(song);
     out.close();
     return out.toByteArray();
@@ -88,7 +86,7 @@ public class TGShareSong {
         String message = new String();
         List<String> messages = new ArrayList<String>();
         response.loadMessages(messages);
-        
+
         for (final String msg : messages) {
           message += (msg + "\r\n");
         }

@@ -1,7 +1,6 @@
 package org.herac.tuxguitar.gui.editors.tab;
 
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 
 public class TGMeasureHeaderImpl extends TGMeasureHeader {
@@ -33,10 +32,6 @@ public class TGMeasureHeaderImpl extends TGMeasureHeader {
   private int maxWidth;
 
   private int paintFlags;
-
-  public TGMeasureHeaderImpl(TGFactory factory) {
-    super(factory);
-  }
 
   public void calculateMeasureChanges(ViewLayout layout) {
     TGMeasureHeader previous = layout.getSongManager().getPrevMeasureHeader(

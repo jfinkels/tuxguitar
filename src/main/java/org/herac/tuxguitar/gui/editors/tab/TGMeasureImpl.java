@@ -25,7 +25,6 @@ import org.herac.tuxguitar.player.base.MidiPlayerMode;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
-import org.herac.tuxguitar.song.models.TGColor;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
@@ -484,17 +483,17 @@ public class TGMeasureImpl extends TGMeasure {
   }
 
   public Color getMarkerColor() {
-    TGColor color = getMarker().getColor();
+    java.awt.Color color = getMarker().getColor();
     if (this.markerColor != null && !this.markerColor.isDisposed()) {
       RGB rgb = this.markerColor.getRGB();
-      if (rgb.red != color.getR() || rgb.green != color.getG()
-          || rgb.blue != color.getB()) {
+      if (rgb.red != color.getRed() || rgb.green != color.getGreen()
+          || rgb.blue != color.getBlue()) {
         this.disposeMarkerColor();
       }
     }
     if (this.markerColor == null || this.markerColor.isDisposed()) {
       this.markerColor = new Color(TuxGuitar.instance().getDisplay(), color
-          .getR(), color.getG(), color.getB());
+          .getRed(), color.getGreen(), color.getBlue());
     }
     return this.markerColor;
   }

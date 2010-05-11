@@ -1,28 +1,18 @@
 package org.herac.tuxguitar.song.models.effects;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGDuration;
 
-public abstract class TGEffectTrill {
+public class TGEffectTrill extends ExtraNoteEffect {
 
-  private TGDuration duration;
-  private int fret;
+  /** The duration of the trill. */
+  private TGDuration duration = new TGDuration();
 
-  public TGEffectTrill(TGFactory factory) {
-    this.fret = 0;
-    this.duration = factory.newDuration();
-  }
+  @Override
+  public TGEffectTrill clone() {
+    TGEffectTrill effect = new TGEffectTrill();
 
-  public TGEffectTrill clone(TGFactory factory) {
-    TGEffectTrill effect = factory.newEffectTrill();
-    effect.setFret(getFret());
-    effect.getDuration().setValue(getDuration().getValue());
-    effect.getDuration().setDotted(getDuration().isDotted());
-    effect.getDuration().setDoubleDotted(getDuration().isDoubleDotted());
-    effect.getDuration().getDivision().setEnters(
-        getDuration().getDivision().getEnters());
-    effect.getDuration().getDivision().setTimes(
-        getDuration().getDivision().getTimes());
+    effect.setFret(this.getFret());
+    effect.setDuration(this.getDuration().clone());
 
     return effect;
   }
@@ -31,16 +21,8 @@ public abstract class TGEffectTrill {
     return this.duration;
   }
 
-  public int getFret() {
-    return this.fret;
-  }
-
   public void setDuration(TGDuration duration) {
     this.duration = duration;
-  }
-
-  public void setFret(int fret) {
-    this.fret = fret;
   }
 
 }

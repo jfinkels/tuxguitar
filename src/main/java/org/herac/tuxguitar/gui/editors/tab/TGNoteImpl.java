@@ -12,13 +12,11 @@ import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGKeySignaturePainter;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGNotePainter;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGNoteEffect;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 
 /**
  * @author julian
@@ -30,16 +28,11 @@ public class TGNoteImpl extends TGNote {
 
   private int accidental;
 
-  private Rectangle noteOrientation;
+  private Rectangle noteOrientation = new Rectangle(0, 0, 0, 0);
 
   private int scorePosY;
 
   private int tabPosY;
-
-  public TGNoteImpl(TGFactory factory) {
-    super(factory);
-    this.noteOrientation = new Rectangle(0, 0, 0, 0);
-  }
 
   public TGBeatImpl getBeatImpl() {
     return getVoiceImpl().getBeatImpl();
@@ -276,15 +269,7 @@ public class TGNoteImpl extends TGNote {
         && (layout.getStyle() & ViewLayout.DISPLAY_SCORE) == 0) {
       int x = fromX + getPosX() + spacing;
       int y = (bsY + bs.getPosition(TGBeatSpacing.POSITION_HARMONIC_EFFEC));
-      String key = new String();
-      key = effect.getHarmonic().isNatural() ? TGEffectHarmonic.KEY_NATURAL
-          : key;
-      key = effect.getHarmonic().isArtificial() ? TGEffectHarmonic.KEY_ARTIFICIAL
-          : key;
-      key = effect.getHarmonic().isTapped() ? TGEffectHarmonic.KEY_TAPPED : key;
-      key = effect.getHarmonic().isPinch() ? TGEffectHarmonic.KEY_PINCH : key;
-      key = effect.getHarmonic().isSemi() ? TGEffectHarmonic.KEY_SEMI : key;
-      painter.drawString(key, x, y);
+      painter.drawString(effect.getHarmonic().getLabel(), x, y);
     }
     if (effect.isTapping()) {
       int x = fromX + getPosX() + spacing;

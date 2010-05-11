@@ -14,7 +14,7 @@ public class UndoableTrackGeneric implements UndoableEdit {
     public RedoTrack(TGTrack track) {
       if (track != null) {
         this.track = track.clone(TuxGuitar.instance().getSongManager()
-            .getFactory(), TuxGuitar.instance().getSongManager().getSong());
+            .getSong());
       }
     }
 
@@ -41,7 +41,7 @@ public class UndoableTrackGeneric implements UndoableEdit {
     public UndoTrack(TGTrack track) {
       if (track != null) {
         this.track = track.clone(TuxGuitar.instance().getSongManager()
-            .getFactory(), TuxGuitar.instance().getSongManager().getSong());
+            .getSong());
       }
     }
 

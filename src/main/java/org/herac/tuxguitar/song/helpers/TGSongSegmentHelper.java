@@ -3,6 +3,7 @@ package org.herac.tuxguitar.song.helpers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.managers.TGTrackManager;
 import org.herac.tuxguitar.song.models.TGMeasure;
@@ -31,7 +32,7 @@ public class TGSongSegmentHelper {
       }
       segment.addTrack(track.getNumber(), measures);
     }
-    return segment.clone(this.sm.getFactory());
+    return segment.clone();
   }
 
   public TGSongSegment copyMeasures(int m1, int m2, TGTrack track) {
@@ -44,31 +45,28 @@ public class TGSongSegmentHelper {
       measures.add(this.sm.getTrackManager().getMeasure(track, number));
     }
     segment.addTrack(track.getNumber(), measures);
-    return segment.clone(this.sm.getFactory());
+    return segment.clone();
   }
 
   public TGSongSegment createSegmentCopies(TGSongSegment srcSegment, int count) {
-    TGSongSegment segment = srcSegment.clone(this.sm.getFactory());
+    TGSongSegment segment = srcSegment.clone();
 
     int mCount = segment.getHeaders().size();
     int tCount = segment.getTracks().size();
 
-    TGMeasureHeader fMeasure = (TGMeasureHeader) segment.getHeaders().get(0);
-    TGMeasureHeader lMeasure = (TGMeasureHeader) segment.getHeaders().get(
-        mCount - 1);
+    TGMeasureHeader fMeasure = segment.getHeaders().get(0);
+    TGMeasureHeader lMeasure = segment.getHeaders().get(mCount - 1);
 
     long mMove = ((lMeasure.getStart() + lMeasure.getLength()) - fMeasure
         .getStart());
     for (int i = 1; i < count; i++) {
       for (int m = 0; m < mCount; m++) {
-        TGMeasureHeader header = ((TGMeasureHeader) segment.getHeaders().get(m))
-            .clone(this.sm.getFactory());
+        TGMeasureHeader header = segment.getHeaders().get(m).clone();
         segment.getHeaders().add(header);
         this.sm.moveMeasureHeader(header, (mMove * i), (mCount * i));
         for (int t = 0; t < tCount; t++) {
-          TGTrackSegment track = (TGTrackSegment) segment.getTracks().get(t);
-          TGMeasure measure = ((TGMeasure) track.getMeasures().get(m)).clone(
-              this.sm.getFactory(), header);
+          TGTrackSegment track = segment.getTracks().get(t);
+          TGMeasure measure = track.getMeasures().get(m).clone(header);
           track.getMeasures().add(measure);
           this.sm.getMeasureManager().moveAllBeats(measure, (mMove * i));
         }
@@ -81,7 +79,7 @@ public class TGSongSegmentHelper {
   private List<TGMeasure> getEmptyMeasures(int count, int clef, int keySignature) {
     List<TGMeasure> measures = new ArrayList<TGMeasure>();
     for (int i = 0; i < count; i++) {
-      TGMeasure measure = this.sm.getFactory().newMeasure(null);
+      TGMeasure measure = new TGMeasureImpl(null);
       measure.setClef(clef);
       measure.setKeySignature(keySignature);
       measures.add(measure);

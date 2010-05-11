@@ -6,8 +6,6 @@
  */
 package org.herac.tuxguitar.gui.actions.insert;
 
-import java.util.Iterator;
-
 import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.widgets.Shell;
 import org.herac.tuxguitar.gui.TuxGuitar;
@@ -15,6 +13,7 @@ import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.editors.chord.ChordDialog;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.song.models.TGBeat;
@@ -38,6 +37,7 @@ public class InsertChordAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     Caret caret = getEditor().getTablature().getCaret();
     TGTrackImpl track = caret.getTrack();
@@ -46,8 +46,7 @@ public class InsertChordAction extends Action {
     if (track != null && measure != null && beat != null) {
       // Si el acorde llego en el data del widget solo lo agrego
       if (e.widget.getData() instanceof TGChord) {
-        TGChord chord = ((TGChord) e.widget.getData()).clone(getSongManager()
-            .getFactory());
+        TGChord chord = ((TGChord) e.widget.getData()).clone();
         insertChord(chord, track, measure, beat, caret.getVoice());
       }
       // sino muestro el editor de acordes
@@ -79,19 +78,17 @@ public class InsertChordAction extends Action {
       TGVoice voice = beat.getVoice(voiceIndex);
       if (restBeat) {
 
-        Iterator it = track.getStrings().iterator();
-        while (it.hasNext()) {
-          TGString string = (TGString) it.next();
+        for (final TGString string : track.getStrings()) {
 
           int value = chord.getFretValue(string.getNumber() - 1);
           if (value >= 0) {
-            TGNote note = getSongManager().getFactory().newNote();
+            TGNote note = new TGNoteImpl();
             note.setValue(value);
             note.setVelocity(getEditor().getTablature().getCaret()
                 .getVelocity());
             note.setString(string.getNumber());
 
-            TGDuration duration = getSongManager().getFactory().newDuration();
+            TGDuration duration = new TGDuration();
             voice.getDuration().copy(duration);
 
             getSongManager().getMeasureManager().addNote(beat, note, duration,

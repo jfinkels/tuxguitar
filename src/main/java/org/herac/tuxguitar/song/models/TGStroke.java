@@ -1,22 +1,17 @@
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
-
-public abstract class TGStroke {
+public class TGStroke {
 
   public static final int STROKE_DOWN = -1;
   public static final int STROKE_NONE = 0;
   public static final int STROKE_UP = 1;
 
-  private int direction;
+  private int direction = STROKE_NONE;
   private int value;
 
-  public TGStroke() {
-    this.direction = STROKE_NONE;
-  }
-
-  public TGStroke clone(TGFactory factory) {
-    TGStroke stroke = factory.newStroke();
+  @Override
+  public TGStroke clone() {
+    TGStroke stroke = new TGStroke();
     copy(stroke);
     return stroke;
   }

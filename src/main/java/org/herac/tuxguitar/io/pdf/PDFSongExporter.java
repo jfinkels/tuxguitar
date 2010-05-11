@@ -9,7 +9,6 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 import org.herac.tuxguitar.gui.editors.tab.Tablature;
 import org.herac.tuxguitar.gui.editors.tab.layout.PrinterViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
@@ -20,7 +19,6 @@ import org.herac.tuxguitar.gui.printer.PrintStylesDialog;
 import org.herac.tuxguitar.gui.util.MessageDialog;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGLocalFileExporter;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.util.TGSynchronizer;
@@ -138,8 +136,8 @@ public class PDFSongExporter implements TGLocalFileExporter {
       public void run() {
         try {
           TGSongManager manager = new TGSongManager();
-          manager.setFactory(new TGFactoryImpl());
-          manager.setSong(song.clone(manager.getFactory()));
+          // manager.setFactory(new TGFactoryImpl());
+          manager.setSong(song.clone());
 
           export(stream, manager, data);
         } catch (Throwable throwable) {
@@ -196,7 +194,7 @@ public class PDFSongExporter implements TGLocalFileExporter {
     return new TGFileFormat("PDF", "*.pdf");
   }
 
-  public void init(TGFactory factory, OutputStream stream) {
+  public void init(OutputStream stream) {
     this.stream = stream;
   }
 }

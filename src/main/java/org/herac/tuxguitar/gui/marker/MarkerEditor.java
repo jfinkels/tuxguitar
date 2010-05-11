@@ -47,8 +47,7 @@ public class MarkerEditor {
   }
 
   public MarkerEditor(TGMarker marker, int status) {
-    this.marker = marker.clone(TuxGuitar.instance().getSongManager()
-        .getFactory());
+    this.marker = marker.clone();
     this.status = status;
   }
 
@@ -97,6 +96,7 @@ public class MarkerEditor {
     this.measureSpinner.setMaximum(measureCount);
     this.measureSpinner.setSelection(this.marker.getMeasure());
     this.measureSpinner.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         int selection = MarkerEditor.this.measureSpinner.getSelection();
         if (selection < 1) {
@@ -125,6 +125,7 @@ public class MarkerEditor {
         SWT.FILL));
     this.colorButton.setText(TuxGuitar.getProperty("choose"));
     this.colorButton.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent event) {
         ColorDialog dlg = new ColorDialog(MarkerEditor.this.dialog);
         dlg.setRGB(MarkerEditor.this.dialog.getDisplay().getSystemColor(
@@ -132,9 +133,8 @@ public class MarkerEditor {
         dlg.setText(TuxGuitar.getProperty("choose-color"));
         RGB rgb = dlg.open();
         if (rgb != null) {
-          MarkerEditor.this.marker.getColor().setR(rgb.red);
-          MarkerEditor.this.marker.getColor().setG(rgb.green);
-          MarkerEditor.this.marker.getColor().setB(rgb.blue);
+          MarkerEditor.this.marker.setColor(new java.awt.Color(rgb.red,
+              rgb.green, rgb.blue));
           MarkerEditor.this.setButtonColor();
         }
       }
@@ -159,6 +159,7 @@ public class MarkerEditor {
     buttonOK.setText(TuxGuitar.getProperty("ok"));
     buttonOK.setLayoutData(data);
     buttonOK.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         updateMarker();
         MarkerEditor.this.accepted = true;
@@ -170,6 +171,7 @@ public class MarkerEditor {
     buttonCancel.setText(TuxGuitar.getProperty("cancel"));
     buttonCancel.setLayoutData(data);
     buttonCancel.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         MarkerEditor.this.dialog.dispose();
       }
@@ -185,7 +187,8 @@ public class MarkerEditor {
 
   protected void setButtonColor() {
     Color color = new Color(this.dialog.getDisplay(), this.marker.getColor()
-        .getR(), this.marker.getColor().getG(), this.marker.getColor().getB());
+        .getRed(), this.marker.getColor().getGreen(), this.marker.getColor()
+        .getBlue());
 
     this.colorButton.setForeground(color);
     this.disposeButtonColor();
@@ -196,8 +199,7 @@ public class MarkerEditor {
     int oldMeasure = this.marker.getMeasure();
     this.marker.setMeasure(this.measureSpinner.getSelection());
     this.marker.setTitle(this.titleText.getText());
-    this.marker = this.marker.clone(TuxGuitar.instance().getSongManager()
-        .getFactory());
+    this.marker = this.marker.clone();
 
     TGSongManager manager = TuxGuitar.instance().getSongManager();
 

@@ -10,6 +10,7 @@ import org.eclipse.swt.events.TypedEvent;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -28,6 +29,7 @@ public class ChangeDeadNoteAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     // comienza el undoable
     UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
@@ -35,12 +37,12 @@ public class ChangeDeadNoteAction extends Action {
     Caret caret = getEditor().getTablature().getCaret();
     TGNote note = caret.getSelectedNote();
     if (note == null) {
-      note = getSongManager().getFactory().newNote();
+      note = new TGNoteImpl();
       note.setValue(0);
       note.setVelocity(caret.getVelocity());
       note.setString(caret.getSelectedString().getNumber());
 
-      TGDuration duration = getSongManager().getFactory().newDuration();
+      TGDuration duration = new TGDuration();
       caret.getDuration().copy(duration);
 
       getSongManager().getMeasureManager().addNote(caret.getMeasure(),
@@ -56,6 +58,7 @@ public class ChangeDeadNoteAction extends Action {
     return 0;
   }
 
+  @Override
   public void updateTablature() {
     fireUpdate(getEditor().getTablature().getCaret().getMeasure().getNumber());
   }

@@ -14,7 +14,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.player.base.MidiInstrument;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -34,12 +33,12 @@ import org.w3c.dom.Node;
 public class MusicXMLWriter {
 
   private static class TGVoiceJoiner {
-    private TGFactory factory;
+    // private TGFactory factory;
     private TGMeasure measure;
 
-    public TGVoiceJoiner(TGFactory factory, TGMeasure measure) {
-      this.factory = factory;
-      this.measure = measure.clone(factory, measure.getHeader());
+    public TGVoiceJoiner(TGMeasure measure) {
+      // this.factory = factory;
+      this.measure = measure.clone(measure.getHeader());
       this.measure.setTrack(measure.getTrack());
     }
 
@@ -55,7 +54,7 @@ public class MusicXMLWriter {
         for (int v = 1; v < beat.countVoices(); v++) {
           TGVoice currentVoice = beat.getVoice(v);
           if (!currentVoice.isEmpty()) {
-            for (int n = 0; n < currentVoice.countNotes(); n++) {
+            for (int n = 0; n < currentVoice.getNotes().size(); n++) {
               TGNote note = currentVoice.getNote(n);
               voice.addNote(note);
             }
@@ -93,8 +92,8 @@ public class MusicXMLWriter {
               finish = false;
               break;
             }
-            TGDuration duration = TGDuration.fromTime(this.factory,
-                (beatStart - previousStart));
+            TGDuration duration = TGDuration
+                .fromTime((beatStart - previousStart));
             duration.copy(previous.getVoice(0).getDuration());
           }
         }
@@ -119,8 +118,7 @@ public class MusicXMLWriter {
             finish = false;
             break;
           }
-          TGDuration duration = TGDuration.fromTime(this.factory,
-              (measureEnd - beatStart));
+          TGDuration duration = TGDuration.fromTime((measureEnd - beatStart));
           duration.copy(voice.getDuration());
         }
         previous = beat;
@@ -243,7 +241,7 @@ public class MusicXMLWriter {
         this.addNode(noteNode, "voice", "1");
         this.writeDuration(noteNode, voice.getDuration());
       } else {
-        int noteCount = voice.countNotes();
+        int noteCount = voice.getNotes().size();
         for (int n = 0; n < noteCount; n++) {
           TGNote note = voice.getNote(n);
 
@@ -433,8 +431,7 @@ public class MusicXMLWriter {
 
       for (final TGMeasure srcMeasure : track.getMeasures()) {
         // TODO: Add multivoice support.
-        TGMeasure measure = new TGVoiceJoiner(this.manager.getFactory(),
-            srcMeasure).process();
+        TGMeasure measure = new TGVoiceJoiner(srcMeasure).process();
         Node measureNode = this.addAttribute(this.addNode(part, "measure"),
             "number", Integer.toString(measure.getNumber()));
 

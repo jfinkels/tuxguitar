@@ -6,7 +6,7 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.song.factory.TGFactory;
+import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
 
 /**
  * @author julian
@@ -33,23 +33,26 @@ public abstract class TGChord {
     }
   }
 
-  public TGChord clone(TGFactory factory) {
-    TGChord chord = factory.newChord(this.strings.length);
-    chord.setName(getName());
-    chord.setFirstFret(getFirstFret());
-    for (int i = 0; i < chord.strings.length; i++) {
-      chord.strings[i] = this.strings[i];
-    }
+  @Override
+  public TGChord clone() {
+    TGChord chord = new TGChordImpl(this.strings.length);
+    chord.setName(this.name);
+    chord.setFirstFret(this.firstFret);
+
+    System.arraycopy(this.strings, 0, chord.strings, 0, this.strings.length);
+
     return chord;
   }
 
   public int countNotes() {
     int count = 0;
-    for (int i = 0; i < this.strings.length; i++) {
-      if (this.strings[i] >= 0) {
+    
+    for (final int string : this.strings) {
+      if (string >= 0) {
         count++;
       }
     }
+    
     return count;
   }
 

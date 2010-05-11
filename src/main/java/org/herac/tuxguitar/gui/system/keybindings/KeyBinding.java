@@ -16,8 +16,9 @@ public class KeyBinding {
     this.mask = mask;
   }
 
+  @Override
   public Object clone() {
-    return new KeyBinding(getKey(), getMask());
+    return new KeyBinding(this.key, this.mask);
   }
 
   public int getKey() {
@@ -29,9 +30,9 @@ public class KeyBinding {
   }
 
   private String getSpecialKey() {
-    for (int i = 0; i < KeyConversion.relations.length; i++) {
-      if (this.key == KeyConversion.relations[i].getCode()) {
-        return KeyConversion.relations[i].getKey();
+    for (final KeyConversion conversion : KeyConversion.relations) {
+      if (this.key == conversion.getCode()) {
+        return conversion.getKey();
       }
     }
     return null;
@@ -39,20 +40,16 @@ public class KeyBinding {
 
   private String getSpecialMask() {
     String mask = new String();
-    for (int i = 0; i < KeyConversion.relations.length; i++) {
-      if ((this.mask & KeyConversion.relations[i].getCode()) == KeyConversion.relations[i]
-          .getCode()) {
-        mask += KeyConversion.relations[i].getKey() + MASK_SEPARATOR;
+    for (final KeyConversion conversion : KeyConversion.relations) {
+      if ((this.mask & conversion.getCode()) == conversion.getCode()) {
+        mask += conversion.getKey() + MASK_SEPARATOR;
       }
     }
     return mask;
   }
 
-  public boolean isSameAs(KeyBinding kb) {
-    if (kb != null) {
-      return (this.key == kb.key && this.mask == kb.mask);
-    }
-    return false;
+  public boolean isSameAs(final KeyBinding kb) {
+    return kb != null && this.key == kb.key && this.mask == kb.mask;
   }
 
   public void setKey(int key) {
@@ -63,6 +60,7 @@ public class KeyBinding {
     this.mask = mask;
   }
 
+  @Override
   public String toString() {
     String mask = getSpecialMask();
     String key = getSpecialKey();

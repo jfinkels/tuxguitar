@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
-import org.herac.tuxguitar.song.factory.TGFactory;
 
 public abstract class GTPInputStream extends GTPFileFormat implements
     TGInputStreamBase {
@@ -31,8 +30,7 @@ public abstract class GTPInputStream extends GTPFileFormat implements
     return this.versionIndex;
   }
 
-  public void init(TGFactory factory, InputStream stream) {
-    super.init(factory);
+  public void init(InputStream stream) {
     this.stream = stream;
     this.version = null;
   }

@@ -1,6 +1,5 @@
 package org.herac.tuxguitar.gui.editors.piano;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -165,12 +164,12 @@ public class Piano extends Composite {
           // comienza el undoable
           UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
 
-          TGNote note = manager.getFactory().newNote();
+          TGNote note = new TGNoteImpl();
           note.setValue((value - string.getValue()));
           note.setVelocity(caret.getVelocity());
           note.setString(string.getNumber());
 
-          TGDuration duration = manager.getFactory().newDuration();
+          TGDuration duration = new TGDuration();
           caret.getDuration().copy(duration);
 
           manager.getMeasureManager().addNote(caret.getMeasure(),
@@ -204,6 +203,7 @@ public class Piano extends Composite {
     this.redraw();
   }
 
+  @Override
   public void dispose() {
     super.dispose();
     this.image.dispose();
@@ -348,6 +348,7 @@ public class Piano extends Composite {
     this.settings.setToolTipText(TuxGuitar.getProperty("settings"));
     this.settings.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, true));
     this.settings.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         configure();
       }
@@ -561,6 +562,7 @@ public class Piano extends Composite {
     }
   }
 
+  @Override
   public void redraw() {
     if (!super.isDisposed() && !TuxGuitar.instance().isLocked()) {
       super.redraw();

@@ -35,9 +35,9 @@ public class TGCommunityWeb {
 
     String[] browserCmds = config.getStringConfigValue("community.browser", "")
         .split(";");
-    for (int i = 0; i < browserCmds.length; i++) {
+    
+    for (final String browserCmd : browserCmds) {
       try {
-        String browserCmd = browserCmds[i];
 
         if (browserCmd != null && browserCmd.length() > 0) {
           String pattern = ("%s");

@@ -39,7 +39,6 @@ import org.herac.tuxguitar.gui.editors.TablatureEditor;
 import org.herac.tuxguitar.gui.editors.chord.CustomChordManager;
 import org.herac.tuxguitar.gui.editors.lyric.LyricEditor;
 import org.herac.tuxguitar.gui.editors.matrix.MatrixEditor;
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 import org.herac.tuxguitar.gui.helper.FileHistory;
 import org.herac.tuxguitar.gui.helper.SyncThread;
 import org.herac.tuxguitar.gui.items.ItemManager;
@@ -220,11 +219,13 @@ public class TuxGuitar {
     getFretBoardEditor().showFretBoard(footer);
 
     this.sash.addMouseListener(new MouseAdapter() {
+      @Override
       public void mouseUp(MouseEvent e) {
         TuxGuitar.this.sashComposite.layout(true, true);
       }
     });
     this.sash.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent event) {
         int maximumHeight = (TuxGuitar.this.sashComposite.getBounds().height - TuxGuitar.this.sash
             .getBounds().height);
@@ -236,6 +237,7 @@ public class TuxGuitar {
       }
     });
     this.sash.addMouseTrackListener(new MouseTrackAdapter() {
+      @Override
       public void mouseEnter(MouseEvent e) {
         TuxGuitar.this.sash.setCursor(getDisplay().getSystemCursor(
             SWT.CURSOR_SIZENS));
@@ -509,7 +511,8 @@ public class TuxGuitar {
 
   public TGSongManager getSongManager() {
     if (this.songManager == null) {
-      this.songManager = new TGSongManager(new TGFactoryImpl());
+//      this.songManager = new TGSongManager(new TGFactoryImpl());
+      this.songManager = new TGSongManager();
       this.songManager.setSong(this.songManager.newSong());
     }
     return this.songManager;

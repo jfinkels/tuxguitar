@@ -37,6 +37,7 @@ import org.herac.tuxguitar.gui.actions.duration.IncrementDurationAction;
 import org.herac.tuxguitar.gui.actions.tools.ScaleAction;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.system.config.TGConfigKeys;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.gui.util.TGMusicKeyUtils;
@@ -153,12 +154,12 @@ public class FretBoard extends Composite {
     Caret caret = TuxGuitar.instance().getTablatureEditor().getTablature()
         .getCaret();
 
-    TGNote note = manager.getFactory().newNote();
+    TGNote note = new TGNoteImpl();
     note.setValue(fret);
     note.setVelocity(caret.getVelocity());
     note.setString(string);
 
-    TGDuration duration = manager.getFactory().newDuration();
+    TGDuration duration = new TGDuration();
     caret.getDuration().copy(duration);
 
     manager.getMeasureManager().addNote(caret.getMeasure(),
@@ -196,6 +197,7 @@ public class FretBoard extends Composite {
     this.redraw();
   }
 
+  @Override
   public void dispose() {
     super.dispose();
     this.disposeFretBoardImage();
@@ -411,6 +413,7 @@ public class FretBoard extends Composite {
     this.handSelector.add(TuxGuitar.getProperty("fretboard.left-mode"));
     this.handSelector.select(this.getDirection(this.config.getDirection()));
     this.handSelector.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         updateDirection(FretBoard.this.handSelector.getSelectionIndex());
       }
@@ -438,6 +441,7 @@ public class FretBoard extends Composite {
     this.settings.setToolTipText(TuxGuitar.getProperty("settings"));
     this.settings.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, true, true));
     this.settings.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent e) {
         configure();
       }
@@ -447,6 +451,7 @@ public class FretBoard extends Composite {
     this.toolComposite.setLayout(layout);
   }
 
+  @Override
   public void layout() {
     super.layout();
   }
@@ -637,10 +642,7 @@ public class FretBoard extends Composite {
       TGTrack track = getTrack();
 
       for (int v = 0; v < this.beat.countVoices(); v++) {
-        TGVoice voice = this.beat.getVoice(v);
-        Iterator it = voice.getNotes().iterator();
-        while (it.hasNext()) {
-          TGNote note = (TGNote) it.next();
+        for (final TGNote note : this.beat.getVoice(v).getNotes()){
           int fretIndex = note.getValue();
           int stringIndex = note.getString() - 1;
           if (fretIndex >= 0 && fretIndex < this.frets.length
@@ -695,6 +697,7 @@ public class FretBoard extends Composite {
     painter.setForeground(this.config.getColorBackground());
   }
 
+  @Override
   public void redraw() {
     if (!super.isDisposed() && !TuxGuitar.instance().isLocked()) {
       super.redraw();

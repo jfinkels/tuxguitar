@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGLocalFileExporter;
 import org.herac.tuxguitar.player.base.MidiSequenceParser;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGSong;
 
@@ -41,7 +40,7 @@ public class MidiSongExporter implements TGLocalFileExporter {
     return new TGFileFormat("Midi", "*.mid;*.midi");
   }
 
-  public void init(TGFactory factory, OutputStream stream) {
+  public void init(OutputStream stream) {
     this.stream = stream;
   }
 }

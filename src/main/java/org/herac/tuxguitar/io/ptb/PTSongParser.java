@@ -1,5 +1,7 @@
 package org.herac.tuxguitar.io.ptb;
 
+import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.io.ptb.base.PTBar;
 import org.herac.tuxguitar.io.ptb.base.PTBeat;
 import org.herac.tuxguitar.io.ptb.base.PTComponent;
@@ -13,7 +15,6 @@ import org.herac.tuxguitar.io.ptb.base.PTTempo;
 import org.herac.tuxguitar.io.ptb.base.PTTrack;
 import org.herac.tuxguitar.io.ptb.base.PTTrackInfo;
 import org.herac.tuxguitar.io.ptb.helper.TrackHelper;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDuration;
@@ -24,15 +25,16 @@ import org.herac.tuxguitar.song.models.TGString;
 import org.herac.tuxguitar.song.models.TGStroke;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
-import org.herac.tuxguitar.song.models.effects.TGEffectBend;
+import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.EffectPoint;
 
 public class PTSongParser {
 
   private TrackHelper helper;
   private TGSongManager manager;
 
-  public PTSongParser(TGFactory factory) {
-    this.manager = new TGSongManager(factory);
+  public PTSongParser() {
+    this.manager = new TGSongManager();
     this.helper = new TrackHelper();
   }
 
@@ -55,7 +57,7 @@ public class PTSongParser {
         return beat;
       }
     }
-    TGBeat beat = this.manager.getFactory().newBeat();
+    TGBeat beat = new TGBeatImpl();
     beat.setStart(start);
     measure.addBeat(beat);
     return beat;
@@ -110,42 +112,42 @@ public class PTSongParser {
     return true;
   }
 
-  private TGEffectBend makeBend(int value) {
+  private BendingEffect makeBend(int value) {
     if (value >= 1 && value <= 8) {
-      TGEffectBend bend = this.manager.getFactory().newEffectBend();
+      BendingEffect bend = new BendingEffect();
       if (value == 1) {
         bend.addPoint(0, 0);
-        bend.addPoint(6, (TGEffectBend.SEMITONE_LENGTH * 4));
-        bend.addPoint(12, (TGEffectBend.SEMITONE_LENGTH * 4));
+        bend.addPoint(6, (EffectPoint.SEMITONE_LENGTH * 4));
+        bend.addPoint(12, (EffectPoint.SEMITONE_LENGTH * 4));
       } else if (value == 2) {
         bend.addPoint(0, 0);
-        bend.addPoint(3, (TGEffectBend.SEMITONE_LENGTH * 4));
-        bend.addPoint(6, (TGEffectBend.SEMITONE_LENGTH * 4));
+        bend.addPoint(3, (EffectPoint.SEMITONE_LENGTH * 4));
+        bend.addPoint(6, (EffectPoint.SEMITONE_LENGTH * 4));
         bend.addPoint(9, 0);
         bend.addPoint(12, 0);
       } else if (value == 3) {
         bend.addPoint(0, 0);
-        bend.addPoint(6, (TGEffectBend.SEMITONE_LENGTH * 4));
-        bend.addPoint(12, (TGEffectBend.SEMITONE_LENGTH * 4));
+        bend.addPoint(6, (EffectPoint.SEMITONE_LENGTH * 4));
+        bend.addPoint(12, (EffectPoint.SEMITONE_LENGTH * 4));
       } else if (value == 4) {
-        bend.addPoint(0, (TGEffectBend.SEMITONE_LENGTH * 4));
-        bend.addPoint(12, (TGEffectBend.SEMITONE_LENGTH * 4));
+        bend.addPoint(0, (EffectPoint.SEMITONE_LENGTH * 4));
+        bend.addPoint(12, (EffectPoint.SEMITONE_LENGTH * 4));
       } else if (value == 5) {
-        bend.addPoint(0, (TGEffectBend.SEMITONE_LENGTH * 4));
-        bend.addPoint(4, (TGEffectBend.SEMITONE_LENGTH * 4));
+        bend.addPoint(0, (EffectPoint.SEMITONE_LENGTH * 4));
+        bend.addPoint(4, (EffectPoint.SEMITONE_LENGTH * 4));
         bend.addPoint(8, 0);
         bend.addPoint(12, 0);
       } else if (value == 6) {
         bend.addPoint(0, 8);
         bend.addPoint(12, 8);
       } else if (value == 7) {
-        bend.addPoint(0, (TGEffectBend.SEMITONE_LENGTH * 4));
-        bend.addPoint(4, (TGEffectBend.SEMITONE_LENGTH * 4));
+        bend.addPoint(0, (EffectPoint.SEMITONE_LENGTH * 4));
+        bend.addPoint(4, (EffectPoint.SEMITONE_LENGTH * 4));
         bend.addPoint(8, 0);
         bend.addPoint(12, 0);
       } else if (value == 8) {
-        bend.addPoint(0, (TGEffectBend.SEMITONE_LENGTH * 4));
-        bend.addPoint(4, (TGEffectBend.SEMITONE_LENGTH * 4));
+        bend.addPoint(0, (EffectPoint.SEMITONE_LENGTH * 4));
+        bend.addPoint(4, (EffectPoint.SEMITONE_LENGTH * 4));
         bend.addPoint(8, 0);
         bend.addPoint(12, 0);
       }
@@ -201,7 +203,7 @@ public class PTSongParser {
     for (final PTNote ptNote : beat.getNotes()) {
       if (ptNote.getString() <= measure.getTrack().stringCount()
           && ptNote.getValue() >= 0) {
-        TGNote note = this.manager.getFactory().newNote();
+        TGNote note = new TGNoteImpl();
         note.setString(ptNote.getString());
         note.setValue(ptNote.getValue());
         note.setTiedNote(ptNote.isTied());
@@ -331,7 +333,7 @@ public class PTSongParser {
     PTSong song = new PTSong();
     PTSongSynchronizerUtil.synchronizeTracks(src, song);
 
-    this.manager.setSong(this.manager.getFactory().newSong());
+    this.manager.setSong(new TGSong());
 
     this.parseTrack(song.getTrack1());
     this.parseTrack(song.getTrack2());
@@ -380,7 +382,7 @@ public class PTSongParser {
     tgTrack.getChannel().setBalance((short) info.getBalance());
     tgTrack.getStrings().clear();
     for (int i = 0; i < info.getStrings().length; i++) {
-      TGString string = this.manager.getFactory().newString();
+      TGString string = new TGString();
       string.setNumber((i + 1));
       string.setValue(info.getStrings()[i]);
       tgTrack.getStrings().add(string);

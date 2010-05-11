@@ -1,6 +1,7 @@
 package org.herac.tuxguitar.midiinput;
 
 import java.util.Iterator;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
@@ -66,12 +67,10 @@ class MiScaleFinder {
     return (sequences);
   }
 
-  static private int countMatches(TreeSet inScale, int[] inRefSequence) {
+  static private int countMatches(SortedSet<Byte> inScale, int[] inRefSequence) {
     int count = 0;
-    Iterator it = inScale.iterator();
-
-    while (it.hasNext()) {
-      int pitch = ((Byte) it.next()).intValue();
+    
+    for (final Byte pitch : inScale) {
       boolean found = false;
 
       for (int i = 0; i < inRefSequence.length && !found; i++)
@@ -79,15 +78,15 @@ class MiScaleFinder {
           found = true;
 
       if (!found)
-        return (0);
+        return 0;
       else
         count++;
     }
 
-    return (count);
+    return count;
   }
 
-  static public int findMatchingScale(TreeSet inScale) {
+  static public int findMatchingScale(SortedSet<Byte> inScale) {
     ScaleManager scaleMgr = TuxGuitar.instance().getScaleManager();
     int scalesCount = scaleMgr.countScales(), minScaleSize = 12, maxMatches = 0, scaleIndex = ScaleManager.NONE_SELECTION, scaleKey = 0;
 

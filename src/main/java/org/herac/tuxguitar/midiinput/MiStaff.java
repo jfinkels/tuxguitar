@@ -2,11 +2,16 @@ package org.herac.tuxguitar.midiinput;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
+import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.managers.TGTrackManager;
 import org.herac.tuxguitar.song.models.TGBeat;
@@ -37,27 +42,30 @@ class MiStaff {
 
   private boolean f_Dump_TrackGeneration = false; // for debugging...
 
-  private TreeMap f_Events = new TreeMap(); // staff events map
+  private Map<Long, MiStaffEvent> f_Events = new TreeMap<Long, MiStaffEvent>(); // staff
+  // events
+  // map
 
   private TGTrack f_TgTrack = null; // work track
 
-  MiStaff(final ArrayList inBufferNotes, // MIDI input notes from buffer
-                                         // [microseconds]
+  MiStaff(final List<MiNote> inBufferNotes, // MIDI input notes from buffer
+      // [microseconds]
       int inTempo, // quarters per minute
       long inStartTime, // first MIDI time stamp [microseconds]
       long inStopTime, // last MIDI time stamp [microseconds]
       long inStartPosition, // recording start position [ticks]
       String inTrackName) // name for the TuxGuitar track to be created
   {
-    ArrayList midiNotes = new ArrayList();
+    List<MiNote> midiNotes = new ArrayList<MiNote>();
 
     // make a deep copy of input buffer notes
-    for (Iterator it = inBufferNotes.iterator(); it.hasNext();)
-      midiNotes.add(new MiNote((MiNote) it.next()));
+    for (final MiNote note : inBufferNotes) {
+      midiNotes.add(new MiNote(note));
+    }
 
     // convert time stamps from absolute microseconds to song relative ticks
-    for (Iterator it = midiNotes.iterator(); it.hasNext();) {
-      MiNote note = (MiNote) it.next();
+    for (final MiNote note : midiNotes) {
+
       long timeOn = note.getTimeOn(), timeOff = note.getTimeOff();
 
       // absolute to relative time stamps
@@ -73,7 +81,7 @@ class MiStaff {
       note.setTimeOff(timeOff);
     }
 
-    if (f_Dump_Input) {
+    if (this.f_Dump_Input) {
       MiBuffer.dump(inBufferNotes, "input buffer MIDI notes");
       MiBuffer.dump(midiNotes, "converted MIDI notes");
     }
@@ -89,8 +97,9 @@ class MiStaff {
       addBar(tick);
 
     // insert note events into staff
-    for (Iterator it = midiNotes.iterator(); it.hasNext();)
-      addNote((MiNote) it.next());
+    for (final MiNote note : midiNotes) {
+      this.addNote(note);
+    }
 
     // generate bars
     createMeasures();
@@ -100,24 +109,22 @@ class MiStaff {
   }
 
   void addBar(long inTime) {
-    MiStaffEvent se = (MiStaffEvent) f_Events.get(new Long(inTime));
+    MiStaffEvent se = this.f_Events.get(new Long(inTime));
 
     if (se == null) {
       se = new MiStaffEvent(inTime);
-      f_Events.put(new Long(inTime), se);
+      this.f_Events.put(new Long(inTime), se);
     }
 
     se.markAsBar();
   }
 
   void addNote(MiNote inNote) {
-    MiStaffEvent se;
-
-    se = (MiStaffEvent) f_Events.get(new Long(inNote.getTimeOn()));
+    MiStaffEvent se = this.f_Events.get(new Long(inNote.getTimeOn()));
 
     if (se == null) {
       se = new MiStaffEvent(inNote.getTimeOn());
-      f_Events.put(new Long(inNote.getTimeOn()), se);
+      this.f_Events.put(new Long(inNote.getTimeOn()), se);
     }
 
     se.addNoteOn(inNote);
@@ -125,11 +132,11 @@ class MiStaff {
 
   private void addTiedNote(long inTime, MiStaffNote inSN,
       long inResidualDuration) {
-    MiStaffEvent se = (MiStaffEvent) f_Events.get(new Long(inTime));
+    MiStaffEvent se = this.f_Events.get(new Long(inTime));
 
     if (se == null) {
       se = new MiStaffEvent(inTime);
-      f_Events.put(new Long(inTime), se);
+      this.f_Events.put(new Long(inTime), se);
     }
 
     MiStaffNote sn = new MiStaffNote(inSN);
@@ -140,11 +147,10 @@ class MiStaff {
 
   void createMeasures() {
     TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
-    Iterator it = f_Events.keySet().iterator();
 
-    while (it.hasNext()) {
-      Long key = (Long) it.next();
-      MiStaffEvent se = (MiStaffEvent) f_Events.get(key);
+    for (final Entry<Long, MiStaffEvent> entry : this.f_Events.entrySet()) {
+      final Long key = entry.getKey();
+      final MiStaffEvent se = entry.getValue();
 
       if (se.isBar() && tgSongMgr.getMeasureHeaderAt(key.longValue()) == null) {
         tgSongMgr.addNewMeasure(tgSongMgr.getSong().countMeasureHeaders() + 1);
@@ -153,16 +159,12 @@ class MiStaff {
   }
 
   private void dump(String inTitle) {
-    Iterator it = f_Events.keySet().iterator();
 
     LOG.debug("");
     LOG.debug("MiStaff dump " + inTitle + "...");
     LOG.debug("");
 
-    while (it.hasNext()) {
-      Long time = (Long) it.next();
-      MiStaffEvent se = (MiStaffEvent) f_Events.get(time);
-
+    for (final MiStaffEvent se : this.f_Events.values()) {
       LOG.debug(se);
     }
   }
@@ -170,9 +172,8 @@ class MiStaff {
   private void generateTrack(String inTrackName) {
     TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
     TGTrack tgTrack = tgSongMgr.createTrack();
-    Iterator eventsIt;
 
-    if (f_Dump_TrackGeneration) {
+    if (this.f_Dump_TrackGeneration) {
       LOG.debug("");
       LOG.debug("generating track: " + inTrackName + "...");
       LOG.debug("");
@@ -180,28 +181,18 @@ class MiStaff {
 
     tgTrack.setName(inTrackName);
 
-    f_TgTrack = tgTrack;
+    this.f_TgTrack = tgTrack;
 
-    // clears events TGBeats
-    for (eventsIt = f_Events.keySet().iterator(); eventsIt.hasNext();) {
-      Long time = (Long) eventsIt.next();
-      MiStaffEvent se = (MiStaffEvent) f_Events.get(time);
-
+    for (final MiStaffEvent se : this.f_Events.values()) {
       se.setBeat(null);
     }
 
     // generate TuxGuitar track
-    for (eventsIt = f_Events.keySet().iterator(); eventsIt.hasNext();) {
-      Long time = (Long) eventsIt.next();
-      MiStaffEvent se = (MiStaffEvent) f_Events.get(time);
-
+    for (final MiStaffEvent se : this.f_Events.values()) {
       if (se.isOnBeat() || se.isTieBeat()) {
-        TGBeat tgBeat = getEventBeat(se.getBeginTime());
-        Iterator it = se.getNotes().iterator();
+        final TGBeat tgBeat = getEventBeat(se.getBeginTime());
 
-        while (it.hasNext()) {
-          MiStaffNote sn = (MiStaffNote) it.next();
-
+        for (final MiStaffNote sn : se.getNotes()) {
           insertNoteIntoTrack(tgBeat, sn);
         }
       }
@@ -209,17 +200,17 @@ class MiStaff {
   }
 
   private TGBeat getEventBeat(long inTime) {
-    MiStaffEvent se = (MiStaffEvent) f_Events.get(new Long(inTime));
+    MiStaffEvent se = this.f_Events.get(new Long(inTime));
     TGBeat tgBeat = se.getBeat();
 
     // creates a TGBeat if needed
     if (tgBeat == null) {
       TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
       TGTrackManager tgTrackMgr = tgSongMgr.getTrackManager();
-      TGMeasure tgMeasure = tgTrackMgr.getMeasureAt(f_TgTrack, inTime);
+      TGMeasure tgMeasure = tgTrackMgr.getMeasureAt(this.f_TgTrack, inTime);
 
       if (tgMeasure != null) {
-        tgBeat = tgSongMgr.getFactory().newBeat();
+        tgBeat = new TGBeatImpl();
 
         tgBeat.setStart(inTime);
         tgMeasure.addBeat(tgBeat);
@@ -231,9 +222,9 @@ class MiStaff {
   }
 
   private void insertNoteIntoTrack(TGBeat inTgBeat, MiStaffNote inSN) {
-    TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
-    TGNote tgNote = tgSongMgr.getFactory().newNote();
-    TGDuration tgDuration = tgSongMgr.getFactory().newDuration();
+    // TGSongManager tgSongMgr = TuxGuitar.instance().getSongManager();
+    TGNote tgNote = new TGNoteImpl();
+    TGDuration tgDuration = new TGDuration();
 
     tgNote.setString(inSN.getString());
     tgNote.setValue(inSN.getFret());
@@ -246,7 +237,7 @@ class MiStaff {
     tgDuration.setDotted(inSN.getDotCount() == 1);
     tgDuration.setDoubleDotted(inSN.getDotCount() == 2);
 
-    if (f_Dump_TrackGeneration) {
+    if (this.f_Dump_TrackGeneration) {
       LOG.debug(""
           + inTgBeat.getMeasure().getNumber()
           + " "
@@ -275,17 +266,14 @@ class MiStaff {
 
   void insertNotesIntoTrack(String inTrackName) {
     // normalize beats
-    TreeMap normalizedEvents = new TreeMap();
+    SortedMap<Long, MiStaffEvent> normalizedEvents = new TreeMap<Long, MiStaffEvent>();
 
-    for (Iterator eventsIt = f_Events.entrySet().iterator(); eventsIt.hasNext();) {
-      Map.Entry me = (Map.Entry) eventsIt.next();
-      MiStaffEvent se = (MiStaffEvent) me.getValue();
-
+    for (final MiStaffEvent se : this.f_Events.values()) {
       se.normalizeBeat(TGDuration.SIXTY_FOURTH);
       mergeEvent(normalizedEvents, se);
     }
 
-    f_Events = normalizedEvents;
+    this.f_Events = normalizedEvents;
 
     dump("after beat normalization");
     generateTrack("after beat normalization");
@@ -298,23 +286,17 @@ class MiStaff {
 
       keepGoing = false;
 
-      for (Iterator eventsIt = f_Events.entrySet().iterator(); eventsIt
-          .hasNext();) {
-        Map.Entry me = (Map.Entry) eventsIt.next();
-        MiStaffEvent se = (MiStaffEvent) me.getValue();
-
+      for (final MiStaffEvent se : this.f_Events.values()) {
         if (se.isBar())
           nextBarBeginTime = se.getBeginTime() + 4 * TGDuration.QUARTER_TIME; // bar
-                                                                              // length
-                                                                              // should
-                                                                              // be
-                                                                              // a
-                                                                              // MiStaff
-                                                                              // member
+        // length
+        // should
+        // be
+        // a
+        // MiStaff
+        // member
 
-        for (Iterator snIt = se.getNotes().iterator(); snIt.hasNext();) {
-          MiStaffNote sn = (MiStaffNote) snIt.next();
-
+        for (final MiStaffNote sn : se.getNotes()) {
           if (se.getBeginTime() + sn.getOverallDuration() > nextBarBeginTime) {
             long limitedDuration = (nextBarBeginTime - se.getBeginTime()), residualDuration = sn
                 .getOverallDuration()
@@ -336,10 +318,7 @@ class MiStaff {
     generateTrack("after tied due to bar crossing");
 
     // normalize durations
-    for (Iterator eventsIt = f_Events.entrySet().iterator(); eventsIt.hasNext();) {
-      Map.Entry me = (Map.Entry) eventsIt.next();
-      MiStaffEvent se = (MiStaffEvent) me.getValue();
-
+    for (final MiStaffEvent se : this.f_Events.values()) {
       se.normalizeDurations();
     }
 
@@ -352,22 +331,20 @@ class MiStaff {
     while (keepGoing) {
       keepGoing = false;
 
-      Iterator eventsIt2 = f_Events.keySet().iterator();
+      Iterator<Long> eventsIt2 = this.f_Events.keySet().iterator();
 
       if (eventsIt2.hasNext())
         eventsIt2.next();
 
-      for (Iterator eventsIt = f_Events.entrySet().iterator(); eventsIt
-          .hasNext();) {
-        Map.Entry me = (Map.Entry) eventsIt.next();
+      for (Iterator<Entry<Long, MiStaffEvent>> eventsIt = this.f_Events
+          .entrySet().iterator(); eventsIt.hasNext();) {
+        Entry<Long, MiStaffEvent> me = eventsIt.next();
         MiStaffEvent se = (MiStaffEvent) me.getValue();
 
         if (eventsIt.hasNext() && eventsIt2.hasNext()) {
-          long nextTime = ((Long) eventsIt2.next()).longValue();
+          long nextTime = eventsIt2.next();
 
-          for (Iterator snIt = se.getNotes().iterator(); snIt.hasNext();) {
-            MiStaffNote sn = (MiStaffNote) snIt.next();
-
+          for (final MiStaffNote sn : se.getNotes()) {
             if (se.getBeginTime() + sn.getOverallDuration() > nextTime) {
               long limitedDuration = (nextTime - se.getBeginTime()), residualDuration = sn
                   .getOverallDuration()
@@ -390,10 +367,7 @@ class MiStaff {
     generateTrack("after tied due to note crossing");
 
     // normalize durations
-    for (Iterator eventsIt = f_Events.entrySet().iterator(); eventsIt.hasNext();) {
-      Map.Entry me = (Map.Entry) eventsIt.next();
-      MiStaffEvent se = (MiStaffEvent) me.getValue();
-
+    for (final MiStaffEvent se : this.f_Events.values()) {
       se.normalizeDurations();
     }
 
@@ -401,9 +375,9 @@ class MiStaff {
     generateTrack("after duration normalization 2");
   }
 
-  private void mergeEvent(TreeMap inEventsMap, MiStaffEvent inSE) {
-    MiStaffEvent se = (MiStaffEvent) inEventsMap.get(new Long(inSE
-        .getBeginTime()));
+  private void mergeEvent(SortedMap<Long, MiStaffEvent> inEventsMap,
+      MiStaffEvent inSE) {
+    final MiStaffEvent se = inEventsMap.get(new Long(inSE.getBeginTime()));
 
     if (se == null)
       inEventsMap.put(new Long(inSE.getBeginTime()), inSE);

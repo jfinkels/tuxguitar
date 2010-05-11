@@ -152,7 +152,7 @@ public class LilypondOutputStream {
 
       this.writer.print("<");
 
-      int size = voice.countNotes();
+      int size = voice.getNotes().size();
       for (int i = 0; i < size; i++) {
         TGNote note = voice.getNote(i);
 
@@ -309,7 +309,7 @@ public class LilypondOutputStream {
 
   private void addEffectsBeforeBeat(TGVoice voice) {
     List<TGNote> graceNotes = new ArrayList<TGNote>();
-    for (int i = 0; i < voice.countNotes(); i++) {
+    for (int i = 0; i < voice.getNotes().size(); i++) {
       TGNote note = voice.getNote(i);
       if (note.getEffect().isGrace()) {
         graceNotes.add(note);
@@ -370,7 +370,7 @@ public class LilypondOutputStream {
     boolean accentuatedNote = false;
     boolean heavyAccentuatedNote = false;
     boolean arpeggio = (voice.getBeat().getStroke().getDirection() != TGStroke.STROKE_NONE);
-    for (int i = 0; i < voice.countNotes(); i++) {
+    for (int i = 0; i < voice.getNotes().size(); i++) {
       TGNoteEffect effect = voice.getNote(i).getEffect();
 
       trill = (trill || effect.isTrill());
@@ -402,7 +402,7 @@ public class LilypondOutputStream {
 
   private void addEffectsOnDuration(TGVoice voice) {
     int tremoloPicking = -1;
-    for (int i = 0; i < voice.countNotes(); i++) {
+    for (int i = 0; i < voice.getNotes().size(); i++) {
       TGNote note = voice.getNote(i);
       if (tremoloPicking == -1 && note.getEffect().isTremoloPicking()) {
         tremoloPicking = note.getEffect().getTremoloPicking().getDuration()
@@ -679,7 +679,8 @@ public class LilypondOutputStream {
 
   private void addScoreStaff(TGTrack track, String id) {
     boolean addLyrics = (this.settings.isLyricsEnabled()
-        && !this.settings.isTablatureEnabled() && !track.getLyrics().isEmpty());
+        && !this.settings.isTablatureEnabled() && !track.getLyrics()
+        .getLyrics().isEmpty());
     boolean addChordDiagrams = this.settings.isChordDiagramEnabled();
     boolean addTexts = this.settings.isTextEnabled();
 
@@ -774,7 +775,7 @@ public class LilypondOutputStream {
 
   private void addTabStaff(TGTrack track, String id) {
     boolean addLyrics = (this.settings.isLyricsEnabled() && !track.getLyrics()
-        .isEmpty());
+        .getLyrics().isEmpty());
     boolean addChordDiagrams = (this.settings.isChordDiagramEnabled() && !this.settings
         .isScoreEnabled());
     boolean addTexts = (this.settings.isTextEnabled() && !this.settings

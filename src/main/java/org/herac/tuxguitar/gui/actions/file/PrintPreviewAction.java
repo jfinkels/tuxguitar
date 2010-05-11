@@ -16,7 +16,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.editors.TGPainter;
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 import org.herac.tuxguitar.gui.editors.tab.Tablature;
 import org.herac.tuxguitar.gui.editors.tab.layout.PrinterViewLayout;
 import org.herac.tuxguitar.gui.helper.SyncThread;
@@ -103,6 +102,7 @@ public class PrintPreviewAction extends Action {
     super(NAME, AUTO_LOCK | AUTO_UNLOCK | AUTO_UPDATE | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     try {
       final PrintStyles data = PrintStylesDialog.open(TuxGuitar.instance()
@@ -143,9 +143,8 @@ public class PrintPreviewAction extends Action {
       public void run() {
         try {
           final TGSongManager manager = new TGSongManager();
-          manager.setFactory(new TGFactoryImpl());
-          manager.setSong(getSongManager().getSong()
-              .clone(manager.getFactory()));
+          // manager.setFactory(new TGFactoryImpl());
+          manager.setSong(getSongManager().getSong().clone());
 
           printPreview(manager, data);
         } catch (Throwable throwable) {

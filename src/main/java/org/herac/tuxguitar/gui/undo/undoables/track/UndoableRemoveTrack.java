@@ -10,8 +10,7 @@ import org.herac.tuxguitar.song.models.TGTrack;
 
 public class UndoableRemoveTrack implements UndoableEdit {
   private static TGTrack cloneTrack(TGTrack track) {
-    return track.clone(TuxGuitar.instance().getSongManager().getFactory(),
-        TuxGuitar.instance().getSongManager().getSong());
+    return track.clone(TuxGuitar.instance().getSongManager().getSong());
   }
 
   private static Caret getCaret() {

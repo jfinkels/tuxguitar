@@ -5,7 +5,6 @@ import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGNotePainter;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGSilencePainter;
-import org.herac.tuxguitar.song.factory.TGFactory;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -51,8 +50,8 @@ public class TGVoiceImpl extends TGVoice {
   private boolean[] usedStrings;
   private int width;
 
-  public TGVoiceImpl(TGFactory factory, int index) {
-    super(factory, index);
+  public TGVoiceImpl(int index) {
+    super(index);
   }
 
   public void check(TGNoteImpl note) {

@@ -3,7 +3,6 @@ package org.herac.tuxguitar.gui.editors.chord;
 import java.io.File;
 import java.util.List;
 
-import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.chord.xml.ChordXMLReader;
 import org.herac.tuxguitar.gui.editors.chord.xml.ChordXMLWriter;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
@@ -45,8 +44,7 @@ public class CustomChordManager {
 
   public TGChord getChord(int index) {
     if (index >= 0 && index < countChords()) {
-      return ((TGChord) this.chords.get(index)).clone(TuxGuitar.instance()
-          .getSongManager().getFactory());
+      return this.chords.get(index).clone();
     }
     return null;
   }

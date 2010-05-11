@@ -6,12 +6,11 @@
  */
 package org.herac.tuxguitar.gui.actions.note;
 
-import java.util.Iterator;
-
 import org.eclipse.swt.events.TypedEvent;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
+import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
@@ -32,6 +31,7 @@ public class ChangeTiedNoteAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     Caret caret = getEditor().getTablature().getCaret();
     if (caret.getSelectedNote() != null) {
@@ -44,13 +44,13 @@ public class ChangeTiedNoteAction extends Action {
       // termia el undoable
       addUndoableEdit(undoable.endUndo());
     } else {
-      TGNote note = getSongManager().getFactory().newNote();
+      TGNote note = new TGNoteImpl();
       note.setValue(0);
       note.setVelocity(caret.getVelocity());
       note.setString(caret.getSelectedString().getNumber());
       note.setTiedNote(true);
 
-      TGDuration duration = getSongManager().getFactory().newDuration();
+      TGDuration duration = new TGDuration();
       caret.getDuration().copy(duration);
 
       setTiedNoteValue(note, caret);
@@ -80,9 +80,7 @@ public class ChangeTiedNoteAction extends Action {
           return;
         }
         // Check if is there any note at same string.
-        Iterator it = voice.getNotes().iterator();
-        while (it.hasNext()) {
-          TGNote current = (TGNote) it.next();
+        for (final TGNote current : voice.getNotes()) {
           if (current.getString() == note.getString()) {
             note.setValue(current.getValue());
             return;
@@ -99,6 +97,7 @@ public class ChangeTiedNoteAction extends Action {
     }
   }
 
+  @Override
   public void updateTablature() {
     fireUpdate(getEditor().getTablature().getCaret().getMeasure().getNumber());
   }

@@ -50,8 +50,7 @@ public class UndoableChangeTempo implements UndoableEdit {
   private void getTempos(List<TGTempo> list) {
     for (final TGMeasureHeader header : TuxGuitar.instance().getSongManager()
         .getSong().getMeasureHeaders()) {
-      list.add(header.getTempo().clone(
-          TuxGuitar.instance().getSongManager().getFactory()));
+      list.add(header.getTempo().clone());
     }
   }
 
@@ -72,8 +71,7 @@ public class UndoableChangeTempo implements UndoableEdit {
       return;
     }
     for (int i = 0; i < length; i++) {
-      TGTempo tempo = ((TGTempo) tempos.get(i)).clone(TuxGuitar.instance()
-          .getSongManager().getFactory());
+      TGTempo tempo = tempos.get(i).clone();
       TuxGuitar.instance().getSongManager().changeTempo(
           TuxGuitar.instance().getSongManager().getMeasureHeader(i + 1), tempo);
     }
