@@ -46,9 +46,9 @@ public class TGServiceReader {
             }
           }
         } catch (UnsupportedEncodingException e) {
-          e.printStackTrace();
+          LOG.error(e);
         } catch (IOException e) {
-          e.printStackTrace();
+          LOG.error(e);
         }
       }
       this.iterator = providers.iterator();
@@ -65,7 +65,7 @@ public class TGServiceReader {
           return provider;
         }
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
       throw new NoSuchElementException();
     }

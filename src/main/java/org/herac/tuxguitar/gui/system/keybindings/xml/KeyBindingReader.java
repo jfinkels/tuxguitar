@@ -66,11 +66,11 @@ public class KeyBindingReader {
       DocumentBuilder builder = factory.newDocumentBuilder();
       document = builder.parse(file);
     } catch (SAXException sxe) {
-      sxe.printStackTrace();
+      LOG.error(sxe);
     } catch (ParserConfigurationException pce) {
-      pce.printStackTrace();
+      LOG.error(pce);
     } catch (IOException ioe) {
-      ioe.printStackTrace();
+      LOG.error(ioe);
     }
     return document;
   }
@@ -82,11 +82,11 @@ public class KeyBindingReader {
       DocumentBuilder builder = factory.newDocumentBuilder();
       document = builder.parse(is);
     } catch (SAXException sxe) {
-      sxe.printStackTrace();
+      LOG.error(sxe);
     } catch (ParserConfigurationException pce) {
-      pce.printStackTrace();
+      LOG.error(pce);
     } catch (IOException ioe) {
-      ioe.printStackTrace();
+      LOG.error(ioe);
     }
     return document;
   }
@@ -97,7 +97,7 @@ public class KeyBindingReader {
         return getBindings(getDocument(is).getFirstChild());
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
@@ -109,7 +109,7 @@ public class KeyBindingReader {
         return getBindings(getDocument(file).getFirstChild());
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }

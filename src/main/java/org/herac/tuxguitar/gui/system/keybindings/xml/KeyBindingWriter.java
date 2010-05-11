@@ -34,7 +34,7 @@ public class KeyBindingWriter {
       Document document = builder.newDocument();
       return document;
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
@@ -51,7 +51,7 @@ public class KeyBindingWriter {
       idTransform.setOutputProperty(OutputKeys.INDENT, "yes");
       idTransform.transform(input, output);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -93,7 +93,7 @@ public class KeyBindingWriter {
       setBindings(list, doc);
       saveDocument(doc, file);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 

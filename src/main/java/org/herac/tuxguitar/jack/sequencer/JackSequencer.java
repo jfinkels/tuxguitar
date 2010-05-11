@@ -32,7 +32,7 @@ public class JackSequencer implements MidiSequencer {
           }
         }
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
     }
 

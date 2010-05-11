@@ -120,7 +120,7 @@ public class TGInputStream implements TGInputStreamBase {
     try {
       return this.dataInputStream.readBoolean();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return false;
   }
@@ -205,7 +205,7 @@ public class TGInputStream implements TGInputStreamBase {
     try {
       return this.dataInputStream.readInt();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -214,7 +214,7 @@ public class TGInputStream implements TGInputStreamBase {
     try {
       return this.dataInputStream.readLong();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -330,7 +330,7 @@ public class TGInputStream implements TGInputStreamBase {
     try {
       return this.dataInputStream.readShort();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -377,7 +377,7 @@ public class TGInputStream implements TGInputStreamBase {
 
       return String.copyValueOf(chars);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
 

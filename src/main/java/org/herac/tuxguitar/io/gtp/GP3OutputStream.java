@@ -537,7 +537,7 @@ public class GP3OutputStream extends GTPOutputStream {
       writeMeasures(song, header.getTempo().clone());
       close();
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

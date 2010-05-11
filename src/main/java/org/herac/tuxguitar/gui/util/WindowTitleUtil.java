@@ -46,7 +46,7 @@ public class WindowTitleUtil {
         return result;
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }

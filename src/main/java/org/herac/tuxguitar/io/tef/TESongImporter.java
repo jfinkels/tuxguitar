@@ -208,7 +208,7 @@ public class TESongImporter implements TGLocalFileImporter {
         return this.parseSong(new TEInputStream(this.stream).readSong());
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     throw new TGFileFormatException();
   }

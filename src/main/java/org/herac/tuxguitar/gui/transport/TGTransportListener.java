@@ -52,7 +52,7 @@ public class TGTransportListener implements MidiPlayerListener {
           }
           TGTransportListener.this.notifyStopped();
         } catch (Throwable throwable) {
-          throwable.printStackTrace();
+          LOG.error(throwable);
         }
       }
     }).start();
@@ -65,7 +65,7 @@ public class TGTransportListener implements MidiPlayerListener {
             TGTransportListener.this.stoppedRunnable);
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 }

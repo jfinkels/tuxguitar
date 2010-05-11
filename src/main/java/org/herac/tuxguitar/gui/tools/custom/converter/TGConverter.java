@@ -140,7 +140,7 @@ public class TGConverter {
           }
         }
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
     }
     return null;
@@ -212,7 +212,7 @@ public class TGConverter {
     try {
       Thread.sleep(SLEEP_TIME);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 }

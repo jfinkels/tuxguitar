@@ -36,7 +36,7 @@ public class PTInputStream implements TGInputStreamBase {
     try {
       this.stream.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -86,7 +86,7 @@ public class PTInputStream implements TGInputStreamBase {
     try {
       return (this.stream.read() > 0);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return false;
   }
@@ -95,7 +95,7 @@ public class PTInputStream implements TGInputStreamBase {
     try {
       return this.stream.read();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -259,7 +259,7 @@ public class PTInputStream implements TGInputStreamBase {
       return ((b[3] & 0xff) << 24) | ((b[2] & 0xff) << 16)
           | ((b[1] & 0xff) << 8) | (b[0] & 0xff);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -424,7 +424,7 @@ public class PTInputStream implements TGInputStreamBase {
       this.stream.read(b);
       return ((b[1] & 0xff) << 8) | (b[0] & 0xff);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -509,7 +509,7 @@ public class PTInputStream implements TGInputStreamBase {
       int length = (this.stream.read() & 0xff);
       return this.readString(((length < 0xff) ? length : readShort()));
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -520,7 +520,7 @@ public class PTInputStream implements TGInputStreamBase {
       this.stream.read(bytes);
       return new String(bytes);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -591,7 +591,7 @@ public class PTInputStream implements TGInputStreamBase {
     try {
       this.stream.read(new byte[bytes]);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

@@ -189,7 +189,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     try {
       return (byte) this.dataInputStream.read();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -335,7 +335,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     try {
       return this.dataInputStream.read();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -363,7 +363,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     try {
       return readString(this.dataInputStream.readInt());
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -588,7 +588,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     try {
       return this.dataInputStream.readShort();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -614,7 +614,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
       }
       return String.copyValueOf(chars);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -732,7 +732,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     try {
       return readString((this.dataInputStream.read() & 0xFF));
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }

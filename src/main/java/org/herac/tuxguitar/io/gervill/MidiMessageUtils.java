@@ -18,7 +18,7 @@ public class MidiMessageUtils {
           fixValue(controller), fixValue(value));
       return message;
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -44,7 +44,7 @@ public class MidiMessageUtils {
           fixValue(note), fixValue(velocity));
       return message;
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -56,7 +56,7 @@ public class MidiMessageUtils {
           fixValue(note), fixValue(velocity));
       return message;
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -68,7 +68,7 @@ public class MidiMessageUtils {
           fixValue(value));
       return message;
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -80,7 +80,7 @@ public class MidiMessageUtils {
           fixValue(instrument), 0);
       return message;
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -91,7 +91,7 @@ public class MidiMessageUtils {
       message.setMessage(ShortMessage.SYSTEM_RESET);
       return message;
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -103,7 +103,7 @@ public class MidiMessageUtils {
           (byte) ((usq >> 8) & 0x00FF), (byte) ((usq) & 0x00FF) }, 3);
       return message;
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }
@@ -116,7 +116,7 @@ public class MidiMessageUtils {
           (byte) (96 / ts.getDenominator().getValue()), 8 }, 4);
       return message;
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }

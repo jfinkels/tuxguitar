@@ -89,7 +89,7 @@ public class TGConfigEditor {
           TuxGuitar.instance().updateCache(true);
           TuxGuitar.instance().loadCursor(SWT.CURSOR_ARROW);
           ActionLock.unlock();
-          throwable.printStackTrace();
+          LOG.error(throwable);
         }
       }
     }).start();

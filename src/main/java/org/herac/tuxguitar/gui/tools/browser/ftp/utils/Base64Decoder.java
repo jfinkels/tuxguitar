@@ -74,7 +74,7 @@ public class Base64Decoder {
       }
 
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
 
     return bytes;

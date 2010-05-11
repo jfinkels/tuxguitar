@@ -38,7 +38,7 @@ public class TGClassLoader {
     try {
       this.classLoader.addURL(new File(path).toURI().toURL());
     } catch (MalformedURLException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -49,7 +49,7 @@ public class TGClassLoader {
         try {
           this.addPath((folder.getAbsolutePath() + File.separator + files[i]));
         } catch (Throwable throwable) {
-          throwable.printStackTrace();
+          LOG.error(throwable);
         }
       }
     }
@@ -64,11 +64,11 @@ public class TGClassLoader {
     try {
       object = getClassLoader().loadClass(loadClassName).newInstance();
     } catch (InstantiationException e) {
-      e.printStackTrace();
+      LOG.error(e);
     } catch (IllegalAccessException e) {
-      e.printStackTrace();
+      LOG.error(e);
     } catch (ClassNotFoundException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return object;
   }

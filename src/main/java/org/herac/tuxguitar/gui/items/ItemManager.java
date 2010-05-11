@@ -272,7 +272,7 @@ public class ItemManager implements TGUpdateListener, IconLoader,
         }
       });
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

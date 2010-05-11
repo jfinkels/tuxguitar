@@ -61,7 +61,7 @@ public abstract class GTPInputStream extends GTPFileFormat implements
       return new String(new String(bytes, 0, length, charset)
           .getBytes(DEFAULT_TG_CHARSET), DEFAULT_TG_CHARSET);
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return new String(bytes, 0, length);
   }

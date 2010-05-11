@@ -54,7 +54,7 @@ public class ToolBarsWriter {
       setToolBars(items, doc);
       saveDocument(doc, file);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 

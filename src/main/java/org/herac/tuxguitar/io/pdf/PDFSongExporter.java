@@ -55,7 +55,7 @@ public class PDFSongExporter implements TGLocalFileExporter {
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
       this.write();
     }

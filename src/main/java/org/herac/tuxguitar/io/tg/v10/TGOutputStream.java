@@ -304,7 +304,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     try {
       this.dataOutputStream.write(v);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -419,7 +419,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     try {
       this.dataOutputStream.write(v);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -439,7 +439,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
       this.dataOutputStream.writeInt(v.length());
       this.dataOutputStream.writeChars(v);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -672,7 +672,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     try {
       this.dataOutputStream.writeShort(v);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -768,7 +768,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
       this.dataOutputStream.write(byteString.length());
       this.dataOutputStream.writeChars(byteString);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

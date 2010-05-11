@@ -59,7 +59,7 @@ public class SBInstaller {
 
       return true;
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return false;
   }
@@ -80,7 +80,7 @@ public class SBInstaller {
       config.setProperty(MidiConfigUtils.SOUNDBANK_KEY, file.getAbsolutePath());
       config.save();
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -142,7 +142,7 @@ public class SBInstaller {
         return soundbank;
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }

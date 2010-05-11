@@ -147,7 +147,7 @@ public class SBAssistant {
                 }
               });
         } catch (Throwable e) {
-          e.printStackTrace();
+          LOG.error(e);
         }
       }
     }).start();

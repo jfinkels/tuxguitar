@@ -59,7 +59,7 @@ public class TGConfigDefaults {
         this.properties.load(is);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

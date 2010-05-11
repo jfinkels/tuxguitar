@@ -53,7 +53,7 @@ public class TGResourceBundle {
         p.putAll(properties);
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

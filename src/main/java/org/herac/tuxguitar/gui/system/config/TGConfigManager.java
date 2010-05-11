@@ -46,7 +46,7 @@ public abstract class TGConfigManager {
       return (value == null) ? defaultValue : Boolean.valueOf(value.trim())
           .booleanValue();
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return defaultValue;
   }
@@ -62,7 +62,7 @@ public abstract class TGConfigManager {
       String value = getProperty(key);
       return (value == null) ? defaultValue : Double.parseDouble(value.trim());
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return defaultValue;
   }
@@ -78,7 +78,7 @@ public abstract class TGConfigManager {
       String value = getProperty(key);
       return (value == null) ? defaultValue : Float.parseFloat(value.trim());
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return defaultValue;
   }
@@ -95,12 +95,12 @@ public abstract class TGConfigManager {
             int style = Integer.parseInt(values[2].trim());
             return new FontData((name == null ? "" : name), size, style);
           } catch (NumberFormatException e) {
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return new FontData();
   }
@@ -114,7 +114,7 @@ public abstract class TGConfigManager {
       String value = getProperty(key);
       return (value == null) ? defaultValue : Integer.parseInt(value.trim());
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return defaultValue;
   }
@@ -138,12 +138,12 @@ public abstract class TGConfigManager {
 
             return new RGB(red, green, blue);
           } catch (NumberFormatException e) {
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
@@ -157,7 +157,7 @@ public abstract class TGConfigManager {
       String property = getProperty(key);
       return (property == null) ? defaultValue : property.trim();
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return defaultValue;
   }
@@ -177,7 +177,7 @@ public abstract class TGConfigManager {
         this.save();
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -196,9 +196,9 @@ public abstract class TGConfigManager {
       }
       this.properties.store(new FileOutputStream(file), getName());
     } catch (FileNotFoundException e1) {
-      e1.printStackTrace();
+      e1LOG.error();
     } catch (IOException e1) {
-      e1.printStackTrace();
+      e1LOG.error();
     }
   }
 

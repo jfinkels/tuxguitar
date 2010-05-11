@@ -209,7 +209,7 @@ public class SkinOption extends Option {
                 properties.load(skinInfo);
               }
             } catch (Throwable throwable) {
-              throwable.printStackTrace();
+              LOG.error(throwable);
             }
             SkinInfo info = new SkinInfo(skinNames[i]);
             info.setName(properties.getProperty("name", info.getSkin()));

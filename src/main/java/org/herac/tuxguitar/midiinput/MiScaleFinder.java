@@ -163,7 +163,7 @@ class MiScaleFinder {
         }
       });
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

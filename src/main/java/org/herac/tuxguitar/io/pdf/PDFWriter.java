@@ -39,7 +39,7 @@ public class PDFWriter {
       }
       return Image.getInstance(width, height, 3, 8, bytes);
     } catch (BadElementException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return null;
   }

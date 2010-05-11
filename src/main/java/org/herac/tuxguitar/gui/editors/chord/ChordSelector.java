@@ -513,7 +513,7 @@ public class ChordSelector extends Composite {
                 }
               });
         } catch (Throwable e) {
-          e.printStackTrace();
+          LOG.error(e);
         }
       }
     };

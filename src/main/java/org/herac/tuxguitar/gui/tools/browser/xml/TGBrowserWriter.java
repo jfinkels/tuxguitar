@@ -38,7 +38,7 @@ public class TGBrowserWriter {
       DocumentBuilder builder = factory.newDocumentBuilder();
       document = builder.newDocument();
     } catch (ParserConfigurationException pce) {
-      pce.printStackTrace();
+      LOG.error(pce);
     }
     return document;
   }
@@ -82,13 +82,13 @@ public class TGBrowserWriter {
       idTransform.transform(input, output);
 
     } catch (FactoryConfigurationError e) {
-      e.printStackTrace();
+      LOG.error(e);
     } catch (TransformerConfigurationException e) {
-      e.printStackTrace();
+      LOG.error(e);
     } catch (TransformerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -98,7 +98,7 @@ public class TGBrowserWriter {
       saveCollections(manager, doc);
       saveDocument(doc, new File(fileName));
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 

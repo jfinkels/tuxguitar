@@ -103,7 +103,7 @@ public class ScaleManager {
       new ScaleReader().loadScales(this.scales, TGFileUtils
           .getResourceAsStream("scales/scales.xml"));
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

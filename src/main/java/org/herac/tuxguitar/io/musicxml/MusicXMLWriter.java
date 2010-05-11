@@ -211,7 +211,7 @@ public class MusicXMLWriter {
       Document document = builder.newDocument();
       return document;
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
@@ -225,7 +225,7 @@ public class MusicXMLWriter {
       idTransform.setOutputProperty(OutputKeys.INDENT, "yes");
       idTransform.transform(input, output);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 

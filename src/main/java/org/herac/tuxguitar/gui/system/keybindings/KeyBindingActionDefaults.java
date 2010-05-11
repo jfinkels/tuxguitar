@@ -23,7 +23,7 @@ public class KeyBindingActionDefaults {
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return list;
 

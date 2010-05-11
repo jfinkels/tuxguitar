@@ -83,7 +83,7 @@ public class MidiPortSynthesizer implements MidiOutputPort {
       }
       this.synthesizerLoaded = this.synthesizer.isOpen();
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return this.synthesizer;
   }
@@ -107,7 +107,7 @@ public class MidiPortSynthesizer implements MidiOutputPort {
     } catch (Throwable throwable) {
       new MidiPlayerException(TuxGuitar
           .getProperty("jsa.error.soundbank.custom"), throwable)
-          .printStackTrace();
+          LOG.error();
     }
     return false;
   }
@@ -122,7 +122,7 @@ public class MidiPortSynthesizer implements MidiOutputPort {
         this.soundbankLoaded = getSynthesizer().loadAllInstruments(sb);
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return this.soundbankLoaded;
   }
@@ -151,7 +151,7 @@ public class MidiPortSynthesizer implements MidiOutputPort {
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 }

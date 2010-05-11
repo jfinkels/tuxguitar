@@ -158,7 +158,7 @@ public class LanguageManager {
       this.resources = TGResourceBundle.getBundle(baseName, locale);
       this.fireChanges();
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

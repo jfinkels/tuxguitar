@@ -23,7 +23,7 @@ public class TGPluginConfigManager extends TGConfigManager {
         properties.load(is);
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return properties;
   }

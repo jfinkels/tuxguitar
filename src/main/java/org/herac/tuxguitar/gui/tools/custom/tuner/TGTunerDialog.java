@@ -86,7 +86,7 @@ public class TGTunerDialog implements TGTunerListener {
         }
       });
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -107,7 +107,7 @@ public class TGTunerDialog implements TGTunerListener {
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
   }

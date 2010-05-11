@@ -201,7 +201,7 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     try {
       this.dataOutputStream.write(v);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -565,7 +565,7 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     try {
       this.dataOutputStream.writeShort(v);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -682,7 +682,7 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
       this.dataOutputStream.write(byteString.length());
       this.dataOutputStream.writeChars(byteString);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

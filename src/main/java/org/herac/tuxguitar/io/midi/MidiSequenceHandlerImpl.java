@@ -80,7 +80,7 @@ public class MidiSequenceHandlerImpl extends MidiSequenceHandler {
       getSequence().finish();
       new MidiFileWriter().write(getSequence(), 1, this.stream);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

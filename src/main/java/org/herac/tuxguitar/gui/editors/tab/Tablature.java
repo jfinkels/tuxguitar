@@ -238,7 +238,7 @@ public class Tablature extends Composite {
           moveScrollTo(getCaret().getMeasure(), xScroll, yScroll, area);
         }
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
       this.setPainting(false);
       TuxGuitar.instance().unlock();
@@ -301,7 +301,7 @@ public class Tablature extends Composite {
           }
         }
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
     }
   }

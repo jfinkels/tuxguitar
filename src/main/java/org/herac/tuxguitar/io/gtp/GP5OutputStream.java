@@ -726,7 +726,7 @@ public class GP5OutputStream extends GTPOutputStream {
       writeMeasures(song, header.getTempo().clone());
       close();
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

@@ -30,7 +30,7 @@ public class TEInputStream {
     try {
       this.stream.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -38,7 +38,7 @@ public class TEInputStream {
     try {
       return this.stream.read();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }
@@ -51,7 +51,7 @@ public class TEInputStream {
     try {
       this.stream.read(bytes);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return bytes;
   }
@@ -188,7 +188,7 @@ public class TEInputStream {
       this.stream.read(b);
       return ((b[1] & 0xff) << 8) | (b[0] & 0xff);
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return 0;
   }

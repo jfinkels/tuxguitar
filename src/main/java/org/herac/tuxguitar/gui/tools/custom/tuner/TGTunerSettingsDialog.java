@@ -121,7 +121,7 @@ public class TGTunerSettingsDialog {
       this.tunerDialog.getTuner().resumeFromPause();
       dialog.dispose();
     } catch (Exception ex) {
-      ex.printStackTrace();
+      LOG.error(ex);
       MessageDialog.errorMessage(dialog, ex.getMessage());
     }
   }

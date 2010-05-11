@@ -137,7 +137,7 @@ public class TGConverterProcess implements TGConverterListener, LanguageLoader,
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
   }
@@ -160,7 +160,7 @@ public class TGConverterProcess implements TGConverterListener, LanguageLoader,
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
   }
@@ -183,7 +183,7 @@ public class TGConverterProcess implements TGConverterListener, LanguageLoader,
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
   }
@@ -206,7 +206,7 @@ public class TGConverterProcess implements TGConverterListener, LanguageLoader,
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
   }

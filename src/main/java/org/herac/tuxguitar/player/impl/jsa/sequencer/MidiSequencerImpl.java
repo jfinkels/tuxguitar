@@ -40,7 +40,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
         this.closeTransmitter();
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -51,7 +51,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
         this.sequencerTransmitter = null;
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -83,7 +83,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
     try {
       return getSequencer().getTickLength();
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return 0;
   }
@@ -92,7 +92,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
     try {
       return (getSequencer().getTickPosition() + TICK_MOVE);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return 0;
   }
@@ -105,7 +105,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
     try {
       return (getSequencer(false) != null && getSequencer(false).isRunning());
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return false;
   }
@@ -118,7 +118,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
         this.openTransmitter();
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -127,7 +127,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
       this.sequencerTransmitter = getSequencer().getTransmitter();
       this.sequencerTransmitter.setReceiver(new MidiReceiverImpl(this));
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -141,7 +141,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
         this.getTransmitter().sendSystemReset();
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -159,7 +159,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -167,7 +167,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
     try {
       getSequencer().setTrackMute(index, mute);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -182,7 +182,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -190,7 +190,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
     try {
       getSequencer().setSequence(sequence);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -198,7 +198,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
     try {
       getSequencer().setTrackSolo(index, solo);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -207,7 +207,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
       this.getSequencer().setTickPosition(tickPosition - TICK_MOVE);
       this.reset(false);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -219,7 +219,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
     try {
       this.setRunning(true);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -227,7 +227,7 @@ public class MidiSequencerImpl implements MidiSequencer, MidiSequenceLoader {
     try {
       this.setRunning(false);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 }

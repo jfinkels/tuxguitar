@@ -32,7 +32,7 @@ public class AboutContentReader {
       }
       is.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return sb;
   }

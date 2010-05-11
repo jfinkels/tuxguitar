@@ -30,7 +30,7 @@ public class TGBrowserConnection {
             }
           } catch (TGBrowserException e) {
             notifyError(callId, e);
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }).start();
@@ -51,7 +51,7 @@ public class TGBrowserConnection {
             }
           } catch (TGBrowserException e) {
             notifyError(callId, e);
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }).start();
@@ -72,7 +72,7 @@ public class TGBrowserConnection {
             }
           } catch (TGBrowserException e) {
             notifyError(callId, e);
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }).start();
@@ -95,7 +95,7 @@ public class TGBrowserConnection {
             }
           } catch (TGBrowserException e) {
             notifyError(callId, e);
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }).start();
@@ -128,7 +128,7 @@ public class TGBrowserConnection {
             }
           } catch (TGBrowserException e) {
             notifyError(callId, e);
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }).start();
@@ -181,7 +181,7 @@ public class TGBrowserConnection {
             }
           } catch (TGBrowserException e) {
             notifyError(callId, e);
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }).start();
@@ -207,7 +207,7 @@ public class TGBrowserConnection {
             }
           } catch (TGBrowserException e) {
             notifyError(callId, e);
-            e.printStackTrace();
+            LOG.error(e);
           }
         }
       }).start();

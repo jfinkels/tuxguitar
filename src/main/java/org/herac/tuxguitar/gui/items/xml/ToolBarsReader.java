@@ -33,7 +33,7 @@ public class ToolBarsReader {
         loadToolBars(manager, getDocument(file).getFirstChild());
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 

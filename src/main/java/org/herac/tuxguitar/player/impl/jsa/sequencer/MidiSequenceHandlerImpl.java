@@ -76,7 +76,7 @@ public class MidiSequenceHandlerImpl extends MidiSequenceHandler {
         this.midiTracks[i] = this.sequence.createTrack();
       }
     } catch (InvalidMidiDataException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

@@ -34,7 +34,7 @@ public class SyncThread extends Thread {
     try {
       TGSynchronizer.instance().addRunnable(this.runnable);
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

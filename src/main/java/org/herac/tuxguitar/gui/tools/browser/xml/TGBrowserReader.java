@@ -57,7 +57,7 @@ public class TGBrowserReader {
         Document doc = getDocument(file);
         loadCollections(manager, doc.getFirstChild());
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
     }
   }

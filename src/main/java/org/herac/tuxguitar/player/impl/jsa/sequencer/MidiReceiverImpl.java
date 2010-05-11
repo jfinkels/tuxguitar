@@ -101,7 +101,7 @@ public class MidiReceiverImpl implements Receiver {
         parseMessage(message.getMessage());
       }
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

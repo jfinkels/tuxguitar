@@ -112,7 +112,7 @@ public class MidiPlayer {
       this.infoTrack = parser.getInfoTrack();
       this.metronomeTrack = parser.getMetronomeTrack();
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -133,7 +133,7 @@ public class MidiPlayer {
       getSequencer().setSolo(this.metronomeTrack,
           (isMetronomeEnabled() && this.anySolo));
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -147,7 +147,7 @@ public class MidiPlayer {
       }
       setChangeTickPosition(false);
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -168,7 +168,7 @@ public class MidiPlayer {
       this.closeSequencer();
       this.closeOutputPort();
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -185,7 +185,7 @@ public class MidiPlayer {
       }
       this.lock.unlock();
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -217,7 +217,7 @@ public class MidiPlayer {
       }
       this.reset();
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -339,7 +339,7 @@ public class MidiPlayer {
       return (this.running || this.getSequencer().isRunning() || this
           .isStarting());
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return false;
   }
@@ -365,7 +365,7 @@ public class MidiPlayer {
       try {
         ports.addAll(provider.listPorts());
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
     }
     return ports;
@@ -377,7 +377,7 @@ public class MidiPlayer {
       try {
         sequencers.addAll(provider.listSequencers());
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
     }
     return sequencers;
@@ -447,7 +447,7 @@ public class MidiPlayer {
         this.loadOutputPort((MidiOutputPort) ports.get(0));
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -494,7 +494,7 @@ public class MidiPlayer {
       this.sequencerKey = key;
       this.openSequencer(listSequencers(), tryFirst);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -566,7 +566,7 @@ public class MidiPlayer {
           } catch (Throwable throwable) {
             setStarting(false);
             reset();
-            throwable.printStackTrace();
+            LOG.error(throwable);
           } finally {
             MidiPlayer.this.lock.unlock();
           }
@@ -616,7 +616,7 @@ public class MidiPlayer {
         getOutputTransmitter().sendNoteOff(channel, beat[i][0], beat[i][1]);
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
 
@@ -704,7 +704,7 @@ public class MidiPlayer {
       this.getSequencer().setSolo(this.metronomeTrack,
           (isMetronomeEnabled() && this.anySolo));
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -762,7 +762,7 @@ public class MidiPlayer {
       }
       this.setRunning(false);
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -770,7 +770,7 @@ public class MidiPlayer {
     try {
       this.getOutputTransmitter().sendSystemReset();
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -792,7 +792,7 @@ public class MidiPlayer {
       getOutputTransmitter().sendControlChange(channel,
           MidiControllers.EXPRESSION, expression);
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -816,7 +816,7 @@ public class MidiPlayer {
       getSequencer().setMute(track.getNumber(), track.isMute());
       getSequencer().setSolo(track.getNumber(), track.isSolo());
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -853,7 +853,7 @@ public class MidiPlayer {
             MidiControllers.DATA_ENTRY_LSB, 0);
       }
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -893,7 +893,7 @@ public class MidiPlayer {
         }
       }
     } catch (MidiPlayerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

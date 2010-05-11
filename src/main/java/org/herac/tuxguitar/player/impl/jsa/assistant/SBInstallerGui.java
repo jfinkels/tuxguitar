@@ -79,7 +79,7 @@ public class SBInstallerGui implements SBInstallerlistener {
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
   }
@@ -95,7 +95,7 @@ public class SBInstallerGui implements SBInstallerlistener {
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
   }
@@ -111,7 +111,7 @@ public class SBInstallerGui implements SBInstallerlistener {
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
   }

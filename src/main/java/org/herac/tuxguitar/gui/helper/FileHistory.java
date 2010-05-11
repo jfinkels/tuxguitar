@@ -67,7 +67,7 @@ public class FileHistory {
     try {
       return URLDecoder.decode(url, "UTF-8");
     } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return url;
   }
@@ -141,7 +141,7 @@ public class FileHistory {
         return true;
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return false;
   }
@@ -176,7 +176,7 @@ public class FileHistory {
         this.saveHistory();
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 
@@ -212,9 +212,9 @@ public class FileHistory {
       properties.store(new FileOutputStream(getHistoryFileName()),
           "History Files");
     } catch (FileNotFoundException e1) {
-      e1.printStackTrace();
+      e1LOG.error();
     } catch (IOException e1) {
-      e1.printStackTrace();
+      e1LOG.error();
     }
   }
 

@@ -60,7 +60,7 @@ public class ScaleReader {
         loadScales(scales, doc.getFirstChild());
       }
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

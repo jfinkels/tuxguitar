@@ -146,7 +146,7 @@ public class FileMenuItem extends MenuItems {
     try {
       return URLDecoder.decode(url, "UTF-8");
     } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return url;
   }

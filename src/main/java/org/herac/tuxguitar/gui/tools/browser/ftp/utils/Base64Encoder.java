@@ -109,7 +109,7 @@ public class Base64Encoder {
       return out.toByteArray();
 
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
 
     return bytes;
