@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.community.startup;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -96,9 +97,12 @@ public class TGCommunityStartupScreen {
         }
       });
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGCommunityStartupScreen.class);
+
 
   protected void open(Shell parent) {
     final Shell dialog = DialogUtils.newDialog(TuxGuitar.instance().getShell(),

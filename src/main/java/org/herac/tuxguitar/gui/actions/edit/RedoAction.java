@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.gui.actions.edit;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.events.TypedEvent;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
@@ -31,8 +32,12 @@ public class RedoAction extends Action {
         TuxGuitar.instance().getUndoableManager().redo();
       }
     } catch (CannotRedoException e1) {
-      e1.printStackTrace();
+      LOG.error(e1);
     }
     return 0;
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(RedoAction.class);
+
+
 }

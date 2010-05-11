@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.gui.actions.system;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.events.TypedEvent;
@@ -96,9 +97,12 @@ public class DisposeAction extends Action {
         }
       });
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(DisposeAction.class);
 
   protected void saveConfig() {
     TGConfigManager config = TuxGuitar.instance().getConfig();

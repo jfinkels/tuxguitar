@@ -3,6 +3,8 @@ package org.herac.tuxguitar.community.auth.utils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
+import org.apache.log4j.Logger;
+
 public class Base64Encoder {
 
   private static final int BUFFER_SIZE = 1024;
@@ -109,11 +111,14 @@ public class Base64Encoder {
       return out.toByteArray();
 
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
 
     return bytes;
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(Base64Encoder.class);
+
 
   private static int get1(byte buf[], int off) {
     return (buf[off] & 0xfc) >> 2;

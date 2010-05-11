@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.gui.actions.file;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.graphics.GC;
@@ -78,11 +79,14 @@ public class PrintAction extends Action {
                 }
               });
         } catch (Throwable e) {
-          e.printStackTrace();
+          LOG.error(e);
         }
         TuxGuitar.instance().loadCursor(SWT.CURSOR_ARROW);
       }
     }
+
+    /** The Logger for this class. */
+    public static final transient Logger LOG = Logger.getLogger(PrinAction.class);
 
     public Rectangle getBounds() {
       return this.bounds;

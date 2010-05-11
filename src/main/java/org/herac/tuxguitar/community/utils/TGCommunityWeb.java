@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.community.TGCommunitySingleton;
 import org.herac.tuxguitar.gui.system.config.TGConfigManager;
 
@@ -16,9 +17,13 @@ public class TGCommunityWeb {
     try {
       open(new URL(HOME_URL + "/" + suffix));
     } catch (MalformedURLException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGCommunityWeb.class);
 
   public static boolean open(URL url) {
     if (openDesktopBrowser(url)) {
@@ -35,7 +40,7 @@ public class TGCommunityWeb {
 
     String[] browserCmds = config.getStringConfigValue("community.browser", "")
         .split(";");
-    
+
     for (final String browserCmd : browserCmds) {
       try {
 
@@ -80,8 +85,9 @@ public class TGCommunityWeb {
       }
       return true;
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return false;
   }
+
 }

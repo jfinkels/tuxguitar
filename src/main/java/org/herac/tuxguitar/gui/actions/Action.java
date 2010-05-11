@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.gui.actions;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.events.TypedEvent;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TablatureEditor;
@@ -70,6 +71,7 @@ public abstract class Action extends ActionAdapter {
     return ((getFlags() & KEY_BINDING_AVAILABLE) != 0);
   }
 
+  @Override
   public synchronized void process(final TypedEvent e) {
     if (!ActionLock.isLocked() && !TuxGuitar.instance().isLocked()) {
       final int flags = getFlags();
@@ -100,10 +102,13 @@ public abstract class Action extends ActionAdapter {
           }
         });
       } catch (Throwable throwable) {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
     }
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(Action.class);
 
   public synchronized void updateTablature() {
     TuxGuitar.instance().fireUpdate();

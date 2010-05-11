@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.gui.actions.measure;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
+import org.herac.tuxguitar.gui.actions.file.FileActionUtils;
 import org.herac.tuxguitar.gui.clipboard.CannotInsertTransferException;
 import org.herac.tuxguitar.gui.clipboard.MeasureTransferable;
 import org.herac.tuxguitar.gui.clipboard.Transferable;
@@ -73,9 +75,11 @@ public class PasteMeasureAction extends Action {
         }
       }
     } catch (CannotInsertTransferException ex) {
-      ex.printStackTrace();
+      LOG.error(ex);
     }
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(PasteMeasureAction.class);
 
   public void showDialog(Shell shell) {
     TGMeasureImpl measure = getEditor().getTablature().getCaret().getMeasure();

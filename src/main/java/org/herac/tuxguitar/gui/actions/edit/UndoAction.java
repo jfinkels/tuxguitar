@@ -6,7 +6,9 @@
  */
 package org.herac.tuxguitar.gui.actions.edit;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.events.TypedEvent;
+import org.herac.tuxguitar.community.auth.utils.Base64Decoder;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.undo.CannotUndoException;
@@ -31,8 +33,12 @@ public class UndoAction extends Action {
         TuxGuitar.instance().getUndoableManager().undo();
       }
     } catch (CannotUndoException e1) {
-      e1.printStackTrace();
+      LOG.error(e1);
     }
     return 0;
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(UndoAction.class);
+
+
 }

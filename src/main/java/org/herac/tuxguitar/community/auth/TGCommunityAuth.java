@@ -2,6 +2,7 @@ package org.herac.tuxguitar.community.auth;
 
 import java.security.MessageDigest;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.community.auth.utils.Base64Decoder;
 import org.herac.tuxguitar.community.auth.utils.Base64Encoder;
 import org.herac.tuxguitar.gui.system.config.TGConfigManager;
@@ -79,7 +80,12 @@ public class TGCommunityAuth {
       this.authCode = new String(Base64Encoder.encode(new String(this.username
           + ";" + passwordMD5).getBytes()));
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGCommunityAuth.class);
+
 }

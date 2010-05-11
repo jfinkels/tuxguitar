@@ -12,6 +12,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.herac.tuxguitar.gui.TuxGuitar;
@@ -58,10 +59,14 @@ public class TGFileUtils {
         return fileNames;
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(TGFileUtils.class);
 
   public static InputStream getResourceAsStream(String resource) {
     try {
@@ -77,7 +82,7 @@ public class TGFileUtils {
       return TGClassLoader.instance().getClassLoader().getResourceAsStream(
           resource);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
@@ -100,7 +105,7 @@ public class TGFileUtils {
             + File.separator;
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
@@ -118,7 +123,7 @@ public class TGFileUtils {
       }
       return TGClassLoader.instance().getClassLoader().getResource(resource);
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
@@ -145,7 +150,7 @@ public class TGFileUtils {
       }
       return vector;
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
@@ -195,7 +200,7 @@ public class TGFileUtils {
         return true;
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return false;
   }
@@ -229,7 +234,7 @@ public class TGFileUtils {
       }
       System.err.println(name + ": not found");
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return new Image(TuxGuitar.instance().getDisplay(), 16, 16);
   }

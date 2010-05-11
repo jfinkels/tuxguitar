@@ -5,9 +5,8 @@ package org.herac.tuxguitar.gui.editors.chord;
  */
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -550,7 +549,7 @@ public class ChordRecognizer extends Composite {
                 }
               });
         } catch (Throwable e) {
-          e.printStackTrace();
+          LOG.error(e);
         }
       }
     }
@@ -600,7 +599,7 @@ public class ChordRecognizer extends Composite {
                       }
                     });
               } catch (Throwable e) {
-                e.printStackTrace();
+                LOG.error(e);
               }
             }
             return;
@@ -621,7 +620,7 @@ public class ChordRecognizer extends Composite {
                     }
                   });
             } catch (Throwable e) {
-              e.printStackTrace();
+              LOG.error(e);
             }
           }
 
@@ -637,7 +636,7 @@ public class ChordRecognizer extends Composite {
                     }
                   });
             } catch (Throwable e) {
-              e.printStackTrace();
+              LOG.error(e);
             }
           }
         }
@@ -645,6 +644,10 @@ public class ChordRecognizer extends Composite {
     }).start();
   }
 
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(ChordRecognizer.class);
+  
   /** adjusts widgets on the Recognizer combo */
   protected void redecorate(int params[]) {
     this.dialog.getSelector().adjustWidgets(params[TONIC_INDEX],

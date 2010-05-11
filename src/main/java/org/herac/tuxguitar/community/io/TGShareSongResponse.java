@@ -7,6 +7,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.community.auth.utils.Base64Decoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -35,10 +37,13 @@ public class TGShareSongResponse {
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGShareSongResponse.class);
+
 
   public String getStatus() throws Throwable {
     if (this.document != null) {

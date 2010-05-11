@@ -1,5 +1,6 @@
 package org.herac.tuxguitar.community.auth;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -175,9 +176,12 @@ public class TGCommunityAuthDialog {
         });
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGCommunityAuthDialog.class);
 
   protected void update(String username, String password) {
     this.auth.setUsername(username);

@@ -9,8 +9,10 @@ package org.herac.tuxguitar.gui.actions.file;
 import java.io.File;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TypedEvent;
+import org.herac.tuxguitar.community.auth.utils.Base64Decoder;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.actions.ActionLock;
@@ -92,10 +94,14 @@ public class OpenFileAction extends Action {
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(OpenFileAction.class);
+
 
   protected void openFile(Object data) {
     final URL url = getOpenFileName(data);
@@ -119,7 +125,9 @@ public class OpenFileAction extends Action {
         }
       });
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
+  
+
 }

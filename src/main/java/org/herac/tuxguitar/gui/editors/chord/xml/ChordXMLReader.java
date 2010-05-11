@@ -9,6 +9,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.w3c.dom.Document;
@@ -28,10 +30,12 @@ public class ChordXMLReader {
         loadChords(doc.getFirstChild(), chords);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
     return chords;
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(ChordXMLReader.class);
 
   private static Document getDocument(File file) {
     Document document = null;
@@ -40,11 +44,11 @@ public class ChordXMLReader {
       DocumentBuilder builder = factory.newDocumentBuilder();
       document = builder.parse(file);
     } catch (SAXException sxe) {
-      sxe.printStackTrace();
+      LOG.error(sxe);
     } catch (ParserConfigurationException pce) {
-      pce.printStackTrace();
+      LOG.error(pce);
     } catch (IOException ioe) {
-      ioe.printStackTrace();
+      LOG.error(ioe);
     }
     return document;
   }
@@ -94,7 +98,7 @@ public class ChordXMLReader {
       }
     } catch (Exception e) {
       chords.clear();
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 }

@@ -6,6 +6,7 @@
  */
 package org.herac.tuxguitar.gui.util;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -44,10 +45,12 @@ public class MessageDialog {
             .getClass().getName()));
     new Thread(new Runnable() {
       public void run() {
-        throwable.printStackTrace();
+        LOG.error(throwable);
       }
     }).start();
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(MessageDialog.class);
 
   public static void errorMessage(final Throwable throwable) {
     MessageDialog.errorMessage(TuxGuitar.instance().getShell(), throwable);

@@ -9,6 +9,7 @@ package org.herac.tuxguitar.gui.actions.track;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -31,6 +32,7 @@ import org.eclipse.swt.widgets.Text;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.actions.ActionLock;
+import org.herac.tuxguitar.gui.actions.file.FileActionUtils;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.gui.helper.SyncThread;
 import org.herac.tuxguitar.gui.undo.undoables.UndoableJoined;
@@ -673,9 +675,12 @@ public class TrackPropertiesAction extends Action {
     } catch (Throwable throwable) {
       TuxGuitar.instance().loadCursor(SWT.CURSOR_ARROW);
       ActionLock.unlock();
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TrackPropertiesAction.class);
+
 
   protected void updateTrackTunings(TGTrackImpl track, List<TGString> strings,
       boolean transposeStrings, boolean transposeTryKeepString,

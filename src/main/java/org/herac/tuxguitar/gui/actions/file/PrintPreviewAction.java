@@ -9,6 +9,7 @@ package org.herac.tuxguitar.gui.actions.file;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.graphics.Image;
@@ -34,6 +35,9 @@ import org.herac.tuxguitar.util.TGSynchronizer;
  *         Window - Preferences - Java - Code Style - Code Templates
  */
 public class PrintPreviewAction extends Action {
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(PrintPreviewAction.class);
+
   private class PrintDocumentImpl implements PrintDocument {
 
     private Rectangle bounds;
@@ -64,10 +68,11 @@ public class PrintPreviewAction extends Action {
           }
         });
       } catch (Throwable e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
 
+    
     public Rectangle getBounds() {
       return this.bounds;
     }

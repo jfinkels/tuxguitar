@@ -19,6 +19,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -33,10 +34,13 @@ public class ChordXMLWriter {
       DocumentBuilder builder = factory.newDocumentBuilder();
       document = builder.newDocument();
     } catch (ParserConfigurationException pce) {
-      pce.printStackTrace();
+      LOG.error(pce);
     }
     return document;
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(ChordXMLWriter.class);
+
 
   public static void saveDocument(Document document, File file) {
     try {
@@ -50,13 +54,13 @@ public class ChordXMLWriter {
       idTransform.setOutputProperty(OutputKeys.INDENT, "yes");
       idTransform.transform(input, output);
     } catch (FactoryConfigurationError e) {
-      e.printStackTrace();
+      LOG.error(e);
     } catch (TransformerConfigurationException e) {
-      e.printStackTrace();
+      LOG.error(e);
     } catch (TransformerException e) {
-      e.printStackTrace();
+      LOG.error(e);
     } catch (FileNotFoundException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

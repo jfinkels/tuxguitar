@@ -8,6 +8,7 @@ package org.herac.tuxguitar.gui;
 
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -478,11 +479,14 @@ public class TuxGuitar {
         getPlayer()
             .addSequencerProvider(new MidiSequencerProviderImpl(), false);
       } catch (MidiPlayerException e) {
-        e.printStackTrace();
+        LOG.error(e);
       }
     }
     return this.player;
   }
+
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TuxGuitar.class);
 
   public TGPluginManager getPluginManager() {
     if (this.pluginManager == null) {
@@ -511,7 +515,7 @@ public class TuxGuitar {
 
   public TGSongManager getSongManager() {
     if (this.songManager == null) {
-//      this.songManager = new TGSongManager(new TGFactoryImpl());
+      // this.songManager = new TGSongManager(new TGFactoryImpl());
       this.songManager = new TGSongManager();
       this.songManager.setSong(this.songManager.newSong());
     }
@@ -600,7 +604,7 @@ public class TuxGuitar {
         }
       });
     } catch (Throwable e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
 

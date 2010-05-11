@@ -1,5 +1,7 @@
 package org.herac.tuxguitar.gui.actions;
 
+import org.apache.log4j.Logger;
+
 public class ActionLock {
 
   private static boolean working;
@@ -24,7 +26,10 @@ public class ActionLock {
         }
       }
     } catch (InterruptedException e) {
-      e.printStackTrace();
+      LOG.error(e);
     }
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(ActionLock.class);
+
 }

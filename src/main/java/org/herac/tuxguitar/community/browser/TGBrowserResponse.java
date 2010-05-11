@@ -7,6 +7,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.log4j.Logger;
+import org.herac.tuxguitar.community.auth.utils.Base64Decoder;
 import org.herac.tuxguitar.gui.tools.browser.base.TGBrowserElement;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -42,10 +44,13 @@ public class TGBrowserResponse {
         }
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return null;
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(TGBrowserResponse.class);
+
 
   public String getStatus() {
     if (this.document != null) {

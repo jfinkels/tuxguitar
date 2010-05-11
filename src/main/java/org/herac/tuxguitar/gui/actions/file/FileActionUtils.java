@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.util.ConfirmDialog;
 import org.herac.tuxguitar.gui.util.FileChooser;
@@ -147,10 +148,15 @@ public class FileActionUtils {
         return true;
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
     return false;
   }
+  
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(FileActionUtils.class);
+
+
 
   public static boolean isSupportedFormat(String path) {
     if (path != null) {

@@ -3,6 +3,7 @@ package org.herac.tuxguitar.gui.util;
 import java.io.File;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.util.TGVersion;
 
@@ -139,9 +140,11 @@ public class ArgumentParser {
         checkURL();
       }
     } catch (Throwable throwable) {
-      throwable.printStackTrace();
+      LOG.error(throwable);
     }
   }
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger.getLogger(ArgumentParser.class);
 
   protected void print(String s) {
     print(s, true);
