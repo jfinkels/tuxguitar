@@ -25,6 +25,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
 import org.herac.tuxguitar.gui.undo.undoables.custom.UndoableChangeClef;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.gui.util.MessageDialog;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.util.TGSynchronizer;
@@ -43,6 +44,7 @@ public class ChangeClefAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     showDialog(getEditor().getTablature().getShell());
     return 0;
@@ -61,7 +63,7 @@ public class ChangeClefAction extends Action {
     return data;
   }
 
-  protected void setClef(int clef, boolean toEnd) {
+  protected void setClef(Clef clef, boolean toEnd) {
     // comienza el undoable
     UndoableChangeClef undoable = UndoableChangeClef.startUndo();
 
@@ -103,7 +105,24 @@ public class ChangeClefAction extends Action {
       clefs.add(TuxGuitar.getProperty("composition.clef.bass"));
       clefs.add(TuxGuitar.getProperty("composition.clef.tenor"));
       clefs.add(TuxGuitar.getProperty("composition.clef.alto"));
-      clefs.select(measure.getClef() - 1);
+
+      int selection = 0;
+      switch (measure.getClef()) {
+      case ALTO:
+        selection = 3;
+        break;
+      case BASS:
+        selection = 1;
+        break;
+      case TENOR:
+        selection = 2;
+        break;
+      case TREBLE:
+        selection = 0;
+        break;
+      }
+
+      clefs.select(selection);
       clefs.setLayoutData(getComboData());
 
       // --------------------To End Checkbox-------------------------------
@@ -124,9 +143,26 @@ public class ChangeClefAction extends Action {
       buttonOK.setText(TuxGuitar.getProperty("ok"));
       buttonOK.setLayoutData(getButtonData());
       buttonOK.addSelectionListener(new SelectionAdapter() {
+        @Override
         public void widgetSelected(SelectionEvent arg0) {
           final boolean toEndValue = toEnd.getSelection();
-          final int clef = (clefs.getSelectionIndex() + 1);
+
+          Clef selectedClef = null;
+          switch (clefs.getSelectionIndex()) {
+          case 0:
+            selectedClef = Clef.TREBLE;
+            break;
+          case 1:
+            selectedClef = Clef.BASS;
+            break;
+          case 2:
+            selectedClef = Clef.TENOR;
+            break;
+          case 3:
+            selectedClef = Clef.ALTO;
+            break;
+          }
+          final Clef clef = selectedClef;
 
           dialog.dispose();
           try {
@@ -150,6 +186,7 @@ public class ChangeClefAction extends Action {
       buttonCancel.setText(TuxGuitar.getProperty("cancel"));
       buttonCancel.setLayoutData(getButtonData());
       buttonCancel.addSelectionListener(new SelectionAdapter() {
+        @Override
         public void widgetSelected(SelectionEvent arg0) {
           dialog.dispose();
         }

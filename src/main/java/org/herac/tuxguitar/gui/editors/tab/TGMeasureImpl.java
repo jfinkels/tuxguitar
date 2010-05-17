@@ -690,15 +690,10 @@ public class TGMeasureImpl extends TGMeasure {
           + getTs().getPosition(TGTrackSpacing.POSITION_SCORE_MIDDLE_LINES);
       layout.setClefStyle(painter);
       painter.initPath(TGPainter.PATH_FILL);
-      if (this.getClef() == TGMeasure.CLEF_TREBLE) {
-        TGClefPainter.paintTreble(painter, x, y, layout.getScoreLineSpacing());
-      } else if (this.getClef() == TGMeasure.CLEF_BASS) {
-        TGClefPainter.paintBass(painter, x, y, layout.getScoreLineSpacing());
-      } else if (this.getClef() == TGMeasure.CLEF_TENOR) {
-        TGClefPainter.paintTenor(painter, x, y, layout.getScoreLineSpacing());
-      } else if (this.getClef() == TGMeasure.CLEF_ALTO) {
-        TGClefPainter.paintAlto(painter, x, y, layout.getScoreLineSpacing());
-      }
+
+      TGClefPainter.paint(painter, this.getClef(), x, y, layout
+          .getScoreLineSpacing());
+
       painter.closePath();
     }
   }
@@ -871,7 +866,23 @@ public class TGMeasureImpl extends TGMeasure {
       int x = fromX + getClefSpacing(layout) + 10;
       int y = fromY
           + getTs().getPosition(TGTrackSpacing.POSITION_SCORE_MIDDLE_LINES);
-      int clefIndex = (this.getClef() - 1);
+      
+      int clefIndex = 0;
+      switch (this.getClef()) {
+      case ALTO:
+        clefIndex = 3;
+        break;
+      case BASS:
+        clefIndex = 1;
+        break;
+      case TENOR:
+        clefIndex = 2;
+        break;
+      case TREBLE:
+        clefIndex = 0;
+        break;
+      }
+      
       int currentKey = this.getKeySignature();
       int previousKey = (this.prevMeasure != null ? this.prevMeasure
           .getKeySignature() : 0);

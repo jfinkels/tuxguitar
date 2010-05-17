@@ -21,6 +21,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
@@ -259,7 +260,25 @@ public class TGInputStream implements TGInputStreamBase {
     readTempo(header.getTempo());
 
     // leo la clave
-    measure.setClef(readInt());
+    final int clefCode = readInt();
+    
+    Clef clef = null;
+    switch(clefCode) {
+    case 1:
+      clef = Clef.TREBLE;
+      break;
+    case 2:
+      clef = Clef.BASS;
+      break;
+    case 3:
+      clef = Clef.TENOR;
+      break;
+    case 4:
+      clef = Clef.ALTO;
+      break;
+    }
+    
+    measure.setClef(clef);
 
     // leo el key signature
     measure.setKeySignature(readInt());

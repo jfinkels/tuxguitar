@@ -24,6 +24,7 @@ import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
 import org.herac.tuxguitar.io.tg.TGBeatData;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -391,11 +392,28 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     readBeats(measure, data);
 
     // leo la clave
-    measure.setClef((lastMeasure == null) ? TGMeasure.CLEF_TREBLE : lastMeasure
+    measure.setClef((lastMeasure == null) ? Clef.TREBLE : lastMeasure
         .getClef());
     if (((header & MEASURE_CLEF) != 0)) {
-      measure.setClef(readByte());
-    }
+      final int clefCode = readByte();
+
+      Clef clef = null;
+      switch (clefCode) {
+      case 1:
+        clef = Clef.TREBLE;
+        break;
+      case 2:
+        clef = Clef.BASS;
+        break;
+      case 3:
+        clef = Clef.TENOR;
+        break;
+      case 4:
+        clef = Clef.ALTO;
+        break;
+      }
+
+      measure.setClef(clef);}
 
     // leo el key signature
     measure.setKeySignature((lastMeasure == null) ? 0 : lastMeasure

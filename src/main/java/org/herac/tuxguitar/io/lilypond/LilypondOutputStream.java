@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -221,18 +222,25 @@ public class LilypondOutputStream {
     this.writer.print(" ");
   }
 
-  private void addClef(int clef, int indent) {
-    String clefName = "";
-    if (clef == TGMeasure.CLEF_TREBLE) {
+  private void addClef(Clef clef, int indent) {
+    String clefName = null;
+
+    switch (clef) {
+    case TREBLE:
       clefName = "treble";
-    } else if (clef == TGMeasure.CLEF_BASS) {
+      break;
+    case BASS:
       clefName = "bass";
-    } else if (clef == TGMeasure.CLEF_ALTO) {
-      clefName = "alto";
-    } else if (clef == TGMeasure.CLEF_TENOR) {
+      break;
+    case TENOR:
       clefName = "tenor";
+      break;
+    case ALTO:
+      clefName = "alto";
+      break;
     }
-    if (clefName != "") {
+
+    if (clefName != null) {
       this.writer.println(indent(indent) + "\\clef #(if $inTab \"tab\" \""
           + clefName + "_8\")");
     }

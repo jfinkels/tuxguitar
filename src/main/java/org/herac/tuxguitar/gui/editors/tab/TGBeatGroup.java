@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGVoice;
 
 public class TGBeatGroup {
@@ -131,10 +132,25 @@ public class TGBeatGroup {
       } else if ((layout.getStyle() & ViewLayout.DISPLAY_SCORE) == 0) {
         this.direction = DIRECTION_DOWN;
       } else {
+        int selection = 0;
+        switch (measure.getClef()) {
+        case ALTO:
+          selection = 3;
+          break;
+        case BASS:
+          selection = 1;
+          break;
+        case TENOR:
+          selection = 2;
+          break;
+        case TREBLE:
+          selection = 0;
+          break;
+        }
         int max = Math.abs(this.minNote.getRealValue()
-            - (SCORE_MIDDLE_KEYS[measure.getClef() - 1] + 100));
+            - (SCORE_MIDDLE_KEYS[selection] + 100));
         int min = Math.abs(this.maxNote.getRealValue()
-            - (SCORE_MIDDLE_KEYS[measure.getClef() - 1] - 100));
+            - (SCORE_MIDDLE_KEYS[selection] - 100));
         if (max > min) {
           this.direction = DIRECTION_UP;
         } else {
@@ -160,7 +176,7 @@ public class TGBeatGroup {
     return this.voices;
   }
 
-  public int getY1(ViewLayout layout, TGNoteImpl note, int key, int clef) {
+  public int getY1(ViewLayout layout, TGNoteImpl note, int key, Clef clef) {
     double scale = (layout.getScoreLineSpacing() / 2.00);
     int noteValue = note.getRealValue();
 
@@ -173,12 +189,28 @@ public class TGBeatGroup {
           * scale);
     }
 
-    scoreLineY += TGMeasureImpl.SCORE_KEY_OFFSETS[clef - 1] * scale;
+    int selection = 0;
+    switch (clef) {
+    case ALTO:
+      selection = 3;
+      break;
+    case BASS:
+      selection = 1;
+      break;
+    case TENOR:
+      selection = 2;
+      break;
+    case TREBLE:
+      selection = 0;
+      break;
+    }
+
+    scoreLineY += TGMeasureImpl.SCORE_KEY_OFFSETS[selection] * scale;
 
     return scoreLineY;
   }
 
-  public int getY2(ViewLayout layout, int x, int key, int clef) {
+  public int getY2(ViewLayout layout, int x, int key, Clef clef) {
     int maxDistance = 10;
     float upOffset = TGBeatGroup.getUpOffset(layout);
     float downOffset = TGBeatGroup.getDownOffset(layout);

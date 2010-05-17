@@ -17,12 +17,8 @@ import java.util.List;
  */
 public class UndoableManager {
   private static final int LIMIT = 100;
-  private List<UndoableEdit> edits;
-  private int indexOfNextAdd;
-
-  public UndoableManager() {
-    this.init();
-  }
+  private final List<UndoableEdit> edits = new ArrayList<UndoableEdit>();
+  private int indexOfNextAdd = 0;
 
   public synchronized void addEdit(UndoableEdit anEdit) {
     checkForUnused();
@@ -65,13 +61,14 @@ public class UndoableManager {
   }
 
   public void discardAllEdits() {
-    this.reset();
+    this.indexOfNextAdd = 0;
+    this.edits.clear();
   }
 
   private UndoableEdit editToBeRedone() {
     int index = this.indexOfNextAdd;
     if (index >= 0 && index < this.edits.size()) {
-      return (UndoableEdit) this.edits.get(index);
+      return this.edits.get(index);
     }
     return null;
   }
@@ -79,14 +76,9 @@ public class UndoableManager {
   private UndoableEdit editToBeUndone() {
     int index = this.indexOfNextAdd - 1;
     if (index >= 0 && index < this.edits.size()) {
-      return (UndoableEdit) this.edits.get(index);
+      return this.edits.get(index);
     }
     return null;
-  }
-
-  private void init() {
-    this.indexOfNextAdd = 0;
-    this.edits = new ArrayList<UndoableEdit>();
   }
 
   public synchronized void redo() throws CannotRedoException {
@@ -104,11 +96,6 @@ public class UndoableManager {
 
   private void remove(UndoableEdit edit) {
     this.edits.remove(edit);
-  }
-
-  private void reset() {
-    this.indexOfNextAdd = 0;
-    this.edits.clear();
   }
 
   public synchronized void undo() throws CannotUndoException {

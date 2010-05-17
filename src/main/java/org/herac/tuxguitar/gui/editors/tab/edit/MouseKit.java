@@ -206,7 +206,24 @@ public class MouseKit {
           float scale = this.kit.getTablature().getViewLayout().getScale();
           int minValue = track.getString(track.stringCount()).getValue();
           int maxValue = track.getString(1).getValue() + 29; // Max frets = 29
-          int tempValue = FIRST_LINE_VALUES[measure.getClef() - 1];
+
+          int selection = 0;
+          switch (measure.getClef()) {
+          case ALTO:
+            selection = 3;
+            break;
+          case BASS:
+            selection = 1;
+            break;
+          case TENOR:
+            selection = 2;
+            break;
+          case TREBLE:
+            selection = 0;
+            break;
+          }
+
+          int tempValue = FIRST_LINE_VALUES[selection];
           int lineSpacing = this.kit.getTablature().getViewLayout()
               .getScoreLineSpacing();
           int width = (int) (10.0f * scale);
@@ -309,8 +326,24 @@ public class MouseKit {
 
           if (e.y >= (y1 - topHeight) && e.y < (y2 + bottomHeight)) {
 
+            int selection = 0;
+            switch (measure.getClef()) {
+            case ALTO:
+              selection = 3;
+              break;
+            case BASS:
+              selection = 1;
+              break;
+            case TENOR:
+              selection = 2;
+              break;
+            case TREBLE:
+              selection = 0;
+              break;
+            }
+            
             int value = 0;
-            int tempValue = FIRST_LINE_VALUES[measure.getClef() - 1];
+            int tempValue = FIRST_LINE_VALUES[selection];
             double limit = (topHeight / (lineSpacing / 2.00));
             for (int i = 0; i < limit; i++) {
               tempValue += (TGMeasureImpl.ACCIDENTAL_NOTES[(tempValue + 1) % 12]) ? 2

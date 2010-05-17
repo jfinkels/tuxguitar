@@ -36,19 +36,19 @@ import org.herac.tuxguitar.util.TGSynchronizer;
  */
 public class PrintPreviewAction extends Action {
   /** The Logger for this class. */
-  public static final transient Logger LOG = Logger.getLogger(PrintPreviewAction.class);
+  public static final transient Logger LOG = Logger
+      .getLogger(PrintPreviewAction.class);
 
   private class PrintDocumentImpl implements PrintDocument {
 
-    private Rectangle bounds;
-    private PrinterViewLayout layout;
-    private List<Image> pages;
-    private TGPainter painter;
+    private final Rectangle bounds;
+    private final PrinterViewLayout layout;
+    private final List<Image> pages;
+    private TGPainter painter = null;
 
     public PrintDocumentImpl(PrinterViewLayout layout, Rectangle bounds) {
       this.layout = layout;
       this.bounds = bounds;
-      this.painter = new TGPainter();
       this.pages = new ArrayList<Image>();
     }
 
@@ -72,7 +72,6 @@ public class PrintPreviewAction extends Action {
       }
     }
 
-    
     public Rectangle getBounds() {
       return this.bounds;
     }
@@ -92,7 +91,7 @@ public class PrintPreviewAction extends Action {
     public void pageStart() {
       Image page = new Image(this.layout.getTablature().getDisplay(),
           this.bounds.width - this.bounds.x, this.bounds.height - this.bounds.y);
-      this.painter.init(page);
+      this.painter = new TGPainter(page);
       this.pages.add(page);
     }
 

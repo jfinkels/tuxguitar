@@ -35,6 +35,7 @@ public class ConfirmDialog {
     button.setLayoutData(getButtonData());
     button.setText(text);
     button.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(SelectionEvent arg0) {
         ConfirmDialog.this.dialog.dispose();
         ConfirmDialog.this.status = value;

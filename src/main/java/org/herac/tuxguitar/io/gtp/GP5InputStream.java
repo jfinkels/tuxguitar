@@ -14,6 +14,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTextImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -69,15 +70,15 @@ public class GP5InputStream extends GTPInputStream {
     return beat;
   }
 
-  private int getClef(TGTrack track) {
+  private Clef getClef(TGTrack track) {
     if (!track.isPercussionTrack()) {
       for (final TGString string : track.getStrings()) {
         if (string.getValue() <= 34) {
-          return TGMeasure.CLEF_BASS;
+          return Clef.BASS;
         }
       }
     }
-    return TGMeasure.CLEF_TREBLE;
+    return Clef.TREBLE;
   }
 
   public TGFileFormat getFileFormat() {

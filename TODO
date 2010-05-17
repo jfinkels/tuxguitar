@@ -7,3 +7,4 @@
 * remove "skins"
 * remove "TG-" prefix from every class
 * replace arbitrary TG*Impl classes with actual interfaces and implementations
+* use enums for HarmonicEffects and Clefs, etc.

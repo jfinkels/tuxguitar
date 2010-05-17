@@ -37,11 +37,11 @@ import org.herac.tuxguitar.util.TGSynchronizer;
 public class PrintAction extends Action {
   private class PrintDocumentImpl implements PrintDocument {
 
-    private Rectangle bounds;
-    private PrinterViewLayout layout;
-    private TGPainter painter;
-    private Printer printer;
-    private PrinterData printerData;
+    private final Rectangle bounds;
+    private final PrinterViewLayout layout;
+    private TGPainter painter = null;
+    private final Printer printer;
+    private final PrinterData printerData;
     private boolean started;
 
     public PrintDocumentImpl(PrinterViewLayout layout, Printer printer,
@@ -50,7 +50,6 @@ public class PrintAction extends Action {
       this.printer = printer;
       this.printerData = printerData;
       this.bounds = bounds;
-      this.painter = new TGPainter();
     }
 
     public void dispose() {
@@ -121,7 +120,7 @@ public class PrintAction extends Action {
     public void pageStart() {
       if (this.started) {
         this.printer.startPage();
-        this.painter.init(new GC(this.printer));
+        this.painter = new TGPainter(new GC(this.printer));
       }
     }
 
@@ -210,7 +209,7 @@ public class PrintAction extends Action {
         public void run() {
           try {
             final TGSongManager manager = new TGSongManager();
-            //manager.setFactory(new TGFactoryImpl());
+            // manager.setFactory(new TGFactoryImpl());
             manager.setSong(getSongManager().getSong().clone());
 
             new SyncThread(new Runnable() {

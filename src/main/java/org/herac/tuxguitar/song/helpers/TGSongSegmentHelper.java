@@ -6,6 +6,7 @@ import java.util.List;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.managers.TGTrackManager;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGTrack;
@@ -76,7 +77,8 @@ public class TGSongSegmentHelper {
     return segment;
   }
 
-  private List<TGMeasure> getEmptyMeasures(int count, int clef, int keySignature) {
+  private List<TGMeasure> getEmptyMeasures(int count, Clef clef,
+      int keySignature) {
     List<TGMeasure> measures = new ArrayList<TGMeasure>();
     for (int i = 0; i < count; i++) {
       TGMeasure measure = new TGMeasureImpl(null);
@@ -126,7 +128,7 @@ public class TGSongSegmentHelper {
         TGTrackManager tm = this.sm.getTrackManager();
         TGMeasure measure = (fromNumber > 1 ? tm.getMeasure(currTrack,
             (fromNumber - 1)) : tm.getMeasure(currTrack, headerNumber));
-        int clef = (measure != null ? measure.getClef()
+        Clef clef = (measure != null ? measure.getClef()
             : TGMeasure.DEFAULT_CLEF);
         int keySignature = (measure != null ? measure.getKeySignature()
             : TGMeasure.DEFAULT_KEY_SIGNATURE);

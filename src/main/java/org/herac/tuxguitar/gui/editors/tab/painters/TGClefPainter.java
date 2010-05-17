@@ -1,10 +1,28 @@
 package org.herac.tuxguitar.gui.editors.tab.painters;
 
 import org.herac.tuxguitar.gui.editors.TGPainter;
+import org.herac.tuxguitar.song.models.Clef;
 
 public class TGClefPainter {
 
-  public static void paintAlto(TGPainter painter, int x, int y, float scale) {
+  public static void paint(final TGPainter painter, final Clef clef, final int x, final int y, final float scale) {
+    switch (clef) {
+    case ALTO:
+      paintAlto(painter, x, y, scale);
+      break;
+    case BASS:
+      paintBass(painter, x, y, scale);
+      break;
+    case TENOR:
+      paintTenor(painter, x, y, scale);
+      break;
+    case TREBLE:
+      paintTreble(painter, x, y, scale);
+      break;
+    }
+  }
+  
+  private static void paintAlto(TGPainter painter, int x, int y, float scale) {
     painter.moveTo((x + (0.026545623f * scale)), (y + (0.5470838f * scale)));
     painter.cubicTo((x + (0.03553187f * scale)), (y + (0.5410925f * scale)),
         (x + (0.053504374f * scale)), (y + (0.5410925f * scale)),
@@ -263,7 +281,7 @@ public class TGClefPainter {
         (x + (0.6016719f * scale)), (y + (0.5470838f * scale)));
   }
 
-  public static void paintBass(TGPainter painter, int x, int y, float scale) {
+  private static void paintBass(TGPainter painter, int x, int y, float scale) {
     painter.moveTo((x + (0.71937084f * scale)), (y + (0.16147426f * scale)));
     painter.cubicTo((x + (0.75454587f * scale)), (y + (0.15827677f * scale)),
         (x + (0.8920496f * scale)), (y + (0.16147426f * scale)),
@@ -380,7 +398,7 @@ public class TGClefPainter {
         (x + (1.9632971f * scale)), (y + (1.2583042f * scale)));
   }
 
-  public static void paintTenor(TGPainter painter, int x, int y, float scale) {
+  private static void paintTenor(TGPainter painter, int x, int y, float scale) {
     painter.moveTo((x + (0.026545623f * scale)), (y + (-0.45291623f * scale)));
     painter.cubicTo((x + (0.03553187f * scale)), (y + (-0.45890749f * scale)),
         (x + (0.053504374f * scale)), (y + (-0.45890749f * scale)),
@@ -639,7 +657,7 @@ public class TGClefPainter {
         (x + (0.6016719f * scale)), (y + (-0.45291623f * scale)));
   }
 
-  public static void paintTreble(TGPainter painter, int x, int y, float scale) {
+  private static void paintTreble(TGPainter painter, int x, int y, float scale) {
     painter.moveTo((x + (0.9706216f * scale)), (y + (-0.9855771f * scale)));
     painter.cubicTo((x + (0.99023926f * scale)), (y + (-0.99538594f * scale)),
         (x + (0.99350905f * scale)), (y + (-0.99538594f * scale)),

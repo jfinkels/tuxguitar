@@ -385,7 +385,20 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
 
     // escribo la clave
     if (((header & MEASURE_CLEF) != 0)) {
-      writeByte(measure.getClef());
+      switch (measure.getClef()) {
+      case ALTO:
+        writeByte(4);
+        break;
+      case BASS:
+        writeByte(2);
+        break;
+      case TENOR:
+        writeByte(3);
+        break;
+      case TREBLE:
+        writeByte(1);
+        break;
+      }
     }
 
     // escribo el key signature

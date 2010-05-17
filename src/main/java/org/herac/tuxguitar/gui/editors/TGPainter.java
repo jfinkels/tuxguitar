@@ -22,17 +22,16 @@ public class TGPainter {
   private boolean pathEmpty;
 
   private int style;
-
-  public TGPainter() {
-    super();
+  
+  public TGPainter(final GC gc) {
+    if (this.gc != null && !this.gc.isDisposed()) {
+      this.gc.dispose();
+    }
+    this.gc = gc;
   }
 
-  public TGPainter(GC gc) {
-    this.init(gc);
-  }
-
-  public TGPainter(Image image) {
-    this.init(image);
+  public TGPainter(final Image image) {
+    this(new GC(image));
   }
 
   public void addArc(float arg0, float arg1, float arg2, float arg3,
@@ -128,17 +127,6 @@ public class TGPainter {
   public Point getStringExtent(String string) {
     this.setAdvanced(false);
     return this.gc.stringExtent(string);
-  }
-
-  public void init(GC gc) {
-    if (this.gc != null && !this.gc.isDisposed()) {
-      this.gc.dispose();
-    }
-    this.gc = gc;
-  }
-
-  public void init(Image image) {
-    this.init(new GC(image));
   }
 
   public void initPath() {

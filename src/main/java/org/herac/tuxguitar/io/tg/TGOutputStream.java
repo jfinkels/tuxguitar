@@ -315,8 +315,9 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     }
   }
 
-  public static final transient Logger LOG = Logger.getLogger(TGOutputStream.class);
-  
+  public static final transient Logger LOG = Logger
+      .getLogger(TGOutputStream.class);
+
   public void writeHeader(int v, int bCount) {
     for (int i = bCount; i > 0; i--) {
       writeHeader((v >>> ((8 * i) - 8)) & 0xFF);
@@ -377,7 +378,20 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
 
     // escribo la clave
     if (((header & MEASURE_CLEF) != 0)) {
-      writeByte(measure.getClef());
+      switch (measure.getClef()) {
+      case ALTO:
+        writeByte(4);
+        break;
+      case BASS:
+        writeByte(2);
+        break;
+      case TENOR:
+        writeByte(3);
+        break;
+      case TREBLE:
+        writeByte(1);
+        break;
+      }
     }
 
     // escribo el key signature

@@ -10,20 +10,21 @@ import org.herac.tuxguitar.gui.undo.CannotRedoException;
 import org.herac.tuxguitar.gui.undo.CannotUndoException;
 import org.herac.tuxguitar.gui.undo.UndoableEdit;
 import org.herac.tuxguitar.gui.undo.undoables.UndoableCaretHelper;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGTrack;
 
 public class UndoableChangeClef implements UndoableEdit {
   private class ClefPosition {
-    private int clef;
+    private Clef clef;
     private long position;
 
-    public ClefPosition(long position, int clef) {
+    public ClefPosition(long position, Clef clef) {
       this.position = position;
       this.clef = clef;
     }
 
-    public int getClef() {
+    public Clef getClef() {
       return this.clef;
     }
 
@@ -46,12 +47,12 @@ public class UndoableChangeClef implements UndoableEdit {
     undoable.track = caret.getTrack();
     undoable.nextClefPositions = new ArrayList<ClefPosition>();
 
-    int prevClef = undoable.undoableClef;
+    Clef prevClef = undoable.undoableClef;
 
     for (final TGMeasure meas : caret.getTrack().getMeasures()) {
       TGMeasureImpl measure = (TGMeasureImpl) meas;
       if (measure.getStart() > undoable.position) {
-        int currClef = measure.getClef();
+        Clef currClef = measure.getClef();
         if (prevClef != currClef) {
           ClefPosition tsp = undoable.new ClefPosition(measure.getStart(),
               currClef);
@@ -67,19 +68,15 @@ public class UndoableChangeClef implements UndoableEdit {
   private int doAction;
   private List<ClefPosition> nextClefPositions;
   private long position;
-  private int redoableClef;
+  private Clef redoableClef;
   private UndoableCaretHelper redoCaret;
   private boolean toEnd;
 
   private TGTrack track;
 
-  private int undoableClef;
+  private Clef undoableClef;
 
   private UndoableCaretHelper undoCaret;
-
-  private UndoableChangeClef() {
-    super();
-  }
 
   public boolean canRedo() {
     return (this.doAction == REDO_ACTION);
@@ -89,7 +86,7 @@ public class UndoableChangeClef implements UndoableEdit {
     return (this.doAction == UNDO_ACTION);
   }
 
-  public UndoableChangeClef endUndo(int clef, boolean toEnd) {
+  public UndoableChangeClef endUndo(Clef clef, boolean toEnd) {
     this.redoCaret = new UndoableCaretHelper();
     this.redoableClef = clef;
     this.toEnd = toEnd;

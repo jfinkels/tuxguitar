@@ -5,6 +5,7 @@ import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGNotePainter;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGSilencePainter;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -228,7 +229,7 @@ public class TGVoiceImpl extends TGVoice {
       float lineSpacing = layout.getScoreLineSpacing();
       int direction = this.group.getDirection();
       int key = getBeat().getMeasure().getKeySignature();
-      int clef = getBeat().getMeasure().getClef();
+      Clef clef = getBeat().getMeasure().getClef();
 
       int xMove = (direction == TGBeatGroup.DIRECTION_UP ? layout
           .getResources().getScoreNoteWidth() : 0);

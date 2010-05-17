@@ -6,7 +6,14 @@
  */
 package org.herac.tuxguitar.gui;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -59,7 +66,6 @@ import org.herac.tuxguitar.gui.tools.scale.ScaleManager;
 import org.herac.tuxguitar.gui.transport.TGTransport;
 import org.herac.tuxguitar.gui.transport.TGTransportListener;
 import org.herac.tuxguitar.gui.undo.UndoableManager;
-import org.herac.tuxguitar.gui.util.ArgumentParser;
 import org.herac.tuxguitar.gui.util.TGFileUtils;
 import org.herac.tuxguitar.gui.util.TGSplash;
 import org.herac.tuxguitar.gui.util.WindowTitleUtil;
@@ -87,12 +93,11 @@ public class TuxGuitar {
   public static final int MARGIN_WIDTH = 5;
 
   public static String getProperty(String key) {
-    return TuxGuitar.instance().getLanguageManager().getProperty(key);
+    return instance.getLanguageManager().getProperty(key);
   }
 
   public static String getProperty(String key, String[] arguments) {
-    return TuxGuitar.instance().getLanguageManager()
-        .getProperty(key, arguments);
+    return instance.getLanguageManager().getProperty(key, arguments);
   }
 
   public static TuxGuitar instance() {
@@ -105,8 +110,7 @@ public class TuxGuitar {
   }
 
   public static boolean isDisposed() {
-    return (TuxGuitar.instance().getDisplay().isDisposed() || TuxGuitar
-        .instance().getShell().isDisposed());
+    return instance.display.isDisposed() || instance.shell.isDisposed();
   }
 
   private ActionManager actionManager;
@@ -252,13 +256,28 @@ public class TuxGuitar {
     });
   }
 
-  public void displayGUI(String[] args) {
-    // checkeo los argumentos
-    ArgumentParser argumentParser = new ArgumentParser(args);
-    if (argumentParser.processAndExit()) {
-      return;
-    }
+  public TuxGuitar() {
+    this.parser.acceptsAll(Arrays.asList("h", "help"),
+        "print this help message");
+    this.parser.acceptsAll(Arrays.asList("v", "version"),
+        "print the version of this program");
 
+  }
+
+  /**
+   * The parser for command-line options. The options which this parser accepts
+   * are given in the constructor of this class.
+   */
+  private final OptionParser parser = new OptionParser();
+
+  public void displayGUI(final String[] args) {
+    // checkeo los argumentos (parse the command-line options/arguments)
+    final OptionSet options = this.parser.parse(args);
+
+    /*
+     * ArgumentParser argumentParser = new ArgumentParser(args); if
+     * (argumentParser.processAndExit()) { return; }
+     */
     // Priority 1 ----------------------------------------------//
     TGFileUtils.loadLibraries();
     TGFileUtils.loadClasspath();
@@ -289,7 +308,16 @@ public class TuxGuitar {
     // Priority 4 ----------------------------------------------//
     this.shell.addShellListener(getAction(DisposeAction.NAME));
     this.shell.open();
-    this.startSong(argumentParser);
+
+    final List<String> nonOptionArguments = options.nonOptionArguments();
+
+    if (nonOptionArguments.size() == 0) {
+      LOG.debug("No file or URL was provided for a song to load.");
+    } else {
+      final String songLocation = nonOptionArguments.get(0);
+      this.startSong(songLocation);
+    }
+
     this.setInitialized(true);
     while (!getDisplay().isDisposed() && !getShell().isDisposed()) {
       if (!getDisplay().readAndDispatch()) {
@@ -777,24 +805,52 @@ public class TuxGuitar {
     }).start();
   }
 
-  private void startSong(final ArgumentParser parser) {
-    final URL url = parser.getURL();
+  private void startSong(final String songLocation) {
+    URL url = null;
+
+    final File file = new File(songLocation);
+    try {
+      if (file.exists()) {
+        url = file.toURI().toURL();
+      } else {
+        url = new URL(songLocation);
+      }
+    } catch (final MalformedURLException exception) {
+      LOG.error("Failed to find songLocation " + songLocation, exception);
+    }
+
     if (url != null) {
       ActionLock.lock();
-      new SyncThread(new Runnable() {
+      new SongLoaderThread(url).start();
+    }
+  }
+
+  private class SongLoaderThread extends SyncThread {
+    public SongLoaderThread(final URL url) {
+      super(new Runnable() {
+        @Override
         public void run() {
           TuxGuitar.instance().loadCursor(SWT.CURSOR_WAIT);
-          new Thread(new Runnable() {
-            public void run() {
-              if (!TuxGuitar.isDisposed()) {
-                FileActionUtils.open(url);
-                TuxGuitar.instance().loadCursor(SWT.CURSOR_ARROW);
-                ActionLock.unlock();
-              }
-            }
-          }).start();
+          new UrlLoaderThread(url).start();
         }
-      }).start();
+      });
+    }
+
+  }
+
+  private class UrlLoaderThread extends Thread {
+    public UrlLoaderThread(final URL url) {
+      super(new Runnable() {
+        @Override
+        public void run() {
+          if (!TuxGuitar.isDisposed()) {
+            FileActionUtils.open(url);
+            TuxGuitar.instance().loadCursor(SWT.CURSOR_ARROW);
+            ActionLock.unlock();
+          }
+        }
+      });
+
     }
   }
 

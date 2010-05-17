@@ -24,20 +24,19 @@ public class ImageExporter implements TGRawExporter {
 
   private class PrintDocumentImpl implements PrintDocument {
 
-    private Rectangle bounds;
-    private Image buffer;
-    private ImageFormat format;
-    private PrinterViewLayout layout;
-    private List<ImageData> pages;
-    private TGPainter painter;
-    private String path;
+    private final Rectangle bounds;
+    private Image buffer = null;
+    private final ImageFormat format;
+    private final PrinterViewLayout layout;
+    private final List<ImageData> pages;
+    private TGPainter painter = null;
+    private final String path;
 
     public PrintDocumentImpl(PrinterViewLayout layout, Rectangle bounds,
         ImageFormat format, String path) {
       this.layout = layout;
       this.bounds = bounds;
       this.path = path;
-      this.painter = new TGPainter();
       this.pages = new ArrayList<ImageData>();
       this.format = format;
     }
@@ -82,7 +81,7 @@ public class ImageExporter implements TGRawExporter {
       this.buffer = new Image(this.layout.getTablature().getDisplay(),
           this.bounds.width + (this.bounds.x * 2), this.bounds.height
               + (this.bounds.y * 2));
-      this.painter.init(this.buffer);
+      this.painter = new TGPainter(this.buffer);
     }
 
     public void start() {

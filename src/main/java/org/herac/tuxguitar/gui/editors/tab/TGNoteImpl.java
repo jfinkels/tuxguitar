@@ -12,6 +12,7 @@ import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGKeySignaturePainter;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGNotePainter;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -317,7 +318,7 @@ public class TGNoteImpl extends TGNote {
       float scale = layout.getScoreLineSpacing();
       int direction = getVoiceImpl().getBeatGroup().getDirection();
       int key = getMeasureImpl().getKeySignature();
-      int clef = getMeasureImpl().getClef();
+      Clef clef = getMeasureImpl().getClef();
 
       int x = (fromX + getPosX() + spacing);
       int y1 = (fromY + getScorePosY());

@@ -13,10 +13,10 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.player.base.MidiInstrument;
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
@@ -37,7 +37,7 @@ public class MusicXMLWriter {
   /** The Logger for this class. */
   public static final transient Logger LOG = Logger
       .getLogger(MusicXMLWriter.class);
-  
+
   private static class TGVoiceJoiner {
     // private TGFactory factory;
     private TGMeasure measure;
@@ -285,20 +285,25 @@ public class MusicXMLWriter {
     }
   }
 
-  private void writeClef(Node parent, int clef) {
+  private void writeClef(Node parent, Clef clef) {
     Node node = this.addNode(parent, "clef");
-    if (clef == TGMeasure.CLEF_TREBLE) {
+    switch (clef) {
+    case TREBLE:
       this.addNode(node, "sign", "G");
       this.addNode(node, "line", "2");
-    } else if (clef == TGMeasure.CLEF_BASS) {
+      break;
+    case BASS:
       this.addNode(node, "sign", "F");
       this.addNode(node, "line", "4");
-    } else if (clef == TGMeasure.CLEF_TENOR) {
+      break;
+    case TENOR:
       this.addNode(node, "sign", "G");
       this.addNode(node, "line", "2");
-    } else if (clef == TGMeasure.CLEF_ALTO) {
+      break;
+    case ALTO:
       this.addNode(node, "sign", "G");
       this.addNode(node, "line", "2");
+      break;
     }
   }
 

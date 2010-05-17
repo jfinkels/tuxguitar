@@ -19,38 +19,30 @@ import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
  */
 public abstract class TGMeasure {
 
-  public static final int CLEF_ALTO = 4;
-  public static final int CLEF_BASS = 2;
-  public static final int CLEF_TENOR = 3;
-  public static final int CLEF_TREBLE = 1;
-
-  public static final int DEFAULT_CLEF = CLEF_TREBLE;
+  public static final Clef DEFAULT_CLEF = Clef.TREBLE;
   public static final int DEFAULT_KEY_SIGNATURE = 0;
 
-  private List<TGBeat> beats;
-  private int clef;
+  private List<TGBeat> beats = new ArrayList<TGBeat>();
+  private Clef clef = DEFAULT_CLEF;
   private TGMeasureHeader header;
-  private int keySignature;
+  private int keySignature = DEFAULT_KEY_SIGNATURE;
 
   private TGTrack track;
 
-  public TGMeasure(TGMeasureHeader header) {
+  public TGMeasure(final TGMeasureHeader header) {
     this.header = header;
-    this.clef = DEFAULT_CLEF;
-    this.keySignature = DEFAULT_KEY_SIGNATURE;
-    this.beats = new ArrayList<TGBeat>();
   }
 
-  public void addBeat(TGBeat beat) {
+  public void addBeat(final TGBeat beat) {
     beat.setMeasure(this);
     this.beats.add(beat);
   }
 
-  public TGMeasure clone(TGMeasureHeader header) {
-    TGMeasure measure = new TGMeasureImpl(header);
-    measure.setClef(getClef());
-    measure.setKeySignature(getKeySignature());
-    for (final TGBeat beat : this.beats){
+  public TGMeasure clone(final TGMeasureHeader header) {
+    final TGMeasure measure = new TGMeasureImpl(header);
+    measure.setClef(this.clef);
+    measure.setKeySignature(this.keySignature);
+    for (final TGBeat beat : this.beats) {
       measure.addBeat(beat.clone());
     }
     return measure;
@@ -62,7 +54,7 @@ public abstract class TGMeasure {
 
   public TGBeat getBeat(int index) {
     if (index >= 0 && index < countBeats()) {
-      return (TGBeat) this.beats.get(index);
+      return this.beats.get(index);
     }
     return null;
   }
@@ -71,7 +63,7 @@ public abstract class TGMeasure {
     return this.beats;
   }
 
-  public int getClef() {
+  public Clef getClef() {
     return this.clef;
   }
 
@@ -127,38 +119,38 @@ public abstract class TGMeasure {
     return this.header.isRepeatOpen();
   }
 
-  public void makeEqual(TGMeasure measure) {
+  public void makeEqual(final TGMeasure measure) {
     this.clef = measure.getClef();
     this.keySignature = measure.getKeySignature();
+
     this.beats.clear();
-    for (int i = 0; i < measure.countBeats(); i++) {
-      TGBeat beat = measure.getBeat(i);
+    for (final TGBeat beat : measure.getBeats()) {
       this.addBeat(beat);
     }
   }
 
-  public void moveBeat(int index, TGBeat beat) {
+  public void moveBeat(final int index, final TGBeat beat) {
     this.beats.remove(beat);
     this.beats.add(index, beat);
   }
 
-  public void removeBeat(TGBeat beat) {
-    this.beats.remove(beat);
+  public boolean removeBeat(final TGBeat beat) {
+    return this.beats.remove(beat);
   }
 
-  public void setClef(int clef) {
+  public void setClef(final Clef clef) {
     this.clef = clef;
   }
 
-  public void setHeader(TGMeasureHeader header) {
+  public void setHeader(final TGMeasureHeader header) {
     this.header = header;
   }
 
-  public void setKeySignature(int keySignature) {
+  public void setKeySignature(final int keySignature) {
     this.keySignature = keySignature;
   }
 
-  public void setTrack(TGTrack track) {
+  public void setTrack(final TGTrack track) {
     this.track = track;
   }
 }

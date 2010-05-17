@@ -5,14 +5,13 @@ import org.herac.tuxguitar.gui.system.language.LanguageLoader;
 
 class TGMusicKeyNames implements LanguageLoader {
 
-  private String[] names;
-  private String prefix;
-  private boolean sharp;
+  private final String[] names = new String[12];
+  private final String prefix;
+  private final boolean sharp;
 
   public TGMusicKeyNames(boolean sharp, String prefix) {
     this.sharp = sharp;
     this.prefix = prefix;
-    this.names = new String[12];
     this.loadProperties();
 
     TuxGuitar.instance().getLanguageManager().addLoader(this);

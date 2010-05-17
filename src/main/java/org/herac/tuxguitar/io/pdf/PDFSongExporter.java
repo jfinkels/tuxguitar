@@ -10,7 +10,6 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Rectangle;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
-import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.tab.Tablature;
 import org.herac.tuxguitar.gui.editors.tab.layout.PrinterViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
@@ -30,7 +29,7 @@ public class PDFSongExporter implements TGLocalFileExporter {
   /** The Logger for this class. */
   public static final transient Logger LOG = Logger
       .getLogger(PDFSongExporter.class);
-  
+
   private class PrintDocumentImpl implements PrintDocument {
 
     private Rectangle bounds;
@@ -45,7 +44,6 @@ public class PDFSongExporter implements TGLocalFileExporter {
       this.layout = layout;
       this.bounds = bounds;
       this.stream = stream;
-      this.painter = new TGPainter();
       this.pages = new ArrayList<ImageData>();
     }
 
@@ -87,7 +85,7 @@ public class PDFSongExporter implements TGLocalFileExporter {
     public void pageStart() {
       this.buffer = new Image(this.layout.getTablature().getDisplay(),
           this.bounds.width - this.bounds.x, this.bounds.height - this.bounds.y);
-      this.painter.init(this.buffer);
+      this.painter = new TGPainter(this.buffer);
     }
 
     public void start() {

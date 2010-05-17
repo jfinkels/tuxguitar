@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
+import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
@@ -80,14 +81,14 @@ public class TGTrackManager {
     }
   }
 
-  public void changeClef(TGTrack track, long start, int clef, boolean toEnd) {
+  public void changeClef(TGTrack track, long start, Clef clef, boolean toEnd) {
     changeClef(track, getMeasureAt(track, start), clef, toEnd);
   }
 
   /**
    * Cambia el Clef
    */
-  public void changeClef(TGTrack track, TGMeasure measure, int clef,
+  public void changeClef(TGTrack track, TGMeasure measure, Clef clef,
       boolean toEnd) {
     // asigno el nuevo clef
     measure.setClef(clef);
