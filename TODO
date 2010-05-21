@@ -2,8 +2,10 @@
 * remove repeated code
 * add @Override annotations where appropriate
 * replace custom concurrency with built-in concurrency
-* replace custom command-line parsing with jopt-simple
+* [DONE] replace custom command-line parsing with jopt-simple
 * replace custom resource bundle with built-in Resources
+* replace custom serialization (i.e. TGOutput and TGInput streams) with
+    built-in serialization
 * remove "skins"
 * remove "TG-" prefix from every class
 * replace arbitrary TG*Impl classes with actual interfaces and implementations
