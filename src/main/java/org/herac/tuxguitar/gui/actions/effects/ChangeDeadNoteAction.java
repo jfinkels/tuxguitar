@@ -42,8 +42,7 @@ public class ChangeDeadNoteAction extends Action {
       note.setVelocity(caret.getVelocity());
       note.setString(caret.getSelectedString().getNumber());
 
-      TGDuration duration = new TGDuration();
-      caret.getDuration().copy(duration);
+      TGDuration duration = caret.getDuration().clone();
 
       getSongManager().getMeasureManager().addNote(caret.getMeasure(),
           caret.getPosition(), note, duration, caret.getVoice());

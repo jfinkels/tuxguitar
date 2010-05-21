@@ -127,7 +127,7 @@ public class TESongImporter implements TGLocalFileImporter {
     TGDuration tgDuration = getDuration(note.getDuration());
     TGBeat tgBeat = getBeat(tgMeasure, getStart(tgDuration, tgMeasure, note
         .getPosition()));
-    tgDuration.copy(tgBeat.getVoice(0).getDuration());
+    tgBeat.getVoice(0).setDuration(tgDuration.clone());
     tgBeat.getVoice(0).addNote(tgNote);
   }
 
@@ -330,7 +330,7 @@ class TGSongAdjuster {
           }
           TGDuration duration = TGDuration
               .fromTime((beatStart - previousStart));
-          duration.copy(previous.getVoice(0).getDuration());
+          previous.getVoice(0).setDuration(duration.clone());
         }
       }
       if ((beatStart + beatLength) > measureEnd) {
@@ -340,7 +340,7 @@ class TGSongAdjuster {
           break;
         }
         TGDuration duration = TGDuration.fromTime((measureEnd - beatStart));
-        duration.copy(beat.getVoice(0).getDuration());
+        beat.getVoice(0).setDuration(duration.clone());
       }
       previous = beat;
     }

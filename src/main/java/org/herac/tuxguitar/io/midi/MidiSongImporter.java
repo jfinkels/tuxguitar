@@ -347,7 +347,7 @@ public class MidiSongImporter implements TGLocalFileImporter {
     header.getTempo().setValue(
         (last != null) ? last.getTempo().getValue() : 120);
     if (last != null) {
-      last.getTimeSignature().copy(header.getTimeSignature());
+      header.setTimeSignature(last.getTimeSignature().clone());
     } else {
       header.getTimeSignature().setNumerator(4);
       header.getTimeSignature().getDenominator().setValue(TGDuration.QUARTER);
@@ -524,7 +524,7 @@ public class MidiSongImporter implements TGLocalFileImporter {
 
       TGMeasure measure = getMeasure(getTrack(track), tempNote.getTick());
       TGBeat beat = getBeat(measure, nStart);
-      nDuration.copy(beat.getVoice(0).getDuration());
+      beat.getVoice(0).setDuration(nDuration.clone());
 
       TGNote note = new TGNoteImpl();
       note.setValue(nValue);
@@ -792,8 +792,8 @@ class SongAdjuster {
           // set the best duration
           if (beatLength > previousLength
               && (beatStart + beatLength) <= measureEnd) {
-            beat.getVoice(0).getDuration().copy(
-                previous.getVoice(0).getDuration());
+            previous.getVoice(0).setDuration(
+                beat.getVoice(0).getDuration().clone());
           }
 
           measure.removeBeat(beat);
@@ -810,7 +810,7 @@ class SongAdjuster {
           }
           TGDuration duration = TGDuration
               .fromTime((beatStart - previousStart));
-          duration.copy(previous.getVoice(0).getDuration());
+          previous.getVoice(0).setDuration(duration.clone());
         }
       }
       if ((beatStart + beatLength) > measureEnd) {
@@ -819,8 +819,8 @@ class SongAdjuster {
           finish = false;
           break;
         }
-        TGDuration duration = TGDuration.fromTime((measureEnd - beatStart));
-        duration.copy(beat.getVoice(0).getDuration());
+        TGDuration duration = TGDuration.fromTime(measureEnd - beatStart);
+        beat.getVoice(0).setDuration(duration.clone());
       }
 
       previous = beat;

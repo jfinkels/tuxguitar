@@ -6,7 +6,6 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureHeaderImpl;
 
 /**
@@ -27,8 +26,8 @@ public abstract class TGMeasureHeader {
   private boolean repeatOpen = false;
   private TGSong song = null;
   private long start = TGDuration.QUARTER_TIME;
-  private TGTempo tempo = TGFactoryImpl.newTempo();
-  private TGTimeSignature timeSignature = TGFactoryImpl.newTimeSignature();
+  private TGTempo tempo = new TGTempo();
+  private TGTimeSignature timeSignature = new TGTimeSignature();
   private int tripletFeel = TRIPLET_FEEL_NONE;
 
   public TGMeasureHeader() {
@@ -44,15 +43,15 @@ public abstract class TGMeasureHeader {
   @Override
   public TGMeasureHeader clone() {
     TGMeasureHeader header = new TGMeasureHeaderImpl();
-    header.setNumber(getNumber());
-    header.setStart(getStart());
-    header.setRepeatOpen(isRepeatOpen());
-    header.setRepeatAlternative(getRepeatAlternative());
-    header.setRepeatClose(getRepeatClose());
-    header.setTripletFeel(getTripletFeel());
-    getTimeSignature().copy(header.getTimeSignature());
-    getTempo().copy(header.getTempo());
-    header.setMarker(hasMarker() ? getMarker().clone() : null);
+    header.setNumber(this.number);
+    header.setStart(this.start);
+    header.setRepeatOpen(this.repeatOpen);
+    header.setRepeatAlternative(this.repeatAlternative);
+    header.setRepeatClose(this.repeatClose);
+    header.setTripletFeel(this.tripletFeel);
+    header.setTimeSignature(this.timeSignature.clone());
+    header.setTempo(this.tempo.clone());
+    header.setMarker(this.hasMarker() ? this.marker.clone() : null);
     return header;
   }
 

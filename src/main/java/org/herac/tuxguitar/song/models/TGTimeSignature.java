@@ -6,8 +6,6 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
-
 /**
  * @author julian
  * 
@@ -15,19 +13,17 @@ import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
  *         Window - Preferences - Java - Code Style - Code Templates
  */
 public class TGTimeSignature {
-  private TGDuration denominator = TGFactoryImpl.newDuration();
+  private TGDuration denominator = new TGDuration();
   private int numerator = 4;
 
   @Override
   public TGTimeSignature clone() {
     TGTimeSignature timeSignature = new TGTimeSignature();
-    copy(timeSignature);
-    return timeSignature;
-  }
 
-  public void copy(TGTimeSignature timeSignature) {
-    timeSignature.setNumerator(getNumerator());
-    getDenominator().copy(timeSignature.getDenominator());
+    timeSignature.setNumerator(this.numerator);
+    timeSignature.setDenominator(this.denominator.clone());
+
+    return timeSignature;
   }
 
   public TGDuration getDenominator() {
@@ -38,9 +34,9 @@ public class TGTimeSignature {
     return this.numerator;
   }
 
-  public boolean isEqual(TGTimeSignature ts) {
-    return (getNumerator() == ts.getNumerator() && getDenominator().isEqual(
-        ts.getDenominator()));
+  public boolean isEqual(final TGTimeSignature ts) {
+    return this.numerator == ts.numerator
+        && this.denominator.equals(ts.denominator);
   }
 
   public void setDenominator(TGDuration denominator) {

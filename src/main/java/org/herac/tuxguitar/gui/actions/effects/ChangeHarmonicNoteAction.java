@@ -13,7 +13,7 @@ import org.herac.tuxguitar.gui.editors.effects.HarmonicEditor;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 
 /**
  * @author julian
@@ -29,7 +29,7 @@ public class ChangeHarmonicNoteAction extends Action {
         | KEY_BINDING_AVAILABLE);
   }
 
-  private void changeHarmonic(TGEffectHarmonic effect) {
+  private void changeHarmonic(HarmonicEffect effect) {
     // comienza el undoable
     UndoableMeasureGeneric undoable = UndoableMeasureGeneric.startUndo();
 
@@ -43,6 +43,7 @@ public class ChangeHarmonicNoteAction extends Action {
     addUndoableEdit(undoable.endUndo());
   }
 
+  @Override
   protected int execute(TypedEvent e) {
     TGNote note = getEditor().getTablature().getCaret().getSelectedNote();
     if (note != null) {
@@ -51,6 +52,7 @@ public class ChangeHarmonicNoteAction extends Action {
     return 0;
   }
 
+  @Override
   public void updateTablature() {
     fireUpdate(getEditor().getTablature().getCaret().getMeasure().getNumber());
   }

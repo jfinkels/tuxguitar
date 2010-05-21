@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.song.models.TGBeat;
@@ -35,8 +34,8 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
 
 /**
  * @author julian
@@ -273,7 +272,7 @@ public class GP3OutputStream extends GTPOutputStream {
       flags |= 0x40;
     }
     if (noteEffect.isHarmonic()) {
-      if (noteEffect.getHarmonic() instanceof NaturalHarmonic) {
+      if (noteEffect.getHarmonic().equals(HarmonicEffect.NATURAL)) {
         flags += 0x04;
       } else {
         flags += 0x08;

@@ -7,7 +7,7 @@
 package org.herac.tuxguitar.song.models;
 
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
 
 /**
  * @author julian
@@ -28,7 +28,7 @@ public abstract class TGBeat {
 
   public TGBeat() {
     for (int i = 0; i < MAX_VOICES; i++) {
-      this.setVoice(i, TGFactoryImpl.newVoice(i));
+      this.setVoice(i, new TGVoiceImpl(i));
     }
   }
 

@@ -35,11 +35,10 @@ import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
 
 /**
  * @author julian
@@ -297,12 +296,12 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
     writeByte(effect.getTransition());
   }
 
-  private void writeHarmonicEffect(TGEffectHarmonic effect) {
+  private void writeHarmonicEffect(HarmonicEffect effect) {
     // excribo el tipo
     writeByte(effect.getId());
 
     // excribo la data
-    if (!(effect instanceof NaturalHarmonic)) {
+    if (!effect.equals(HarmonicEffect.NATURAL)) {
       writeByte(effect.getData());
     }
   }

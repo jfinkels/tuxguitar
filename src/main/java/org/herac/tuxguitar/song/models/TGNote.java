@@ -6,7 +6,6 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 
 /**
@@ -16,7 +15,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
  *         Window - Preferences - Java - Code Style - Code Templates
  */
 public abstract class TGNote {
-  private TGNoteEffect effect = TGFactoryImpl.newEffect();
+  private TGNoteEffect effect = new TGNoteEffect();
   private int string = 1;
   private boolean tiedNote = false;
   private int value = 0;

@@ -14,12 +14,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.song.models.TGNote;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.ArtificialHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.PinchHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.SemiHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.TappedHarmonic;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 
 public class HarmonicEditor extends SelectionAdapter {
 
@@ -28,7 +23,7 @@ public class HarmonicEditor extends SelectionAdapter {
 
   protected Combo harmonicDataCombo;
   protected Combo harmonicType;
-  protected TGEffectHarmonic result;
+  protected HarmonicEffect result;
 
   protected Button[] typeButtons;
 
@@ -39,25 +34,8 @@ public class HarmonicEditor extends SelectionAdapter {
     return data;
   }
 
-  public TGEffectHarmonic getHarmonic() {
-    TGEffectHarmonic result = null;
-    switch (this.getSelectedType()) {
-    case ArtificialHarmonic.ID:
-      result = new ArtificialHarmonic();
-      break;
-    case NaturalHarmonic.ID:
-      result = new NaturalHarmonic();
-      break;
-    case PinchHarmonic.ID:
-      result = new PinchHarmonic();
-      break;
-    case TappedHarmonic.ID:
-      result = new TappedHarmonic();
-      break;
-    case SemiHarmonic.ID:
-      result = new SemiHarmonic();
-      break;
-    }
+  public HarmonicEffect getHarmonic() {
+    HarmonicEffect result = this.getSelectedType();
 
     if (result != null) {
       result.setData(this.harmonicDataCombo.getSelectionIndex());
@@ -66,33 +44,17 @@ public class HarmonicEditor extends SelectionAdapter {
     return result;
   }
 
-  protected int getSelectedType() {
+  protected HarmonicEffect getSelectedType() {
     for (final Button button : this.typeButtons) {
       if (button.getSelection()) {
-        return (Integer) button.getData();
+        return (HarmonicEffect) button.getData();
       }
     }
-    return TGEffectHarmonic.UNKNOWN_ID;
-  }
-
-  private String getTypeLabel(int harmonicId) {
-    switch (harmonicId) {
-    case ArtificialHarmonic.ID:
-      return ArtificialHarmonic.LABEL;
-    case NaturalHarmonic.ID:
-      return NaturalHarmonic.LABEL;
-    case PinchHarmonic.ID:
-      return PinchHarmonic.LABEL;
-    case SemiHarmonic.ID:
-      return SemiHarmonic.LABEL;
-    case TappedHarmonic.ID:
-      return TappedHarmonic.LABEL;
-    }
-    return TGEffectHarmonic.UNKNOWN_LABEL;
+    return null;
   }
 
   private void initButton(Composite parent, SelectionListener listener,
-      int index, int type, String label) {
+      int index, HarmonicEffect type, String label) {
     this.typeButtons[index] = new Button(parent, SWT.RADIO);
     this.typeButtons[index].setText(label);
     this.typeButtons[index].setLayoutData(new GridData(SWT.FILL, SWT.FILL,
@@ -102,14 +64,14 @@ public class HarmonicEditor extends SelectionAdapter {
   }
 
   protected void initDefaults(TGNote note) {
-    int type = NaturalHarmonic.ID;
+    HarmonicEffect type = HarmonicEffect.NATURAL;
 
     if (note.getEffect().isHarmonic()) {
-       type = note.getEffect().getHarmonic().getId();
+      type = note.getEffect().getHarmonic();
     } else {
       boolean naturalValid = false;
       final int value = note.getValue() % 12;
-      for (final int[] freq : NaturalHarmonic.NATURAL_FREQUENCIES) {
+      for (final int[] freq : HarmonicEffect.NATURAL_FREQUENCIES) {
         if (value == (freq[0] % 12)) {
           naturalValid = true;
           break;
@@ -117,7 +79,7 @@ public class HarmonicEditor extends SelectionAdapter {
       }
       if (!naturalValid) {
         this.typeButtons[0].setEnabled(false);
-        type = ArtificialHarmonic.ID;
+        type = HarmonicEffect.ARTIFICIAL;
       }
 
     }
@@ -134,7 +96,7 @@ public class HarmonicEditor extends SelectionAdapter {
     return data;
   }
 
-  public TGEffectHarmonic show(final TGNote note) {
+  public HarmonicEffect show(final TGNote note) {
     final Shell dialog = DialogUtils.newDialog(TuxGuitar.instance().getShell(),
         SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
 
@@ -159,29 +121,29 @@ public class HarmonicEditor extends SelectionAdapter {
     };
 
     // Natural
-    String label = "[" + NaturalHarmonic.LABEL + "] "
+    String label = "[" + HarmonicEffect.NATURAL.getLabel() + "] "
         + TuxGuitar.getProperty("effects.harmonic.natural");
-    initButton(group, listener, 0, NaturalHarmonic.ID, label);
+    initButton(group, listener, 0, HarmonicEffect.NATURAL, label);
 
     // Artificial
-    label = ("[" + ArtificialHarmonic.LABEL + "] " + TuxGuitar
+    label = ("[" + HarmonicEffect.ARTIFICIAL.getLabel() + "] " + TuxGuitar
         .getProperty("effects.harmonic.artificial"));
-    initButton(group, listener, 1, ArtificialHarmonic.ID, label);
+    initButton(group, listener, 1, HarmonicEffect.ARTIFICIAL, label);
 
     // Tapped
-    label = ("[" + TappedHarmonic.LABEL + "] " + TuxGuitar
+    label = ("[" + HarmonicEffect.TAPPED.getLabel() + "] " + TuxGuitar
         .getProperty("effects.harmonic.tapped"));
-    initButton(group, listener, 2, TappedHarmonic.ID, label);
+    initButton(group, listener, 2, HarmonicEffect.TAPPED, label);
 
     // Pinch
-    label = ("[" + PinchHarmonic.LABEL + "] " + TuxGuitar
+    label = ("[" + HarmonicEffect.PINCH.getLabel() + "] " + TuxGuitar
         .getProperty("effects.harmonic.pinch"));
-    initButton(group, listener, 3, PinchHarmonic.ID, label);
+    initButton(group, listener, 3, HarmonicEffect.PINCH, label);
 
     // Semi
-    label = ("[" + SemiHarmonic.LABEL + "] " + TuxGuitar
+    label = ("[" + HarmonicEffect.SEMI.getLabel() + "] " + TuxGuitar
         .getProperty("effects.harmonic.semi"));
-    initButton(group, listener, 4, SemiHarmonic.ID, label);
+    initButton(group, listener, 4, HarmonicEffect.SEMI, label);
 
     this.harmonicDataCombo = new Combo(group, SWT.DROP_DOWN | SWT.READ_ONLY);
     this.harmonicDataCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
@@ -237,20 +199,20 @@ public class HarmonicEditor extends SelectionAdapter {
     return this.result;
   }
 
-  protected void update(TGNote note, int id) {
-    TGEffectHarmonic h = note.getEffect().getHarmonic();
+  protected void update(TGNote note, HarmonicEffect selectedEffect) {
+    HarmonicEffect h = note.getEffect().getHarmonic();
     this.harmonicDataCombo.removeAll();
 
-    final boolean isNatural = id == NaturalHarmonic.ID;
+    final boolean isNatural = selectedEffect.equals(HarmonicEffect.NATURAL);
 
     this.harmonicDataCombo.setEnabled(!isNatural);
 
     if (!isNatural) {
-      for (final int[] freq : NaturalHarmonic.NATURAL_FREQUENCIES) {
-        this.harmonicDataCombo.add(this.getTypeLabel(id) + "("
+      for (final int[] freq : HarmonicEffect.NATURAL_FREQUENCIES) {
+        this.harmonicDataCombo.add(h.getLabel() + "("
             + Integer.toString(freq[0]) + ")");
       }
-      this.harmonicDataCombo.select((h != null && h.getId() == id) ? h
+      this.harmonicDataCombo.select((h != null && h.equals(selectedEffect)) ? h
           .getData() : 0);
     }
   }

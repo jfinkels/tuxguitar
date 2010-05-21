@@ -19,8 +19,8 @@ import org.herac.tuxguitar.song.models.TGText;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
 
@@ -98,7 +98,7 @@ public class TGMeasureManager {
             false);
       }
 
-      duration.copy(beat.getVoice(voice).getDuration());
+      beat.getVoice(voice).setDuration(duration.clone());
 
       // trato de agregar un silencio similar al lado
       tryChangeSilenceAfter(beat.getMeasure(), beat.getVoice(voice));
@@ -142,7 +142,7 @@ public class TGMeasureManager {
       // Borro lo que haya en la misma posicion
       // removeNote(beat.getMeasure(),beat.getStart(),voice, note.getString());
 
-      duration.copy(beat.getVoice(voice).getDuration());
+      beat.getVoice(voice).setDuration(duration.clone());
 
       // trato de agregar un silencio similar al lado
       tryChangeSilenceAfter(beat.getMeasure(), beat.getVoice(voice));
@@ -402,7 +402,7 @@ public class TGMeasureManager {
       // trato de agregar un silencio similar al lado
       tryChangeSilenceAfter(measure, beat.getVoice(voice));
     } else {
-      oldDuration.copy(beat.getVoice(voice).getDuration());
+      beat.getVoice(voice).setDuration(oldDuration.clone());
     }
   }
 
@@ -451,7 +451,7 @@ public class TGMeasureManager {
    * Agrega un harmonic
    */
   public void changeHarmonicNote(TGMeasure measure, long start, int string,
-      TGEffectHarmonic harmonic) {
+      HarmonicEffect harmonic) {
     TGNote note = getNote(measure, start, string);
     if (note != null) {
       note.getEffect().setHarmonic(harmonic);
@@ -703,7 +703,7 @@ public class TGMeasureManager {
 
       TGVoice voice = beat.getVoice(voiceIndex);
       voice.setEmpty(false);
-      duration.copy(voice.getDuration());
+      voice.setDuration(duration.clone());
 
       if (isNew) {
         addBeat(measure, beat);
@@ -1226,7 +1226,7 @@ public class TGMeasureManager {
           if (vDuration > 0) {
             TGDuration duration = TGDuration.fromTime(vDuration);
             if (duration != null) {
-              duration.copy(voice.getDuration());
+              voice.setDuration(duration.clone());
             }
           }
           if (vTiedDuration > 0) {
@@ -1249,7 +1249,7 @@ public class TGMeasureManager {
                 newVoice.addNote(newNote);
               }
               newVoice.setEmpty(false);
-              newVoiceDuration.copy(newVoice.getDuration());
+              newVoice.setDuration(newVoiceDuration.clone());
 
               locateBeat(newBeat, track, newMeasureAlsoForRestBeats);
             }
@@ -1356,7 +1356,7 @@ public class TGMeasureManager {
               for (int v = 0; v < beat.countVoices(); v++) {
                 TGVoice voice = beat.getVoice(v);
                 voice.setEmpty(false);
-                fillDuration.copy(voice.getDuration());
+                voice.setDuration(fillDuration.clone());
               }
               addBeat(measure, beat);
             }
@@ -1370,7 +1370,7 @@ public class TGMeasureManager {
               for (int v = 0; v < beat.countVoices(); v++) {
                 TGVoice voice = beat.getVoice(v);
                 voice.setEmpty(false);
-                fillDuration.copy(voice.getDuration());
+                voice.setDuration(fillDuration.clone());
               }
               addBeat(measure, beat);
             }
@@ -1581,7 +1581,7 @@ public class TGMeasureManager {
             }
             TGVoice voice = beat.getVoice(voiceIndex);
             voice.setEmpty(false);
-            fillDuration.copy(voice.getDuration());
+            voice.setDuration(fillDuration.clone());
             if (beatNew) {
               addBeat(measure, beat);
             }
@@ -1600,7 +1600,7 @@ public class TGMeasureManager {
             }
             TGVoice voice = beat.getVoice(voiceIndex);
             voice.setEmpty(false);
-            fillDuration.copy(voice.getDuration());
+            voice.setDuration(fillDuration.clone());
             if (beatNew) {
               addBeat(measure, beat);
             }
@@ -2287,7 +2287,8 @@ public class TGMeasureManager {
     // como ultimo intento, asigno la duracion de cualquier componente existente
     // en el lugar.
     if (setCurrentDuration && currentVoice != null && !currentVoice.isEmpty()) {
-      currentVoice.getDuration().copy(duration);
+      duration = currentVoice.getDuration().clone();
+//      currentVoice.getDuration().copy(duration);
       return true;
     }
     return false;

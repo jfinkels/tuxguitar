@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.song.models.TGBeat;
@@ -36,13 +35,9 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
-import org.herac.tuxguitar.song.models.effects.harmonics.ArtificialHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.PinchHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.SemiHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.TappedHarmonic;
 
 /**
  * @author julian
@@ -59,7 +54,7 @@ public class GP4OutputStream extends GTPOutputStream {
   /** The Logger for this class. */
   public static final transient Logger LOG = Logger
       .getLogger(GP4OutputStream.class);
-  
+
   public GP4OutputStream(GTPSettings settings) {
     super(settings);
   }
@@ -584,22 +579,20 @@ public class GP4OutputStream extends GTPOutputStream {
       writeByte((byte) 1);
     }
     if ((flags2 & 0x10) != 0) {
-      switch (effect.getHarmonic().getId()) {
-      case NaturalHarmonic.ID:
+      final HarmonicEffect harmonic = effect.getHarmonic();
+
+      if (harmonic.equals(HarmonicEffect.NATURAL)) {
         writeByte((byte) 1);
-        break;
-      case TappedHarmonic.ID:
+      } else if (harmonic.equals(HarmonicEffect.TAPPED)) {
         writeByte((byte) 3);
-        break;
-      case PinchHarmonic.ID:
+      } else if (harmonic.equals(HarmonicEffect.PINCH)) {
         writeByte((byte) 4);
-        break;
-      case SemiHarmonic.ID:
+      } else if (harmonic.equals(HarmonicEffect.SEMI)) {
         writeByte((byte) 5);
-        break;
-      case ArtificialHarmonic.ID:
+      } else if (harmonic.equals(HarmonicEffect.ARTIFICIAL)) {
         writeByte((byte) 15);
-        break;
+      } else {
+        LOG.debug("Unknown type of HarmonicEffect: " + harmonic);
       }
     }
     if ((flags2 & 0x20) != 0) {

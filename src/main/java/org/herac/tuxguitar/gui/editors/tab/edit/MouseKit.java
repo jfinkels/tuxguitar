@@ -171,8 +171,7 @@ public class MouseKit {
       note.setVelocity(caret.getVelocity());
       note.setString(string);
 
-      TGDuration duration = new TGDuration();
-      caret.getDuration().copy(duration);
+      TGDuration duration = caret.getDuration().clone();
 
       manager.getMeasureManager().addNote(voice.getBeat(), note, duration,
           start, voice.getIndex());

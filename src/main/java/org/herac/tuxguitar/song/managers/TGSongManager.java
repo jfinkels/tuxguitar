@@ -120,8 +120,9 @@ public class TGSongManager {
     header.setRepeatOpen(false);
     header.setRepeatClose(0);
     header.setTripletFeel(lastHeader.getTripletFeel());
-    lastHeader.getTimeSignature().copy(header.getTimeSignature());
-    lastHeader.getTempo().copy(header.getTempo());
+
+    header.setTimeSignature(lastHeader.getTimeSignature().clone());
+    header.setTempo(lastHeader.getTempo().clone());
     getSong().addMeasureHeader(header);
 
     for (final TGTrack track : getSong().getTracks()) {
@@ -197,7 +198,7 @@ public class TGSongManager {
   public void changeTimeSignature(TGMeasureHeader header,
       TGTimeSignature timeSignature, boolean toEnd) {
     // asigno el nuevo ritmo
-    timeSignature.copy(header.getTimeSignature());
+    header.setTimeSignature(timeSignature.clone());
 
     long nextStart = header.getStart() + header.getLength();
     for (final TGMeasureHeader nextHeader : getMeasureHeadersBeforeEnd(header
@@ -209,7 +210,7 @@ public class TGSongManager {
       moveMeasureHeader(nextHeader, theMove, 0);
 
       if (toEnd) {
-        timeSignature.copy(nextHeader.getTimeSignature());
+        nextHeader.setTimeSignature(timeSignature.clone());
       }
       nextStart = nextHeader.getStart() + nextHeader.getLength();
     }

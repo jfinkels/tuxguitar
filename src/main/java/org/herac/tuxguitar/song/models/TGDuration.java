@@ -6,7 +6,6 @@
  */
 package org.herac.tuxguitar.song.models;
 
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 
 /**
  * @author julian
@@ -103,7 +102,7 @@ public class TGDuration {
   /**
    * DivisionType.
    */
-  private TGDivisionType divisionType = TGFactoryImpl.newDivisionType();
+  private TGDivisionType divisionType = new TGDivisionType();
 
   /**
    * Puntillo.
@@ -123,17 +122,19 @@ public class TGDuration {
   @Override
   public TGDuration clone() {
     TGDuration duration = new TGDuration();
-    copy(duration);
+
+    duration.setValue(this.value);
+    duration.setDotted(this.dotted);
+    duration.setDoubleDotted(this.doubleDotted);
+    duration.setDivision(this.divisionType.clone());
+        
     return duration;
   }
 
-  public void copy(TGDuration duration) {
-    duration.setValue(getValue());
-    duration.setDotted(isDotted());
-    duration.setDoubleDotted(isDoubleDotted());
-    getDivision().copy(duration.getDivision());
+  private void setDivision(final TGDivisionType newDivision) {
+    this.divisionType = newDivision;
   }
-
+  
   public TGDivisionType getDivision() {
     return this.divisionType;
   }

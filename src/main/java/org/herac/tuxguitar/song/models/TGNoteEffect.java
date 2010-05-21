@@ -7,8 +7,8 @@
 package org.herac.tuxguitar.song.models;
 
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
 
@@ -26,7 +26,7 @@ public class TGNoteEffect {
   private boolean ghostNote = false;
   private TGEffectGrace grace = null;
   private boolean hammer = false;
-  private TGEffectHarmonic harmonic = null;
+  private HarmonicEffect harmonic = null;
   private boolean heavyAccentuatedNote = false;
   private boolean letRing = false;
   private boolean palmMute = false;
@@ -59,7 +59,7 @@ public class TGNoteEffect {
     effect.setFadeIn(isFadeIn());
     effect.setBend(isBend() ? this.bend.clone() : null);
     effect.setTremoloBar(isTremoloBar() ? this.tremoloBar.clone() : null);
-    effect.setHarmonic(isHarmonic() ? this.harmonic.clone() : null);
+    effect.setHarmonic(isHarmonic() ? this.harmonic : null);
     effect.setGrace(isGrace() ? this.grace.clone() : null);
     effect.setTrill(isTrill() ? this.trill.clone() : null);
     effect.setTremoloPicking(isTremoloPicking() ? this.tremoloPicking.clone()
@@ -75,7 +75,7 @@ public class TGNoteEffect {
     return this.grace;
   }
 
-  public TGEffectHarmonic getHarmonic() {
+  public HarmonicEffect getHarmonic() {
     return this.harmonic;
   }
 
@@ -241,7 +241,7 @@ public class TGNoteEffect {
     }
   }
 
-  public void setHarmonic(TGEffectHarmonic harmonic) {
+  public void setHarmonic(HarmonicEffect harmonic) {
     this.harmonic = harmonic;
   }
 

@@ -24,8 +24,7 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.SemiHarmonic;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 
 /**
  * @author julian
@@ -760,8 +759,8 @@ public class MidiSequenceParser {
       for (int noteIdx = 0; noteIdx < voice.getNotes().size(); noteIdx++) {
         TGNote note = voice.getNote(noteIdx);
         if (!note.isTiedNote()) {
-          int key = (this.transpose + track.getOffset() + note.getValue() + ((TGString) track
-              .getStrings().get(note.getString() - 1)).getValue());
+          int key = this.transpose + track.getOffset() + note.getValue()
+              + track.getStrings().get(note.getString() - 1).getValue();
 
           long start = applyStrokeStart(note, (th.getStart() + startMove),
               stroke);
@@ -876,10 +875,10 @@ public class MidiSequenceParser {
             int orig = key;
 
             // Natural
-            if (note.getEffect().getHarmonic() instanceof NaturalHarmonic) {
-              for (int i = 0; i < NaturalHarmonic.NATURAL_FREQUENCIES.length; i++) {
-                if ((note.getValue() % 12) == (NaturalHarmonic.NATURAL_FREQUENCIES[i][0] % 12)) {
-                  key = ((orig + NaturalHarmonic.NATURAL_FREQUENCIES[i][1]) - note
+            if (note.getEffect().getHarmonic().equals(HarmonicEffect.NATURAL)) {
+              for (int i = 0; i < HarmonicEffect.NATURAL_FREQUENCIES.length; i++) {
+                if ((note.getValue() % 12) == (HarmonicEffect.NATURAL_FREQUENCIES[i][0] % 12)) {
+                  key = ((orig + HarmonicEffect.NATURAL_FREQUENCIES[i][1]) - note
                       .getValue());
                   break;
                 }
@@ -887,13 +886,13 @@ public class MidiSequenceParser {
             }
             // Artifical/Tapped/Pinch/Semi
             else {
-              if (note.getEffect().getHarmonic() instanceof SemiHarmonic
+              if (note.getEffect().getHarmonic().equals(HarmonicEffect.SEMI)
                   && !percussionTrack) {
                 makeNote(sh, track.getNumber(), Math.min(127, orig), start,
                     duration, Math.max(TGVelocities.MIN_VELOCITY, velocity
                         - (TGVelocities.VELOCITY_INCREMENT * 3)), channel);
               }
-              key = (orig + NaturalHarmonic.NATURAL_FREQUENCIES[note
+              key = (orig + HarmonicEffect.NATURAL_FREQUENCIES[note
                   .getEffect().getHarmonic().getData()][1]);
 
             }

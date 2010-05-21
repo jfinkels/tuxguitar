@@ -106,23 +106,7 @@ public class ChangeClefAction extends Action {
       clefs.add(TuxGuitar.getProperty("composition.clef.tenor"));
       clefs.add(TuxGuitar.getProperty("composition.clef.alto"));
 
-      int selection = 0;
-      switch (measure.getClef()) {
-      case ALTO:
-        selection = 3;
-        break;
-      case BASS:
-        selection = 1;
-        break;
-      case TENOR:
-        selection = 2;
-        break;
-      case TREBLE:
-        selection = 0;
-        break;
-      }
-
-      clefs.select(selection);
+      clefs.select(measure.getClef().getId());
       clefs.setLayoutData(getComboData());
 
       // --------------------To End Checkbox-------------------------------
@@ -146,6 +130,7 @@ public class ChangeClefAction extends Action {
         @Override
         public void widgetSelected(SelectionEvent arg0) {
           final boolean toEndValue = toEnd.getSelection();
+
 
           Clef selectedClef = null;
           switch (clefs.getSelectionIndex()) {

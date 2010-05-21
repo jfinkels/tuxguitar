@@ -169,8 +169,7 @@ public class MiProvider {
                         .getVelocity());
                     note.setString(string.getNumber());
 
-                    TGDuration duration = new TGDuration();
-                    voice.getDuration().copy(duration);
+                    TGDuration duration = voice.getDuration().clone();
 
                     songMgr.getMeasureManager().addNote(beat, note, duration,
                         voice.getIndex());

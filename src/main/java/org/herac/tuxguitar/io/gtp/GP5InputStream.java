@@ -36,15 +36,10 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
-import org.herac.tuxguitar.song.models.effects.harmonics.ArtificialHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.PinchHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.SemiHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.TappedHarmonic;
 
 public class GP5InputStream extends GTPInputStream {
   private static final float GP_BEND_POSITION = 60f;
@@ -112,25 +107,25 @@ public class GP5InputStream extends GTPInputStream {
   private void readArtificialHarmonic(TGNoteEffect effect) throws IOException {
     int type = readByte();
 
-    TGEffectHarmonic harmonic = null;
+    HarmonicEffect harmonic = null;
 
     switch (type) {
     case 1:
-      harmonic = new NaturalHarmonic();
+      harmonic = HarmonicEffect.NATURAL;
       break;
     case 2:
       skip(3);
-      harmonic = new ArtificialHarmonic();
+      harmonic = HarmonicEffect.ARTIFICIAL;
       break;
     case 3:
       skip(1);
-      harmonic = new TappedHarmonic();
+      harmonic = HarmonicEffect.TAPPED;
       break;
     case 4:
-      harmonic = new PinchHarmonic();
+      harmonic = HarmonicEffect.PINCH;
       break;
     case 5:
-      harmonic = new SemiHarmonic();
+      harmonic = HarmonicEffect.SEMI;
       break;
     }
 
@@ -169,7 +164,7 @@ public class GP5InputStream extends GTPInputStream {
         TGNote note = readNote(string, track, effect.clone());
         voice.addNote(note);
       }
-      duration.copy(voice.getDuration());
+      voice.setDuration(duration.clone());
     }
 
     skip(1);
@@ -443,7 +438,7 @@ public class GP5InputStream extends GTPInputStream {
     if ((flags & 0x02) != 0) {
       timeSignature.getDenominator().setValue(readByte());
     }
-    timeSignature.copy(header.getTimeSignature());
+    header.setTimeSignature(timeSignature.clone());
     if ((flags & 0x08) != 0) {
       header.setRepeatClose(((readByte() & 0xff) - 1));
     }

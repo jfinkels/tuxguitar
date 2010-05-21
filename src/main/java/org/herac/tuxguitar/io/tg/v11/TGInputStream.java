@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGChordImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureHeaderImpl;
@@ -46,15 +45,10 @@ import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
-import org.herac.tuxguitar.song.models.effects.harmonics.ArtificialHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.PinchHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.SemiHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.TappedHarmonic;
 
 /**
  * @author julian
@@ -67,7 +61,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   /** The Logger for this class. */
   public static final transient Logger LOG = Logger
       .getLogger(TGInputStream.class);
-  
+
   private DataInputStream dataInputStream;
   private String version;
 
@@ -290,32 +284,28 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     return effect;
   }
 
-  private TGEffectHarmonic readHarmonicEffect() {
+  private HarmonicEffect readHarmonicEffect() {
     // leo el tipo
     final int id = readByte();
 
-    TGEffectHarmonic harmonic = null;
+    HarmonicEffect harmonic = null;
 
-    switch (id) {
-    case ArtificialHarmonic.ID:
-      harmonic = new ArtificialHarmonic();
-      break;
-    case NaturalHarmonic.ID:
-      harmonic = new NaturalHarmonic();
-      break;
-    case PinchHarmonic.ID:
-      harmonic = new PinchHarmonic();
-      break;
-    case TappedHarmonic.ID:
-      harmonic = new TappedHarmonic();
-      break;
-    case SemiHarmonic.ID:
-      harmonic = new SemiHarmonic();
-      break;
+    if (id == HarmonicEffect.ARTIFICIAL.getId()) {
+      harmonic = HarmonicEffect.ARTIFICIAL;
+    } else if (id == HarmonicEffect.NATURAL.getId()) {
+      harmonic = HarmonicEffect.NATURAL;
+    } else if (id == HarmonicEffect.PINCH.getId()) {
+      harmonic = HarmonicEffect.PINCH;
+    } else if (id == HarmonicEffect.SEMI.getId()) {
+      harmonic = HarmonicEffect.SEMI;
+    } else if (id == HarmonicEffect.TAPPED.getId()) {
+      harmonic = HarmonicEffect.TAPPED;
+    } else {
+      LOG.debug("Unknown type of HarmonicEffect, with id " + id);
     }
 
     // leo la data
-    if (id != NaturalHarmonic.ID) {
+    if (harmonic != null && !harmonic.equals(HarmonicEffect.NATURAL)) {
       harmonic.setData(readByte());
     }
 
@@ -392,8 +382,8 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     readBeats(measure, data);
 
     // leo la clave
-    measure.setClef((lastMeasure == null) ? Clef.TREBLE : lastMeasure
-        .getClef());
+    measure
+        .setClef((lastMeasure == null) ? Clef.TREBLE : lastMeasure.getClef());
     if (((header & MEASURE_CLEF) != 0)) {
       final int clefCode = readByte();
 
@@ -413,7 +403,8 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
         break;
       }
 
-      measure.setClef(clef);}
+      measure.setClef(clef);
+    }
 
     // leo el key signature
     measure.setKeySignature((lastMeasure == null) ? 0 : lastMeasure
@@ -437,8 +428,8 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     if (((header & MEASURE_HEADER_TIMESIGNATURE) != 0)) {
       readTimeSignature(measureHeader.getTimeSignature());
     } else if (lastMeasureHeader != null) {
-      lastMeasureHeader.getTimeSignature().copy(
-          measureHeader.getTimeSignature());
+      measureHeader.setTimeSignature(lastMeasureHeader.getTimeSignature()
+          .clone());
     }
 
     // leo el tempo
@@ -793,7 +784,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
         } else if (((flags & VOICE_DIRECTION_DOWN) != 0)) {
           beat.getVoice(i).setDirection(TGVoice.DIRECTION_DOWN);
         }
-        data.getVoice(i).getDuration().copy(beat.getVoice(i).getDuration());
+        beat.getVoice(i).setDuration(data.getVoice(i).getDuration().clone());
         data.getVoice(i).setStart(
             data.getVoice(i).getStart()
                 + beat.getVoice(i).getDuration().getTime());

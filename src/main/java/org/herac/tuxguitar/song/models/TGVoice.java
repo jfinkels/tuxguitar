@@ -9,7 +9,6 @@ package org.herac.tuxguitar.song.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
 
 /**
@@ -26,7 +25,7 @@ public abstract class TGVoice {
 
   private TGBeat beat = null;
   private int direction = DIRECTION_NONE;
-  private TGDuration duration = TGFactoryImpl.newDuration();
+  private TGDuration duration = new TGDuration();
   private boolean empty = true;
   private int index = 0;
   private List<TGNote> notes = new ArrayList<TGNote>();
@@ -45,12 +44,14 @@ public abstract class TGVoice {
   public TGVoice clone() {
     TGVoice voice = new TGVoiceImpl(this.index);
     
-    voice.setEmpty(isEmpty());
-    voice.setDirection(getDirection());
-    getDuration().copy(voice.getDuration());
+    voice.setEmpty(this.empty);
+    voice.setDirection(this.direction);
+    voice.setDuration(this.duration.clone());
+
     for (final TGNote note : this.notes) {
       voice.addNote(note.clone());
     }
+    
     return voice;
   }
 

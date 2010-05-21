@@ -244,8 +244,7 @@ public class MatrixEditor implements TGRedrawListener, IconLoader,
             note.setVelocity(caret.getVelocity());
             note.setString(string.getNumber());
 
-            TGDuration duration = new TGDuration();
-            caret.getDuration().copy(duration);
+            TGDuration duration = caret.getDuration().clone();
 
             manager.getMeasureManager().addNote(beat, note, duration, start,
                 caret.getVoice());

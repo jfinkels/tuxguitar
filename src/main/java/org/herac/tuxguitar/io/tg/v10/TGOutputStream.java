@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGLocalFileExporter;
@@ -34,11 +33,10 @@ import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
 
 /**
  * @author julian
@@ -105,7 +103,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
           }
 
           if (previousBestDuration != null) {
-            previousBestDuration.copy(previous.getVoice(0).getDuration());
+            previous.getVoice(0).setDuration(previousBestDuration.clone());
           } else {
             if (voice.isRestVoice()) {
               this.measure.removeBeat(beat);
@@ -114,7 +112,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
             }
             TGDuration duration = TGDuration
                 .fromTime((beatStart - previousStart));
-            duration.copy(previous.getVoice(0).getDuration());
+            previous.getVoice(0).setDuration(duration.clone());
           }
         }
 
@@ -139,7 +137,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
             break;
           }
           TGDuration duration = TGDuration.fromTime((measureEnd - beatStart));
-          duration.copy(voice.getDuration());
+          voice.setDuration(duration.clone());
         }
         previous = beat;
       }
@@ -411,12 +409,12 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     writeByte(effect.getTransition());
   }
 
-  private void writeHarmonicEffect(TGEffectHarmonic effect) {
+  private void writeHarmonicEffect(HarmonicEffect effect) {
     // excribo el tipo
     writeByte(effect.getId());
 
     // excribo la data
-    if (!(effect instanceof NaturalHarmonic)) {
+    if (!effect.equals(HarmonicEffect.NATURAL)){
       writeByte(effect.getData());
     }
   }

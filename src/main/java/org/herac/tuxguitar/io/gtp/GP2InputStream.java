@@ -30,9 +30,7 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.ArtificialHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 
 /**
  * @author julian
@@ -210,7 +208,7 @@ public class GP2InputStream extends GTPInputStream {
 
     beat.setStart(start);
     voice.setEmpty(false);
-    duration.copy(voice.getDuration());
+    voice.setDuration(duration.clone());
     measure.addBeat(beat);
 
     return duration.getTime();
@@ -226,11 +224,11 @@ public class GP2InputStream extends GTPInputStream {
     if (flags == 3) {
       readBend(effect);
     } else if (flags == 8 || flags == 9) {
-      TGEffectHarmonic harmonic = null;
+      HarmonicEffect harmonic = null;
       if (flags == 8) {
-        harmonic = new NaturalHarmonic();
+        harmonic = HarmonicEffect.NATURAL;
       } else {
-        harmonic = new ArtificialHarmonic();
+        harmonic = HarmonicEffect.ARTIFICIAL;
         harmonic.setData(0);
       }
       effect.setHarmonic(harmonic);

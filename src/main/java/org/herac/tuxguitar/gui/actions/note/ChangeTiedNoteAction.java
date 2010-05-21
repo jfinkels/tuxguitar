@@ -50,8 +50,7 @@ public class ChangeTiedNoteAction extends Action {
       note.setString(caret.getSelectedString().getNumber());
       note.setTiedNote(true);
 
-      TGDuration duration = new TGDuration();
-      caret.getDuration().copy(duration);
+      TGDuration duration = caret.getDuration().clone();
 
       setTiedNoteValue(note, caret);
 

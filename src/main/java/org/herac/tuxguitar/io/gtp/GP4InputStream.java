@@ -36,15 +36,10 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
-import org.herac.tuxguitar.song.models.effects.harmonics.ArtificialHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.PinchHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.SemiHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.TappedHarmonic;
 
 public class GP4InputStream extends GTPInputStream {
   private static final float GP_BEND_POSITION = 60f;
@@ -149,7 +144,7 @@ public class GP4InputStream extends GTPInputStream {
     }
     beat.setStart(start);
     voice.setEmpty(false);
-    duration.copy(voice.getDuration());
+    voice.setDuration(duration.clone());
     measure.addBeat(beat);
 
     return duration.getTime();
@@ -405,7 +400,7 @@ public class GP4InputStream extends GTPInputStream {
     if ((flags & 0x02) != 0) {
       timeSignature.getDenominator().setValue(readByte());
     }
-    timeSignature.copy(header.getTimeSignature());
+    header.setTimeSignature(timeSignature.clone());
     if ((flags & 0x08) != 0) {
       header.setRepeatClose(readByte());
     }
@@ -543,30 +538,30 @@ public class GP4InputStream extends GTPInputStream {
     if ((flags2 & 0x10) != 0) {
       int type = readByte();
 
-      TGEffectHarmonic harmonic = null;
+      HarmonicEffect harmonic = null;
       switch (type) {
       case 1:
-        harmonic = new NaturalHarmonic();
+        harmonic = HarmonicEffect.NATURAL;
         break;
       case 3:
-        harmonic = new TappedHarmonic();
+        harmonic = HarmonicEffect.TAPPED;
         break;
       case 4:
-        harmonic = new PinchHarmonic();
+        harmonic = HarmonicEffect.PINCH;
         break;
       case 5:
-        harmonic = new SemiHarmonic();
+        harmonic = HarmonicEffect.SEMI;
         break;
       case 15:
-        harmonic = new ArtificialHarmonic();
+        harmonic = HarmonicEffect.ARTIFICIAL;
         harmonic.setData(2);
         break;
       case 17:
-        harmonic = new ArtificialHarmonic();
+        harmonic = HarmonicEffect.ARTIFICIAL;
         harmonic.setData(3);
         break;
       case 22:
-        harmonic = new ArtificialHarmonic();
+        harmonic = HarmonicEffect.ARTIFICIAL;
         harmonic.setData(0);
         break;
       }

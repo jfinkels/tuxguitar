@@ -88,8 +88,7 @@ public class InsertChordAction extends Action {
                 .getVelocity());
             note.setString(string.getNumber());
 
-            TGDuration duration = new TGDuration();
-            voice.getDuration().copy(duration);
+            TGDuration duration = voice.getDuration().clone();
 
             getSongManager().getMeasureManager().addNote(beat, note, duration,
                 voice.getIndex());

@@ -209,7 +209,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     if (((header & COMPONENT_NEXT_DURATION) != 0)) {
       readDuration(voice.getDuration());
     } else if (previous != null && !previous.equals(beat)) {
-      previous.getVoice(0).getDuration().copy(voice.getDuration());
+      voice.setDuration(previous.getVoice(0).getDuration().clone());
     }
 
     if (((header & COMPONENT_NOTE) != 0)) {
@@ -357,8 +357,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     if (((header & MEASURE_HEADER_TIMESIGNATURE) != 0)) {
       readTimeSignature(measureHeader.getTimeSignature());
     } else if (lastMeasureHeader != null) {
-      lastMeasureHeader.getTimeSignature().copy(
-          measureHeader.getTimeSignature());
+      measureHeader.setTimeSignature(lastMeasureHeader.getTimeSignature().clone());
     }
 
     // leo el tempo

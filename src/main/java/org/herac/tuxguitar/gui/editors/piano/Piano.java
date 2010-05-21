@@ -169,8 +169,7 @@ public class Piano extends Composite {
           note.setVelocity(caret.getVelocity());
           note.setString(string.getNumber());
 
-          TGDuration duration = new TGDuration();
-          caret.getDuration().copy(duration);
+          TGDuration duration = caret.getDuration().clone();
 
           manager.getMeasureManager().addNote(caret.getMeasure(),
               caret.getPosition(), note, duration, caret.getVoice());

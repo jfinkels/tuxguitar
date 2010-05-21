@@ -6,8 +6,6 @@
  */
 package org.herac.tuxguitar.gui.editors.fretboard;
 
-import java.util.Iterator;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -58,11 +56,7 @@ import org.herac.tuxguitar.song.models.TGVoice;
  */
 public class FretBoard extends Composite {
 
-  private class FretBoardListener implements PaintListener, MouseListener {
-
-    public FretBoardListener() {
-      super();
-    }
+  class FretBoardListener implements PaintListener, MouseListener {
 
     public void mouseDoubleClick(MouseEvent e) {
       // Not implemented
@@ -159,8 +153,7 @@ public class FretBoard extends Composite {
     note.setVelocity(caret.getVelocity());
     note.setString(string);
 
-    TGDuration duration = new TGDuration();
-    caret.getDuration().copy(duration);
+    TGDuration duration = caret.getDuration().clone();
 
     manager.getMeasureManager().addNote(caret.getMeasure(),
         caret.getPosition(), note, duration, caret.getVoice());
@@ -642,7 +635,7 @@ public class FretBoard extends Composite {
       TGTrack track = getTrack();
 
       for (int v = 0; v < this.beat.countVoices(); v++) {
-        for (final TGNote note : this.beat.getVoice(v).getNotes()){
+        for (final TGNote note : this.beat.getVoice(v).getNotes()) {
           int fretIndex = note.getValue();
           int stringIndex = note.getString() - 1;
           if (fretIndex >= 0 && fretIndex < this.frets.length

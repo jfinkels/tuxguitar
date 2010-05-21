@@ -10,7 +10,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.herac.tuxguitar.gui.editors.tab.TGFactoryImpl;
+import org.herac.tuxguitar.gui.editors.tab.TGLyricImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 
 /**
@@ -23,9 +23,9 @@ public abstract class TGTrack {
   public static final int MAX_OFFSET = 24;
   public static final int MIN_OFFSET = -24;
 
-  private TGChannel channel = TGFactoryImpl.newChannel();
+  private TGChannel channel = new TGChannel();
   private Color color = Color.BLACK;
-  private TGLyric lyrics = TGFactoryImpl.newLyric();
+  private TGLyric lyrics = new TGLyricImpl();
   private List<TGMeasure> measures = new ArrayList<TGMeasure>();
   private boolean mute = false;
   private String name = "";
@@ -64,11 +64,11 @@ public abstract class TGTrack {
     getChannel().copy(track.getChannel());
     this.color = track.getColor();
     getLyrics().copy(track.getLyrics());
-    
+
     for (final TGString string : this.strings) {
       track.getStrings().add(string.clone());
     }
-    
+
     int i = 0;
     for (final TGMeasure measure : this.measures) {
       track.addMeasure(measure.clone(song.getMeasureHeader(i++)));

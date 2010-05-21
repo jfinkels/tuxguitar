@@ -34,10 +34,8 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
+import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
-import org.herac.tuxguitar.song.models.effects.TGEffectHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.ArtificialHarmonic;
-import org.herac.tuxguitar.song.models.effects.harmonics.NaturalHarmonic;
 
 /**
  * @author julian
@@ -142,7 +140,7 @@ public class GP3InputStream extends GTPInputStream {
     }
     beat.setStart(start);
     voice.setEmpty(false);
-    duration.copy(voice.getDuration());
+    voice.setDuration(duration.clone());
     measure.addBeat(beat);
 
     return duration.getTime();
@@ -176,10 +174,10 @@ public class GP3InputStream extends GTPInputStream {
       }
     }
     if ((flags & 0x04) != 0) {
-      effect.setHarmonic(new NaturalHarmonic());
+      effect.setHarmonic(HarmonicEffect.NATURAL);
     }
     if ((flags & 0x08) != 0) {
-      TGEffectHarmonic harmonic = new ArtificialHarmonic();
+      HarmonicEffect harmonic = HarmonicEffect.ARTIFICIAL;
       harmonic.setData(0);
       effect.setHarmonic(harmonic);
     }
@@ -395,7 +393,7 @@ public class GP3InputStream extends GTPInputStream {
     if ((flags & 0x02) != 0) {
       timeSignature.getDenominator().setValue(readByte());
     }
-    timeSignature.copy(header.getTimeSignature());
+    header.setTimeSignature(timeSignature.clone());
     if ((flags & 0x08) != 0) {
       header.setRepeatClose(readByte());
     }
