@@ -29,7 +29,7 @@ import org.herac.tuxguitar.gui.actions.note.ShiftNoteDownAction;
 import org.herac.tuxguitar.gui.actions.note.ShiftNoteUpAction;
 import org.herac.tuxguitar.gui.editors.tab.Caret;
 import org.herac.tuxguitar.gui.items.MenuItems;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGNote;
 
@@ -254,10 +254,10 @@ public class BeatMenuItem extends MenuItems {
     this.voiceDown.setEnabled(!running && !restBeat);
     this.strokeUp.setEnabled(!running && !restBeat);
     this.strokeUp.setSelection(beat != null
-        && beat.getStroke().getDirection().equals(StrokeDirection.UP));
+        && beat.getStroke().getDirection().equals(Direction.UP));
     this.strokeDown.setEnabled(!running && !restBeat);
     this.strokeDown.setSelection(beat != null
-        && beat.getStroke().getDirection().equals(StrokeDirection.DOWN));
+        && beat.getStroke().getDirection().equals(Direction.DOWN));
     this.semitoneUp.setEnabled(!running && note != null);
     this.semitoneDown.setEnabled(!running && note != null);
     this.shiftUp.setEnabled(!running && note != null);

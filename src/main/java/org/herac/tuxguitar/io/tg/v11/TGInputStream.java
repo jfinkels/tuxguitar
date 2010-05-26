@@ -24,7 +24,7 @@ import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
 import org.herac.tuxguitar.io.tg.TGBeatData;
 import org.herac.tuxguitar.song.models.Clef;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -616,13 +616,13 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   private TGStroke readStroke() {
     final int directionId = readByte();
     final int value = readByte();
-    StrokeDirection direction = null;
-    if (directionId == StrokeDirection.NONE.getId()) {
-      direction = StrokeDirection.NONE;
-    } else if (directionId == StrokeDirection.UP.getId()) {
-      direction = StrokeDirection.UP;
-    } else if (directionId == StrokeDirection.DOWN.getId()) {
-      direction = StrokeDirection.DOWN;
+    Direction direction = null;
+    if (directionId == Direction.NONE.getId()) {
+      direction = Direction.NONE;
+    } else if (directionId == Direction.UP.getId()) {
+      direction = Direction.UP;
+    } else if (directionId == Direction.DOWN.getId()) {
+      direction = Direction.DOWN;
     } else {
       LOG.error("Unknown direction ID: " + directionId);
     }

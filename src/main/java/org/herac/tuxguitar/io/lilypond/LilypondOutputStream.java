@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.Clef;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -378,7 +378,7 @@ public class LilypondOutputStream {
     boolean accentuatedNote = false;
     boolean heavyAccentuatedNote = false;
     boolean arpeggio = !voice.getBeat().getStroke().getDirection().equals(
-        StrokeDirection.NONE);
+        Direction.NONE);
     for (int i = 0; i < voice.getNotes().size(); i++) {
       TGNoteEffect effect = voice.getNote(i).getEffect();
 

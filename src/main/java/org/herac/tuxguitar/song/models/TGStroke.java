@@ -1,10 +1,10 @@
 package org.herac.tuxguitar.song.models;
 
-public class TGStroke extends Pair<StrokeDirection, Integer> {
+public class TGStroke extends Pair<Direction, Integer> {
 
-  public static final TGStroke DEFAULT = new TGStroke(StrokeDirection.NONE, 0);
+  public static final TGStroke DEFAULT = new TGStroke(Direction.NONE, 0);
   
-  public TGStroke(final StrokeDirection direction, final int value) {
+  public TGStroke(final Direction direction, final int value) {
     super(direction, value);
   }
 
@@ -13,11 +13,11 @@ public class TGStroke extends Pair<StrokeDirection, Integer> {
     return new TGStroke(this.left, this.right);
   }
 
-  public StrokeDirection getDirection() {
+  public Direction getDirection() {
     return this.left;
   }
   
-  public void setDirection(final StrokeDirection newDirection) {
+  public void setDirection(final Direction newDirection) {
     this.left = newDirection;
   }
 

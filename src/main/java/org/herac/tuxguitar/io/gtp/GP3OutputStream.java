@@ -14,7 +14,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -215,7 +215,7 @@ public class GP3OutputStream extends GTPOutputStream {
       if (effect.isVibrato() || effect.isTremoloBar() || effect.isTapping()
           || effect.isSlapping() || effect.isPopping() || effect.isHarmonic()
           || effect.isFadeIn()
-          || !beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
+          || !beat.getStroke().getDirection().equals(Direction.NONE)) {
         flags |= 0x08;
       }
     }
@@ -269,7 +269,7 @@ public class GP3OutputStream extends GTPOutputStream {
         || noteEffect.isSlapping() || noteEffect.isPopping()) {
       flags += 0x20;
     }
-    if (!beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
+    if (!beat.getStroke().getDirection().equals(Direction.NONE)) {
       flags |= 0x40;
     }
     if (noteEffect.isHarmonic()) {
@@ -300,10 +300,10 @@ public class GP3OutputStream extends GTPOutputStream {
       }
     }
     if ((flags & 0x40) != 0) {
-      writeUnsignedByte((beat.getStroke().getDirection().equals(StrokeDirection.DOWN) ? toStrokeValue(beat
+      writeUnsignedByte((beat.getStroke().getDirection().equals(Direction.DOWN) ? toStrokeValue(beat
           .getStroke())
           : 0));
-      writeUnsignedByte((beat.getStroke().getDirection().equals(StrokeDirection.UP) ? toStrokeValue(beat
+      writeUnsignedByte((beat.getStroke().getDirection().equals(Direction.UP) ? toStrokeValue(beat
           .getStroke())
           : 0));
     }

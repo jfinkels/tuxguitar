@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -588,11 +588,11 @@ public class MidiSequenceParser {
   }
 
   private int[] getStroke(TGBeat beat, TGBeat previous, int[] stroke) {
-    StrokeDirection direction = beat.getStroke().getDirection();
+    Direction direction = beat.getStroke().getDirection();
     if (previous == null
-        || !(direction.equals(StrokeDirection.NONE) && previous.getStroke()
-            .getDirection().equals(StrokeDirection.NONE))) {
-      if (direction.equals(StrokeDirection.NONE)) {
+        || !(direction.equals(Direction.NONE) && previous.getStroke()
+            .getDirection().equals(Direction.NONE))) {
+      if (direction.equals(Direction.NONE)) {
         for (int i = 0; i < stroke.length; i++) {
           stroke[i] = 0;
         }
@@ -613,7 +613,7 @@ public class MidiSequenceParser {
           int strokeMove = 0;
           int strokeIncrement = beat.getStroke().getIncrementTime(beat);
           for (int i = 0; i < stroke.length; i++) {
-            int index = (direction.equals(StrokeDirection.DOWN) ? (stroke.length - 1)
+            int index = (direction.equals(Direction.DOWN) ? (stroke.length - 1)
                 - i : i);
             if ((stringUseds & (0x01 << index)) != 0) {
               stroke[index] = strokeMove;

@@ -6,7 +6,7 @@ import java.util.List;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGNoteEffect;
@@ -219,7 +219,7 @@ public class TGBeatImpl extends TGBeat {
         TGChordImpl chord = (TGChordImpl) getChord();
         chord.paint(layout, painter, fromX, fromY);
       }
-      if (!getStroke().getDirection().equals(StrokeDirection.NONE)) {
+      if (!getStroke().getDirection().equals(Direction.NONE)) {
         paintStroke(layout, painter, fromX, fromY);
       }
     }
@@ -291,7 +291,7 @@ public class TGBeatImpl extends TGBeat {
     } else {
       return;
     }
-    if (getStroke().getDirection().equals(StrokeDirection.UP)) {
+    if (getStroke().getDirection().equals(Direction.UP)) {
       painter.initPath();
       painter.setAntialias(false);
       painter.moveTo(x, y1);
@@ -300,7 +300,7 @@ public class TGBeatImpl extends TGBeat {
       painter.moveTo(x, y2);
       painter.lineTo(x + (2.0f * scale), y2 - (5.0f * scale));
       painter.closePath();
-    } else if (getStroke().getDirection().equals(StrokeDirection.DOWN)) {
+    } else if (getStroke().getDirection().equals(Direction.DOWN)) {
       painter.initPath();
       painter.setAntialias(false);
       painter.moveTo(x, y2);

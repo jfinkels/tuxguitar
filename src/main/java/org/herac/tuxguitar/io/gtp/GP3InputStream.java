@@ -14,7 +14,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGTextImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.song.models.Clef;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -167,10 +167,10 @@ public class GP3InputStream extends GTPInputStream {
       int strokeDown = readByte();
       int strokeUp = readByte();
       if (strokeDown > 0) {
-        beat.getStroke().setDirection(StrokeDirection.DOWN);
+        beat.getStroke().setDirection(Direction.DOWN);
         beat.getStroke().setValue(toStrokeValue(strokeDown));
       } else if (strokeUp > 0) {
-        beat.getStroke().setDirection(StrokeDirection.UP);
+        beat.getStroke().setDirection(Direction.UP);
         beat.getStroke().setValue(toStrokeValue(strokeUp));
       }
     }

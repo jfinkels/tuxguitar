@@ -8,7 +8,7 @@ import java.util.List;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -642,7 +642,7 @@ public class TGMeasureManager {
   }
 
   public void cleanBeat(TGBeat beat) {
-    beat.getStroke().setDirection(StrokeDirection.NONE);
+    beat.getStroke().setDirection(Direction.NONE);
     if (beat.getText() != null) {
       beat.removeText();
     }
@@ -1480,7 +1480,7 @@ public class TGMeasureManager {
             beat.setChord(currentBeat.getChord());
             currentBeat.removeChord();
           }
-          if (currentBeat.getStroke().getDirection() != StrokeDirection.NONE) {
+          if (currentBeat.getStroke().getDirection() != Direction.NONE) {
             beat.setStroke(currentBeat.getStroke().clone());
           }
         }
@@ -1765,7 +1765,7 @@ public class TGMeasureManager {
       TGBeat beat = voice.getBeat();
       if (checkRestBeat && beat.isRestBeat()) {
         // Anulo un posible stroke
-        beat.getStroke().setDirection(StrokeDirection.NONE);
+        beat.getStroke().setDirection(Direction.NONE);
 
         // Borro un posible acorde
         if (beat.getMeasure() != null) {
@@ -1876,7 +1876,7 @@ public class TGMeasureManager {
    * Set the beat stroke
    */
   public boolean setStroke(TGMeasure measure, long start, int value,
-      StrokeDirection direction) {
+      Direction direction) {
     TGBeat beat = getBeat(measure, start);
     if (beat != null) {
       beat.setStroke(new TGStroke(direction, value));

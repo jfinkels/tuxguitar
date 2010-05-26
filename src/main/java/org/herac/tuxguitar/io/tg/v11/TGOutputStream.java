@@ -16,7 +16,7 @@ import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGLocalFileExporter;
 import org.herac.tuxguitar.io.tg.TGBeatData;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -151,7 +151,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
 
     }
     // Berifico si tiene stroke
-    if (!beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
+    if (!beat.getStroke().getDirection().equals(Direction.NONE)) {
       header |= BEAT_HAS_STROKE;
     }
     // Berifico si tiene acorde

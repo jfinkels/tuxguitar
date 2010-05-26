@@ -11,7 +11,7 @@ import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.editors.effects.StrokeEditor;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 
 /**
@@ -34,8 +34,8 @@ public class SetStrokeDownAction extends Action {
       StrokeEditor editor = new StrokeEditor();
       editor.open(beat);
       if (editor.getStatus() != StrokeEditor.STATUS_CANCEL) {
-        StrokeDirection direction = (editor.getStatus() == StrokeEditor.STATUS_CLEAN ? StrokeDirection.NONE
-            : StrokeDirection.DOWN);
+        Direction direction = (editor.getStatus() == StrokeEditor.STATUS_CLEAN ? Direction.NONE
+            : Direction.DOWN);
         int value = editor.getValue();
 
         // comienza el undoable

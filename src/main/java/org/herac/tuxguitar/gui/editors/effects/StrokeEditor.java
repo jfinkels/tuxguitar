@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.util.DialogUtils;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDuration;
 
@@ -82,7 +82,7 @@ public class StrokeEditor extends SelectionAdapter {
 
     // -----defaults-------------------------------------------------
     int duration = TGDuration.SIXTEENTH;
-    if (!beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
+    if (!beat.getStroke().getDirection().equals(Direction.NONE)) {
       duration = beat.getStroke().getValue();
     }
 

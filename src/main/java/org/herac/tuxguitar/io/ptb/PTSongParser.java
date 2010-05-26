@@ -16,7 +16,7 @@ import org.herac.tuxguitar.io.ptb.base.PTTrack;
 import org.herac.tuxguitar.io.ptb.base.PTTrackInfo;
 import org.herac.tuxguitar.io.ptb.helper.TrackHelper;
 import org.herac.tuxguitar.song.managers.TGSongManager;
-import org.herac.tuxguitar.song.models.StrokeDirection;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
@@ -218,10 +218,10 @@ public class PTSongParser {
     }
 
     if (beat.isArpeggioUp()) {
-      tgBeat.getStroke().setDirection(StrokeDirection.DOWN);
+      tgBeat.getStroke().setDirection(Direction.DOWN);
       tgBeat.getStroke().setValue(TGDuration.SIXTEENTH);
     } else if (beat.isArpeggioDown()) {
-      tgBeat.getStroke().setDirection(StrokeDirection.UP);
+      tgBeat.getStroke().setDirection(Direction.UP);
       tgBeat.getStroke().setValue(TGDuration.SIXTEENTH);
     }
 
