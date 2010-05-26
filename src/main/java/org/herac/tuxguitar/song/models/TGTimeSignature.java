@@ -12,38 +12,40 @@ package org.herac.tuxguitar.song.models;
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public class TGTimeSignature {
-  private TGDuration denominator = new TGDuration();
-  private int numerator = 4;
+public class TGTimeSignature extends Pair<Integer, TGDuration> {
+
+  public TGTimeSignature(final int numerator, final TGDuration denominator) {
+    super(numerator, denominator);
+  }
+
+  public TGTimeSignature() {
+    this(DEFAULT_NUMERATOR, new TGDuration());
+  }
+
+  public static final int DEFAULT_NUMERATOR = 4;
 
   @Override
   public TGTimeSignature clone() {
-    TGTimeSignature timeSignature = new TGTimeSignature();
-
-    timeSignature.setNumerator(this.numerator);
-    timeSignature.setDenominator(this.denominator.clone());
-
-    return timeSignature;
+    return new TGTimeSignature(this.left, this.right.clone());
   }
 
   public TGDuration getDenominator() {
-    return this.denominator;
+    return this.right;
   }
 
   public int getNumerator() {
-    return this.numerator;
+    return this.left;
   }
 
   public boolean isEqual(final TGTimeSignature ts) {
-    return this.numerator == ts.numerator
-        && this.denominator.equals(ts.denominator);
+    return this.left == ts.left && this.right.equals(ts.right);
   }
 
-  public void setDenominator(TGDuration denominator) {
-    this.denominator = denominator;
+  public void setDenominator(final TGDuration denominator) {
+    this.right = denominator;
   }
 
-  public void setNumerator(int numerator) {
-    this.numerator = numerator;
+  public void setNumerator(final int numerator) {
+    this.left = numerator;
   }
 }
