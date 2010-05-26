@@ -30,6 +30,7 @@ import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGNote;
+import org.herac.tuxguitar.song.models.Accidental;
 
 /**
  * @author julian
@@ -54,11 +55,8 @@ public class TGMeasureImpl extends TGMeasure {
    */
   private static final int DEFAULT_QUARTER_SPACING = 30;
 
-  public static final int FLAT = 3;
   public static final transient Logger LOG = Logger
       .getLogger(TGMeasureImpl.class);
-
-  public static final int NATURAL = 1;
 
   public static final int SCORE_KEY_FLAT_POSITIONS[][] = new int[][] {
       new int[] { 5, 2, 6, 3, 7, 4, 8 }, new int[] { 7, 4, 8, 5, 9, 6, 10 },
@@ -69,28 +67,53 @@ public class TGMeasureImpl extends TGMeasure {
   public static final int SCORE_KEY_SHARP_POSITIONS[][] = new int[][] {
       new int[] { 1, 4, 0, 3, 6, 2, 5 }, new int[] { 3, 6, 2, 5, 8, 4, 7 },
       new int[] { 7, 3, 6, 2, 5, 1, 4 }, new int[] { 2, 5, 1, 4, 7, 3, 6 }, };
-  public static final int SHARP = 2;
 
-  public static final int KEY_SIGNATURES[][] = new int[][] {
-  // ------------NATURAL------------------------------------
-      { NATURAL, NATURAL, NATURAL, NATURAL, NATURAL, NATURAL, NATURAL }, // NATURAL
+  public static final Accidental[][] KEY_SIGNATURES = new Accidental[][] {
+      // ------------NATURAL------------------------------------
+      { Accidental.NATURAL, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.NATURAL, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.NATURAL }, // NATURAL
       // ------------SHARPS------------------------------------
-      { NATURAL, NATURAL, NATURAL, SHARP, NATURAL, NATURAL, NATURAL }, // 1
+      { Accidental.NATURAL, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.SHARP, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.NATURAL }, // 1
       // SHARP
-      { SHARP, NATURAL, NATURAL, SHARP, NATURAL, NATURAL, NATURAL }, // 2 SHARPS
-      { SHARP, NATURAL, NATURAL, SHARP, SHARP, NATURAL, NATURAL }, // 3 SHARPS
-      { SHARP, SHARP, NATURAL, SHARP, SHARP, NATURAL, NATURAL }, // 4 SHARPS
-      { SHARP, SHARP, NATURAL, SHARP, SHARP, SHARP, NATURAL }, // 5 SHARPS
-      { SHARP, SHARP, SHARP, SHARP, SHARP, SHARP, NATURAL }, // 6 SHARPS
-      { SHARP, SHARP, SHARP, SHARP, SHARP, SHARP, SHARP }, // 7 SHARPS
+      { Accidental.SHARP, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.SHARP, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.NATURAL }, // 2 SHARPS
+      { Accidental.SHARP, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.SHARP, Accidental.SHARP, Accidental.NATURAL,
+          Accidental.NATURAL }, // 3 SHARPS
+      { Accidental.SHARP, Accidental.SHARP, Accidental.NATURAL,
+          Accidental.SHARP, Accidental.SHARP, Accidental.NATURAL,
+          Accidental.NATURAL }, // 4 SHARPS
+      { Accidental.SHARP, Accidental.SHARP, Accidental.NATURAL,
+          Accidental.SHARP, Accidental.SHARP, Accidental.SHARP,
+          Accidental.NATURAL }, // 5 SHARPS
+      { Accidental.SHARP, Accidental.SHARP, Accidental.SHARP, Accidental.SHARP,
+          Accidental.SHARP, Accidental.SHARP, Accidental.NATURAL }, // 6 SHARPS
+      { Accidental.SHARP, Accidental.SHARP, Accidental.SHARP, Accidental.SHARP,
+          Accidental.SHARP, Accidental.SHARP, Accidental.SHARP }, // 7 SHARPS
       // ------------FLATS------------------------------------
-      { NATURAL, NATURAL, NATURAL, NATURAL, NATURAL, NATURAL, FLAT }, // 1 FLAT
-      { NATURAL, NATURAL, FLAT, NATURAL, NATURAL, NATURAL, FLAT }, // 2 FLATS
-      { NATURAL, NATURAL, FLAT, NATURAL, NATURAL, FLAT, FLAT }, // 3 FLATS
-      { NATURAL, FLAT, FLAT, NATURAL, NATURAL, FLAT, FLAT }, // 4 FLATS
-      { NATURAL, FLAT, FLAT, NATURAL, FLAT, FLAT, FLAT }, // 5 FLATS
-      { FLAT, FLAT, FLAT, NATURAL, FLAT, FLAT, FLAT }, // 6 FLATS
-      { FLAT, FLAT, FLAT, FLAT, FLAT, FLAT, FLAT }, // 7 FLATS
+      { Accidental.NATURAL, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.NATURAL, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.FLAT }, // 1 FLAT
+      { Accidental.NATURAL, Accidental.NATURAL, Accidental.FLAT,
+          Accidental.NATURAL, Accidental.NATURAL, Accidental.NATURAL,
+          Accidental.FLAT }, // 2 FLATS
+      { Accidental.NATURAL, Accidental.NATURAL, Accidental.FLAT,
+          Accidental.NATURAL, Accidental.NATURAL, Accidental.FLAT,
+          Accidental.FLAT }, // 3 FLATS
+      { Accidental.NATURAL, Accidental.FLAT, Accidental.FLAT,
+          Accidental.NATURAL, Accidental.NATURAL, Accidental.FLAT,
+          Accidental.FLAT }, // 4 FLATS
+      { Accidental.NATURAL, Accidental.FLAT, Accidental.FLAT,
+          Accidental.NATURAL, Accidental.FLAT, Accidental.FLAT, Accidental.FLAT }, // 5
+                                                                                   // FLATS
+      { Accidental.FLAT, Accidental.FLAT, Accidental.FLAT, Accidental.NATURAL,
+          Accidental.FLAT, Accidental.FLAT, Accidental.FLAT }, // 6 FLATS
+      { Accidental.FLAT, Accidental.FLAT, Accidental.FLAT, Accidental.FLAT,
+          Accidental.FLAT, Accidental.FLAT, Accidental.FLAT }, // 7 FLATS
   };
 
   private int beatEffectSpacing;
@@ -515,12 +538,12 @@ public class TGMeasureImpl extends TGMeasure {
     return this.minY;
   }
 
-  public int getNoteAccidental(int noteValue) {
+  public Accidental getNoteAccidental(int noteValue) {
     if (noteValue >= 0 && noteValue < 128) {
       int key = getKeySignature();
       int note = (noteValue % 12);
       int octave = (noteValue / 12);
-      int accidentalValue = (key <= 7 ? SHARP : FLAT);
+      Accidental accidentalValue = (key <= 7 ? Accidental.SHARP : Accidental.FLAT);
       int[] accidentalNotes = (key <= 7 ? ACCIDENTAL_SHARP_NOTES
           : ACCIDENTAL_FLAT_NOTES);
       boolean isAccidentalNote = ACCIDENTAL_NOTES[note];
@@ -529,16 +552,17 @@ public class TGMeasureImpl extends TGMeasure {
       if (isAccidentalKey != isAccidentalNote
           && !this.registeredAccidentals[octave][accidentalNotes[note]]) {
         this.registeredAccidentals[octave][accidentalNotes[note]] = true;
-        return (isAccidentalNote ? accidentalValue : NATURAL);
+        return (isAccidentalNote ? accidentalValue : Accidental.NATURAL);
       }
 
       if (isAccidentalKey == isAccidentalNote
           && this.registeredAccidentals[octave][accidentalNotes[note]]) {
         this.registeredAccidentals[octave][accidentalNotes[note]] = false;
-        return (isAccidentalNote ? accidentalValue : NATURAL);
+        return (isAccidentalNote ? accidentalValue : Accidental.NATURAL);
       }
     }
-    return 0;
+    // TODO replaced 0 with null, so there may be a null pointer exception here
+    return null;
   }
 
   public int getNotEmptyBeats() {
@@ -866,7 +890,7 @@ public class TGMeasureImpl extends TGMeasure {
       int x = fromX + getClefSpacing(layout) + 10;
       int y = fromY
           + getTs().getPosition(TGTrackSpacing.POSITION_SCORE_MIDDLE_LINES);
-      
+
       int clefIndex = 0;
       switch (this.getClef()) {
       case ALTO:
@@ -882,7 +906,7 @@ public class TGMeasureImpl extends TGMeasure {
         clefIndex = 0;
         break;
       }
-      
+
       int currentKey = this.getKeySignature();
       int previousKey = (this.prevMeasure != null ? this.prevMeasure
           .getKeySignature() : 0);

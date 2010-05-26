@@ -19,6 +19,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.Accidental;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -130,20 +131,20 @@ public class MouseKit {
     int realValue = value;
     int key = this.kit.getTablature().getCaret().getMeasure().getKeySignature();
     if (key <= 7) {
-      if (TGMeasureImpl.KEY_SIGNATURES[key][TGMeasureImpl.ACCIDENTAL_SHARP_NOTES[realValue % 12]] == TGMeasureImpl.SHARP
+      if (TGMeasureImpl.KEY_SIGNATURES[key][TGMeasureImpl.ACCIDENTAL_SHARP_NOTES[realValue % 12]] == Accidental.SHARP
           && this.kit.isNatural()) {
         realValue++;
-      } else if (TGMeasureImpl.KEY_SIGNATURES[key][TGMeasureImpl.ACCIDENTAL_SHARP_NOTES[realValue % 12]] != TGMeasureImpl.SHARP
+      } else if (TGMeasureImpl.KEY_SIGNATURES[key][TGMeasureImpl.ACCIDENTAL_SHARP_NOTES[realValue % 12]] != Accidental.SHARP
           && !this.kit.isNatural()) {
         if (TGMeasureImpl.ACCIDENTAL_NOTES[(realValue + 1) % 12]) {
           realValue++;
         }
       }
     } else if (key > 7) {
-      if (TGMeasureImpl.KEY_SIGNATURES[key][TGMeasureImpl.ACCIDENTAL_FLAT_NOTES[realValue % 12]] == TGMeasureImpl.FLAT
+      if (TGMeasureImpl.KEY_SIGNATURES[key][TGMeasureImpl.ACCIDENTAL_FLAT_NOTES[realValue % 12]] == Accidental.FLAT
           && this.kit.isNatural()) {
         realValue--;
-      } else if (TGMeasureImpl.KEY_SIGNATURES[key][TGMeasureImpl.ACCIDENTAL_FLAT_NOTES[realValue % 12]] != TGMeasureImpl.FLAT
+      } else if (TGMeasureImpl.KEY_SIGNATURES[key][TGMeasureImpl.ACCIDENTAL_FLAT_NOTES[realValue % 12]] != Accidental.FLAT
           && !this.kit.isNatural()) {
         if (TGMeasureImpl.ACCIDENTAL_NOTES[(realValue - 1) % 12]) {
           realValue--;

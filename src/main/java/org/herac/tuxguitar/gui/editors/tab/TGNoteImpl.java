@@ -12,6 +12,7 @@ import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGKeySignaturePainter;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGNotePainter;
+import org.herac.tuxguitar.song.models.Accidental;
 import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDuration;
@@ -27,7 +28,7 @@ import org.herac.tuxguitar.song.models.TGVoice;
  */
 public class TGNoteImpl extends TGNote {
 
-  private int accidental;
+  private Accidental accidental;
 
   private Rectangle noteOrientation = new Rectangle(0, 0, 0, 0);
 
@@ -351,17 +352,17 @@ public class TGNoteImpl extends TGNote {
         painter.closePath();
       }
       // ----------sostenido--------------------------------------
-      if (this.accidental == TGMeasureImpl.NATURAL) {
+      if (this.accidental == Accidental.NATURAL) {
         painter.initPath(TGPainter.PATH_FILL);
         TGKeySignaturePainter.paintNatural(painter,
             (x - (scale - (scale / 4))), (y1 + (scale / 2)), scale);
         painter.closePath();
-      } else if (this.accidental == TGMeasureImpl.SHARP) {
+      } else if (this.accidental == Accidental.SHARP) {
         painter.initPath(TGPainter.PATH_FILL);
         TGKeySignaturePainter.paintSharp(painter, (x - (scale - (scale / 4))),
             (y1 + (scale / 2)), scale);
         painter.closePath();
-      } else if (this.accidental == TGMeasureImpl.FLAT) {
+      } else if (this.accidental == Accidental.FLAT) {
         painter.initPath(TGPainter.PATH_FILL);
         TGKeySignaturePainter.paintFlat(painter, (x - (scale - (scale / 4))),
             (y1 + (scale / 2)), scale);
