@@ -25,6 +25,7 @@ import org.herac.tuxguitar.gui.undo.undoables.track.UndoableTrackGeneric;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.gui.util.MessageDialog;
 import org.herac.tuxguitar.song.models.TGBeat;
+import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGTrack;
@@ -129,8 +130,7 @@ public class MoveBeatsCustomAction extends Action {
           .setValue(((Integer) MOVE_DURATIONS[index].getValue()).intValue());
       duration.setDotted(false);
       duration.setDoubleDotted(false);
-      duration.getDivision().setTimes(1);
-      duration.getDivision().setEnters(1);
+      duration.setDivision(TGDivisionType.NORMAL);
       return (duration.getTime() * count);
     }
     return 0;
@@ -149,10 +149,11 @@ public class MoveBeatsCustomAction extends Action {
             .getValue())[0]);
         duration.setDoubleDotted(((boolean[]) MOVE_DURATION_TYPES[indexType]
             .getValue())[1]);
-        duration.getDivision().setEnters(
-            ((int[]) MOVE_DURATION_DIVISIONS[indexDivision].getValue())[0]);
-        duration.getDivision().setTimes(
-            ((int[]) MOVE_DURATION_DIVISIONS[indexDivision].getValue())[1]);
+        final int enters = ((int[]) MOVE_DURATION_DIVISIONS[indexDivision]
+            .getValue())[0];
+        final int times = ((int[]) MOVE_DURATION_DIVISIONS[indexDivision]
+            .getValue())[1];
+        duration.setDivision(new TGDivisionType(enters, times));
         return (duration.getTime() * count);
       }
     }

@@ -15,6 +15,7 @@ import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
+import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
@@ -132,8 +133,7 @@ public class GP1InputStream extends GTPInputStream {
 
     duration.setDotted(((flags & 0x10) != 0));
     if ((flags & 0x20) != 0) {
-      duration.getDivision().setEnters(3);
-      duration.getDivision().setTimes(2);
+      duration.setDivision(TGDivisionType.DEFAULT);
       skip(1);
     }
 

@@ -22,18 +22,16 @@ import org.herac.tuxguitar.song.models.TGDuration;
  *         Window - Preferences - Java - Code Style - Code Templates
  */
 public class ChangeDivisionTypeAction extends Action {
+  private static final TGDivisionType DEFAULT_DIVISION_TYPE = new TGDivisionType(
+      3, 2);
+
   public static final String NAME = "action.note.duration.change-division-type";
+
+  private static final TGDivisionType NO_TUPLET = new TGDivisionType(1, 1);
 
   public ChangeDivisionTypeAction() {
     super(NAME, AUTO_LOCK | AUTO_UNLOCK | AUTO_UPDATE | DISABLE_ON_PLAYING
         | KEY_BINDING_AVAILABLE);
-  }
-
-  private TGDivisionType defaultDivisionType() {
-    TGDivisionType divisionType = new TGDivisionType();
-    divisionType.setEnters(3);
-    divisionType.setTimes(2);
-    return divisionType;
   }
 
   @Override
@@ -46,22 +44,22 @@ public class ChangeDivisionTypeAction extends Action {
       isKeyEvent = true;
     }
     if (!isKeyEvent) {
-      TGDivisionType divisionType = defaultDivisionType();
+      TGDivisionType divisionType = DEFAULT_DIVISION_TYPE;
       if (e.widget.getData() != null
           && e.widget.getData() instanceof TGDivisionType) {
         divisionType = (TGDivisionType) e.widget.getData();
       }
 
       if (getSelectedDuration().getDivision().isEqual(divisionType)) {
-        setDivisionType(noTuplet());
+        setDivisionType(NO_TUPLET);
       } else {
         setDivisionType(divisionType);
       }
     } else {
       if (getSelectedDuration().getDivision().isEqual(TGDivisionType.NORMAL)) {
-        setDivisionType(defaultDivisionType());
+        setDivisionType(DEFAULT_DIVISION_TYPE);
       } else {
-        setDivisionType(noTuplet());
+        setDivisionType(NO_TUPLET);
       }
     }
     setDurations();
@@ -76,16 +74,8 @@ public class ChangeDivisionTypeAction extends Action {
     return getEditor().getTablature().getCaret().getDuration();
   }
 
-  private TGDivisionType noTuplet() {
-    TGDivisionType divisionType = new TGDivisionType();
-    divisionType.setEnters(1);
-    divisionType.setTimes(1);
-    return divisionType;
-  }
-
   private void setDivisionType(TGDivisionType divisionType) {
-    getSelectedDuration().getDivision().setEnters(divisionType.getEnters());
-    getSelectedDuration().getDivision().setTimes(divisionType.getTimes());
+    getSelectedDuration().setDivision(divisionType);
   }
 
   private void setDurations() {

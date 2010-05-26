@@ -232,12 +232,14 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     beat.setChord(chord);
   }
 
-  private void readDivisionType(TGDivisionType divisionType) {
+  private TGDivisionType readDivisionType() {
     // leo los enters
-    divisionType.setEnters(readByte());
+    final int enters = readByte();
 
     // leo los tiempos
-    divisionType.setTimes(readByte());
+    final int times = readByte();
+    
+    return new TGDivisionType(enters, times);
   }
 
   private void readDuration(TGDuration duration) {
@@ -254,9 +256,9 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
 
     // leo el tipo de divisiones
     if (((header & DURATION_NO_TUPLET) != 0)) {
-      readDivisionType(duration.getDivision());
+      duration.setDivision(this.readDivisionType());
     } else {
-      TGDivisionType.NORMAL.copy(duration.getDivision());
+      duration.setDivision(TGDivisionType.NORMAL);
     }
   }
 

@@ -6,7 +6,6 @@
  */
 package org.herac.tuxguitar.song.models;
 
-
 /**
  * @author julian
  * 
@@ -58,8 +57,7 @@ public class TGDuration {
     duration.setValue(TGDuration.SIXTY_FOURTH);
     duration.setDotted(false);
     duration.setDoubleDotted(false);
-    duration.getDivision().setEnters(3);
-    duration.getDivision().setTimes(2);
+    duration.setDivision(TGDivisionType.DEFAULT);
     return fromTime(time, duration);
   }
 
@@ -84,13 +82,12 @@ public class TGDuration {
       if (tmpDuration.isDotted()) {
         tmpDuration.setDotted(false);
       } else if (tmpDuration.getDivision().isEqual(TGDivisionType.NORMAL)) {
-        tmpDuration.getDivision().setEnters(3);
-        tmpDuration.getDivision().setTimes(2);
+        tmpDuration.setDivision(TGDivisionType.DEFAULT);
       } else {
         tmpDuration.setValue(tmpDuration.getValue() * 2);
         tmpDuration.setDotted(true);
-        tmpDuration.getDivision().setEnters(1);
-        tmpDuration.getDivision().setTimes(1);
+        tmpDuration.setDivision(TGDivisionType.NORMAL);
+
       }
       if (tmpDuration.getValue() > TGDuration.SIXTY_FOURTH) {
         finish = true;
@@ -102,7 +99,7 @@ public class TGDuration {
   /**
    * DivisionType.
    */
-  private TGDivisionType divisionType = new TGDivisionType();
+  private TGDivisionType divisionType = TGDivisionType.NORMAL;
 
   /**
    * Puntillo.
@@ -126,15 +123,15 @@ public class TGDuration {
     duration.setValue(this.value);
     duration.setDotted(this.dotted);
     duration.setDoubleDotted(this.doubleDotted);
-    duration.setDivision(this.divisionType.clone());
-        
+    duration.setDivision(this.divisionType);
+
     return duration;
   }
 
-  private void setDivision(final TGDivisionType newDivision) {
+  public void setDivision(final TGDivisionType newDivision) {
     this.divisionType = newDivision;
   }
-  
+
   public TGDivisionType getDivision() {
     return this.divisionType;
   }

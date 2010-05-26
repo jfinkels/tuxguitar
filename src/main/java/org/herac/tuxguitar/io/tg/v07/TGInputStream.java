@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureHeaderImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGMeasureImpl;
@@ -174,12 +173,15 @@ public class TGInputStream implements TGInputStreamBase {
     return new Color(red, green, blue);
   }
 
-  private void readDivisionType(TGDivisionType divisionType) {
+
+  private TGDivisionType readDivisionType() {
     // leo los enters
-    divisionType.setEnters(readInt());
+    final int enters = readInt();
 
     // leo los tiempos
-    divisionType.setTimes(readInt());
+    final int times = readInt();
+    
+    return new TGDivisionType(enters, times);
   }
 
   private void readDuration(TGDuration duration) {
@@ -193,7 +195,7 @@ public class TGInputStream implements TGInputStreamBase {
     duration.setDoubleDotted(readBoolean());
 
     // leo el tipo de divisiones
-    readDivisionType(duration.getDivision());
+    duration.setDivision(readDivisionType());
   }
 
   private TGString readInstrumentString() {

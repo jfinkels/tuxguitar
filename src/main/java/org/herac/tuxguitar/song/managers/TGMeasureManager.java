@@ -10,6 +10,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
+import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -31,8 +32,7 @@ public class TGMeasureManager {
     minimum.setValue(TGDuration.SIXTY_FOURTH);
     minimum.setDotted(false);
     minimum.setDoubleDotted(false);
-    minimum.getDivision().setEnters(3);
-    minimum.getDivision().setTimes(2);
+    minimum.setDivision(TGDivisionType.DEFAULT);
 
     long missingTime = time;
     while (missingTime > minimum.getTime()) {
@@ -1094,8 +1094,7 @@ public class TGMeasureManager {
     if (!startBeat) {
       TGDuration minDuration = new TGDuration();
       minDuration.setValue(TGDuration.SIXTY_FOURTH);
-      minDuration.getDivision().setEnters(3);
-      minDuration.getDivision().setTimes(2);
+      minDuration.setDivision(TGDivisionType.DEFAULT);
       for (int i = 0; i < minDuration.getTime(); i++) {
         start++;
         startBeat = (start % beatLength == 0);
@@ -2288,7 +2287,7 @@ public class TGMeasureManager {
     // en el lugar.
     if (setCurrentDuration && currentVoice != null && !currentVoice.isEmpty()) {
       duration = currentVoice.getDuration().clone();
-//      currentVoice.getDuration().copy(duration);
+      // currentVoice.getDuration().copy(duration);
       return true;
     }
     return false;

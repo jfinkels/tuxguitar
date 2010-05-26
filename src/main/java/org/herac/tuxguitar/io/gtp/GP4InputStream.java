@@ -18,6 +18,7 @@ import org.herac.tuxguitar.song.models.Clef;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
+import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGLyric;
 import org.herac.tuxguitar.song.models.TGMarker;
@@ -287,36 +288,28 @@ public class GP4InputStream extends GTPInputStream {
       int divisionType = readInt();
       switch (divisionType) {
       case 3:
-        duration.getDivision().setEnters(3);
-        duration.getDivision().setTimes(2);
+        duration.setDivision(TGDivisionType.DEFAULT);
         break;
       case 5:
-        duration.getDivision().setEnters(5);
-        duration.getDivision().setTimes(4);
+        duration.setDivision(new TGDivisionType(5, 4));
         break;
       case 6:
-        duration.getDivision().setEnters(6);
-        duration.getDivision().setTimes(4);
+        duration.setDivision(new TGDivisionType(6, 4));
         break;
       case 7:
-        duration.getDivision().setEnters(7);
-        duration.getDivision().setTimes(4);
+        duration.setDivision(new TGDivisionType(7, 4));
         break;
       case 9:
-        duration.getDivision().setEnters(9);
-        duration.getDivision().setTimes(8);
+        duration.setDivision(new TGDivisionType(9, 8));
         break;
       case 10:
-        duration.getDivision().setEnters(10);
-        duration.getDivision().setTimes(8);
+        duration.setDivision(new TGDivisionType(10, 8));
         break;
       case 11:
-        duration.getDivision().setEnters(11);
-        duration.getDivision().setTimes(8);
+        duration.setDivision(new TGDivisionType(11, 8));
         break;
       case 12:
-        duration.getDivision().setEnters(12);
-        duration.getDivision().setTimes(8);
+        duration.setDivision(new TGDivisionType(12, 8));
         break;
       }
     }

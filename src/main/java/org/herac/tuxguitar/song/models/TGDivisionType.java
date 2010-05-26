@@ -6,47 +6,37 @@
  */
 package org.herac.tuxguitar.song.models;
 
-
 /**
- * @author julian
+ * Immutable class representing a division?
  * 
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
+ * @author julian
+ * @author Jeffrey Finkelstein
  */
+@Immutable
 public class TGDivisionType {
-  public static final TGDivisionType NORMAL = newDivisionType(1, 1);
+  public static final TGDivisionType NORMAL = new TGDivisionType(1, 1);
+  public static final TGDivisionType DEFAULT = new TGDivisionType(3, 2);
 
-  private static TGDivisionType newDivisionType(int enters, int times) {
-    TGDivisionType divisionType = new TGDivisionType();
-    divisionType.setEnters(enters);
-    divisionType.setTimes(times);
-    return divisionType;
+  public TGDivisionType(final int enters, final int times) {
+    this.enters = enters;
+    this.times = times;
   }
+
+  public static final int DEFAULT_ENTERS = 1;
+  public static final int DEFAULT_TIMES = 1;
 
   /**
    * Cantidad de Duraciones que entran en los tiempos
    */
-  private int enters = 1;
+  private int enters = DEFAULT_ENTERS;
 
   /**
    * Tiempos
    */
-  private int times = 1;
-
-  @Override
-  public TGDivisionType clone() {
-    TGDivisionType divisionType = new TGDivisionType();
-    copy(divisionType);
-    return divisionType;
-  }
+  private int times = DEFAULT_TIMES;
 
   public long convertTime(long time) {
     return time * this.times / this.enters;
-  }
-
-  public void copy(TGDivisionType divisionType) {
-    divisionType.setEnters(this.enters);
-    divisionType.setTimes(this.times);
   }
 
   public int getEnters() {
@@ -57,16 +47,8 @@ public class TGDivisionType {
     return this.times;
   }
 
-  public boolean isEqual(TGDivisionType divisionType) {
-    return (divisionType.getEnters() == getEnters() && divisionType.getTimes() == getTimes());
-  }
-
-  public void setEnters(int enters) {
-    this.enters = enters;
-  }
-
-  public void setTimes(int times) {
-    this.times = times;
+  public boolean isEqual(final TGDivisionType other) {
+    return (other.enters == this.enters && other.times == this.times);
   }
 
 }

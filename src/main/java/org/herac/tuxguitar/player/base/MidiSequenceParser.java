@@ -12,6 +12,7 @@ import java.util.List;
 import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
+import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
@@ -323,8 +324,7 @@ public class MidiSequenceParser {
                   .getTime()) || v.getDuration().isEqual(
                   newDuration(TGDuration.EIGHTH)))) {
             TGDuration duration = newDuration(TGDuration.EIGHTH);
-            duration.getDivision().setEnters(3);
-            duration.getDivision().setTimes(2);
+            duration.setDivision(TGDivisionType.DEFAULT);
             bDuration = (duration.getTime() * 2);
           }
         }
@@ -336,8 +336,7 @@ public class MidiSequenceParser {
                   .getTime()) || v.getDuration().isEqual(
                   newDuration(TGDuration.EIGHTH)))) {
             TGDuration duration = newDuration(TGDuration.EIGHTH);
-            duration.getDivision().setEnters(3);
-            duration.getDivision().setTimes(2);
+            duration.setDivision(TGDivisionType.DEFAULT);
             bStart = ((bStart - voice.getDuration().getTime()) + (duration
                 .getTime() * 2));
             bDuration = duration.getTime();
@@ -354,8 +353,7 @@ public class MidiSequenceParser {
                   .getTime()) || v.getDuration().isEqual(
                   newDuration(TGDuration.SIXTEENTH)))) {
             TGDuration duration = newDuration(TGDuration.SIXTEENTH);
-            duration.getDivision().setEnters(3);
-            duration.getDivision().setTimes(2);
+            duration.setDivision(TGDivisionType.DEFAULT);
             bDuration = (duration.getTime() * 2);
           }
         }
@@ -367,8 +365,7 @@ public class MidiSequenceParser {
                   .getTime()) || v.getDuration().isEqual(
                   newDuration(TGDuration.SIXTEENTH)))) {
             TGDuration duration = newDuration(TGDuration.SIXTEENTH);
-            duration.getDivision().setEnters(3);
-            duration.getDivision().setTimes(2);
+            duration.setDivision(TGDivisionType.DEFAULT);
             bStart = ((bStart - voice.getDuration().getTime()) + (duration
                 .getTime() * 2));
             bDuration = duration.getTime();
@@ -892,8 +889,8 @@ public class MidiSequenceParser {
                     duration, Math.max(TGVelocities.MIN_VELOCITY, velocity
                         - (TGVelocities.VELOCITY_INCREMENT * 3)), channel);
               }
-              key = (orig + HarmonicEffect.NATURAL_FREQUENCIES[note
-                  .getEffect().getHarmonic().getData()][1]);
+              key = (orig + HarmonicEffect.NATURAL_FREQUENCIES[note.getEffect()
+                  .getHarmonic().getData()][1]);
 
             }
             if ((key - 12) > 0) {
