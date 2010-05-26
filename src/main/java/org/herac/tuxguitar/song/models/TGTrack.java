@@ -52,11 +52,7 @@ public abstract class TGTrack {
 
   public TGTrack clone(TGSong song) {
     TGTrack track = new TGTrackImpl();
-    copy(song, track);
-    return track;
-  }
 
-  public void copy(TGSong song, TGTrack track) {
     track.clear();
     track.setNumber(getNumber());
     track.setName(getName());
@@ -73,6 +69,8 @@ public abstract class TGTrack {
     for (final TGMeasure measure : this.measures) {
       track.addMeasure(measure.clone(song.getMeasureHeader(i++)));
     }
+
+    return track;
   }
 
   public int countMeasures() {
@@ -118,8 +116,15 @@ public abstract class TGTrack {
     return this.song;
   }
 
+  /**
+   * Gets the string at the specified index (starting with 1).
+   * 
+   * @param number
+   *          The index of the string to get (starting with 1).
+   * @return The TGString identified by the specified number.
+   */
   public TGString getString(int number) {
-    return (TGString) this.strings.get(number - 1);
+    return this.strings.get(number - 1);
   }
 
   public List<TGString> getStrings() {
@@ -131,7 +136,7 @@ public abstract class TGTrack {
   }
 
   public boolean isPercussionTrack() {
-    return (getChannel().isPercussionChannel());
+    return getChannel().isPercussionChannel();
   }
 
   public boolean isSolo() {

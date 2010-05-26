@@ -883,11 +883,19 @@ public class TGSongManager {
   }
 
   public TGTrack replaceTrack(TGTrack track) {
-    TGTrack current = getTrack(track.getNumber());
-    if (current != null) {
-      track.copy(getSong(), current);
+    
+    final int number = track.getNumber();
+    
+    final List<TGTrack> tracks = this.song.getTracks();
+    
+    for (int i = 0; i < tracks.size(); i++) {
+      if (tracks.get(i).getNumber() == number) {
+        tracks.set(i, track.clone(this.song));
+        return tracks.get(i);
+      }
     }
-    return current;
+
+    return null;
   }
 
   public void setProperties(String name, String artist, String album,
