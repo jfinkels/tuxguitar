@@ -8,6 +8,7 @@ import java.util.List;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGNoteImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -641,7 +642,7 @@ public class TGMeasureManager {
   }
 
   public void cleanBeat(TGBeat beat) {
-    beat.getStroke().setDirection(TGStroke.STROKE_NONE);
+    beat.getStroke().setDirection(StrokeDirection.NONE);
     if (beat.getText() != null) {
       beat.removeText();
     }
@@ -1479,9 +1480,8 @@ public class TGMeasureManager {
             beat.setChord(currentBeat.getChord());
             currentBeat.removeChord();
           }
-          if (currentBeat.getStroke().getDirection() != TGStroke.STROKE_NONE) {
-            currentBeat.getStroke().copy(beat.getStroke());
-            currentBeat.getStroke().setDirection(TGStroke.STROKE_NONE);
+          if (currentBeat.getStroke().getDirection() != StrokeDirection.NONE) {
+            beat.setStroke(currentBeat.getStroke().clone());
           }
         }
         // Make sure to remove another voice instance from old beat.
@@ -1765,7 +1765,7 @@ public class TGMeasureManager {
       TGBeat beat = voice.getBeat();
       if (checkRestBeat && beat.isRestBeat()) {
         // Anulo un posible stroke
-        beat.getStroke().setDirection(TGStroke.STROKE_NONE);
+        beat.getStroke().setDirection(StrokeDirection.NONE);
 
         // Borro un posible acorde
         if (beat.getMeasure() != null) {
@@ -1876,11 +1876,10 @@ public class TGMeasureManager {
    * Set the beat stroke
    */
   public boolean setStroke(TGMeasure measure, long start, int value,
-      int direction) {
+      StrokeDirection direction) {
     TGBeat beat = getBeat(measure, start);
     if (beat != null) {
-      beat.getStroke().setValue(value);
-      beat.getStroke().setDirection(direction);
+      beat.setStroke(new TGStroke(direction, value));
       return true;
     }
     return false;

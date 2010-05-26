@@ -22,7 +22,7 @@ public abstract class TGBeat {
   private TGChord chord =null;
   private TGMeasure measure = null;
   private long start = TGDuration.QUARTER_TIME;
-  private TGStroke stroke = new TGStroke();
+  private TGStroke stroke = TGStroke.DEFAULT;
   private TGText text = null;
   private TGVoice[] voices = new TGVoice[MAX_VOICES];
 
@@ -36,7 +36,7 @@ public abstract class TGBeat {
   public TGBeat clone() {
     TGBeat beat = new TGBeatImpl();
     beat.setStart(getStart());
-    this.stroke.copy(beat.getStroke());
+    beat.stroke = this.stroke.clone();
     
     for (int i =0; i < this.voices.length; ++i) {
       beat.setVoice(i, this.voices[i].clone());
@@ -122,6 +122,10 @@ public abstract class TGBeat {
     this.start = start;
   }
 
+  public void setStroke(final TGStroke newStroke) {
+    this.stroke = newStroke;
+  }
+  
   public void setText(TGText text) {
     this.text = text;
     this.text.setBeat(this);

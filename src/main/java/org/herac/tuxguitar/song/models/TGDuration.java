@@ -185,6 +185,7 @@ public class TGDuration {
     this.doubleDotted = doubleDotted;
   }
 
+  // TODO should TGDuration be an Enum?
   public void setValue(int value) {
     this.value = value;
   }

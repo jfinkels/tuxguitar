@@ -1,33 +1,29 @@
 package org.herac.tuxguitar.song.models;
 
-public class TGStroke {
+public class TGStroke extends Pair<StrokeDirection, Integer> {
 
-  public static final int STROKE_DOWN = -1;
-  public static final int STROKE_NONE = 0;
-  public static final int STROKE_UP = 1;
-
-  private int direction = STROKE_NONE;
-  private int value;
+  public static final TGStroke DEFAULT = new TGStroke(StrokeDirection.NONE, 0);
+  
+  public TGStroke(final StrokeDirection direction, final int value) {
+    super(direction, value);
+  }
 
   @Override
   public TGStroke clone() {
-    TGStroke stroke = new TGStroke();
-    copy(stroke);
-    return stroke;
+    return new TGStroke(this.left, this.right);
   }
 
-  public void copy(TGStroke stroke) {
-    stroke.setValue(getValue());
-    stroke.setDirection(getDirection());
+  public StrokeDirection getDirection() {
+    return this.left;
   }
-
-  public int getDirection() {
-    return this.direction;
+  
+  public void setDirection(final StrokeDirection newDirection) {
+    this.left = newDirection;
   }
 
   public int getIncrementTime(TGBeat beat) {
     long duration = 0;
-    if (this.value > 0) {
+    if (this.getValue() > 0) {
       for (int v = 0; v < beat.countVoices(); v++) {
         TGVoice voice = beat.getVoice(v);
         if (!voice.isEmpty()) {
@@ -39,21 +35,17 @@ public class TGStroke {
         }
       }
       if (duration > 0) {
-        return Math.round(((duration / 8.0f) * (4.0f / this.value)));
+        return Math.round(((duration / 8.0f) * (4.0f / this.getValue())));
       }
     }
     return 0;
   }
 
   public int getValue() {
-    return this.value;
+    return this.right;
   }
 
-  public void setDirection(int direction) {
-    this.direction = direction;
-  }
-
-  public void setValue(int value) {
-    this.value = value;
+  public void setValue(final int value) {
+    this.right = value;
   }
 }

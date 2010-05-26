@@ -32,7 +32,6 @@ import org.eclipse.swt.widgets.Text;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.actions.Action;
 import org.herac.tuxguitar.gui.actions.ActionLock;
-import org.herac.tuxguitar.gui.actions.file.FileActionUtils;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.gui.helper.SyncThread;
 import org.herac.tuxguitar.gui.undo.undoables.UndoableJoined;
@@ -42,7 +41,6 @@ import org.herac.tuxguitar.gui.undo.undoables.track.UndoableTrackInstrument;
 import org.herac.tuxguitar.gui.util.DialogUtils;
 import org.herac.tuxguitar.gui.util.TGMusicKeyUtils;
 import org.herac.tuxguitar.player.base.MidiInstrument;
-import org.herac.tuxguitar.song.managers.TGSongManager;
 import org.herac.tuxguitar.song.models.TGString;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.util.TGSynchronizer;
@@ -485,43 +483,43 @@ public class TrackPropertiesAction extends Action {
     this.tempStrings.clear();
     if (this.percussionCheckBox.getSelection()) {
       for (int i = 1; i <= this.stringCount; i++) {
-        this.tempStrings.add(TGSongManager.newString(i, 0));
+        this.tempStrings.add(new TGString(i, 0));
       }
     } else {
       switch (this.stringCount) {
       case 7:
-        this.tempStrings.add(TGSongManager.newString(1, 64));
-        this.tempStrings.add(TGSongManager.newString(2, 59));
-        this.tempStrings.add(TGSongManager.newString(3, 55));
-        this.tempStrings.add(TGSongManager.newString(4, 50));
-        this.tempStrings.add(TGSongManager.newString(5, 45));
-        this.tempStrings.add(TGSongManager.newString(6, 40));
-        this.tempStrings.add(TGSongManager.newString(7, 35));
+        this.tempStrings.add(new TGString(1, 64));
+        this.tempStrings.add(new TGString(2, 59));
+        this.tempStrings.add(new TGString(3, 55));
+        this.tempStrings.add(new TGString(4, 50));
+        this.tempStrings.add(new TGString(5, 45));
+        this.tempStrings.add(new TGString(6, 40));
+        this.tempStrings.add(new TGString(7, 35));
         break;
       case 6:
-        this.tempStrings.add(TGSongManager.newString(1, 64));
-        this.tempStrings.add(TGSongManager.newString(2, 59));
-        this.tempStrings.add(TGSongManager.newString(3, 55));
-        this.tempStrings.add(TGSongManager.newString(4, 50));
-        this.tempStrings.add(TGSongManager.newString(5, 45));
-        this.tempStrings.add(TGSongManager.newString(6, 40));
+        this.tempStrings.add(new TGString(1, 64));
+        this.tempStrings.add(new TGString(2, 59));
+        this.tempStrings.add(new TGString(3, 55));
+        this.tempStrings.add(new TGString(4, 50));
+        this.tempStrings.add(new TGString(5, 45));
+        this.tempStrings.add(new TGString(6, 40));
         break;
       case 5:
-        this.tempStrings.add(TGSongManager.newString(1, 43));
-        this.tempStrings.add(TGSongManager.newString(2, 38));
-        this.tempStrings.add(TGSongManager.newString(3, 33));
-        this.tempStrings.add(TGSongManager.newString(4, 28));
-        this.tempStrings.add(TGSongManager.newString(5, 23));
+        this.tempStrings.add(new TGString(1, 43));
+        this.tempStrings.add(new TGString(2, 38));
+        this.tempStrings.add(new TGString(3, 33));
+        this.tempStrings.add(new TGString(4, 28));
+        this.tempStrings.add(new TGString(5, 23));
         break;
       case 4:
-        this.tempStrings.add(TGSongManager.newString(1, 43));
-        this.tempStrings.add(TGSongManager.newString(2, 38));
-        this.tempStrings.add(TGSongManager.newString(3, 33));
-        this.tempStrings.add(TGSongManager.newString(4, 28));
+        this.tempStrings.add(new TGString(1, 43));
+        this.tempStrings.add(new TGString(2, 38));
+        this.tempStrings.add(new TGString(3, 33));
+        this.tempStrings.add(new TGString(4, 28));
         break;
       default:
         for (int i = 1; i <= this.stringCount; i++) {
-          this.tempStrings.add(TGSongManager.newString(i, 0));
+          this.tempStrings.add(new TGString(i, 0));
         }
         break;
       }
@@ -581,7 +579,8 @@ public class TrackPropertiesAction extends Action {
 
     final List<TGString> strings = new ArrayList<TGString>();
     for (int i = 0; i < this.stringCount; i++) {
-      strings.add(TGSongManager.newString(i + 1, this.stringCombos[i]
+      strings
+          .add(new TGString(i + 1, this.stringCombos[i]
           .getSelectionIndex()));
     }
 

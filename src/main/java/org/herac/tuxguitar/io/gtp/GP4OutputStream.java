@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -200,7 +201,7 @@ public class GP4OutputStream extends GTPOutputStream {
     if (beat.isTextBeat()) {
       flags |= 0x04;
     }
-    if (beat.getStroke().getDirection() != TGStroke.STROKE_NONE) {
+    if (!beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
       flags |= 0x08;
     } else if (effect.isTremoloBar() || effect.isTapping()
         || effect.isSlapping() || effect.isPopping() || effect.isFadeIn()) {
@@ -271,7 +272,7 @@ public class GP4OutputStream extends GTPOutputStream {
     if (effect.isTremoloBar()) {
       flags2 |= 0x04;
     }
-    if (beat.getStroke().getDirection() != TGStroke.STROKE_NONE) {
+    if (!beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
       flags1 |= 0x40;
     }
     writeUnsignedByte(flags1);
@@ -290,10 +291,10 @@ public class GP4OutputStream extends GTPOutputStream {
       writeTremoloBar(effect.getTremoloBar());
     }
     if ((flags1 & 0x40) != 0) {
-      writeUnsignedByte((beat.getStroke().getDirection() == TGStroke.STROKE_DOWN ? toStrokeValue(beat
+      writeUnsignedByte((beat.getStroke().getDirection().equals(StrokeDirection.DOWN) ? toStrokeValue(beat
           .getStroke())
           : 0));
-      writeUnsignedByte((beat.getStroke().getDirection() == TGStroke.STROKE_UP ? toStrokeValue(beat
+      writeUnsignedByte((beat.getStroke().getDirection().equals(StrokeDirection.UP) ? toStrokeValue(beat
           .getStroke())
           : 0));
     }

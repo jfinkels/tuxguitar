@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -18,7 +19,6 @@ import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGStroke;
 import org.herac.tuxguitar.song.models.TGTempo;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVelocities;
@@ -588,11 +588,11 @@ public class MidiSequenceParser {
   }
 
   private int[] getStroke(TGBeat beat, TGBeat previous, int[] stroke) {
-    int direction = beat.getStroke().getDirection();
+    StrokeDirection direction = beat.getStroke().getDirection();
     if (previous == null
-        || !(direction == TGStroke.STROKE_NONE && previous.getStroke()
-            .getDirection() == TGStroke.STROKE_NONE)) {
-      if (direction == TGStroke.STROKE_NONE) {
+        || !(direction.equals(StrokeDirection.NONE) && previous.getStroke()
+            .getDirection().equals(StrokeDirection.NONE))) {
+      if (direction.equals(StrokeDirection.NONE)) {
         for (int i = 0; i < stroke.length; i++) {
           stroke[i] = 0;
         }
@@ -613,9 +613,8 @@ public class MidiSequenceParser {
           int strokeMove = 0;
           int strokeIncrement = beat.getStroke().getIncrementTime(beat);
           for (int i = 0; i < stroke.length; i++) {
-            int index = (direction == TGStroke.STROKE_DOWN ? (stroke.length - 1)
-                - i
-                : i);
+            int index = (direction.equals(StrokeDirection.DOWN) ? (stroke.length - 1)
+                - i : i);
             if ((stringUseds & (0x01 << index)) != 0) {
               stroke[index] = strokeMove;
               strokeMove += strokeIncrement;

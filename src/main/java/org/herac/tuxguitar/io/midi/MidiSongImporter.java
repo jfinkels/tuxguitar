@@ -171,38 +171,38 @@ public class MidiSongImporter implements TGLocalFileImporter {
       int maxFret = 24;
 
       if (this.minValue >= 40 && this.maxValue <= 64 + maxFret) {
-        strings.add(TGSongManager.newString(1, 64));
-        strings.add(TGSongManager.newString(2, 59));
-        strings.add(TGSongManager.newString(3, 55));
-        strings.add(TGSongManager.newString(4, 50));
-        strings.add(TGSongManager.newString(5, 45));
-        strings.add(TGSongManager.newString(6, 40));
+        strings.add(new TGString(1, 64));
+        strings.add(new TGString(2, 59));
+        strings.add(new TGString(3, 55));
+        strings.add(new TGString(4, 50));
+        strings.add(new TGString(5, 45));
+        strings.add(new TGString(6, 40));
       } else if (this.minValue >= 38 && this.maxValue <= 64 + maxFret) {
-        strings.add(TGSongManager.newString(1, 64));
-        strings.add(TGSongManager.newString(2, 59));
-        strings.add(TGSongManager.newString(3, 55));
-        strings.add(TGSongManager.newString(4, 50));
-        strings.add(TGSongManager.newString(5, 45));
-        strings.add(TGSongManager.newString(6, 38));
+        strings.add(new TGString(1, 64));
+        strings.add(new TGString(2, 59));
+        strings.add(new TGString(3, 55));
+        strings.add(new TGString(4, 50));
+        strings.add(new TGString(5, 45));
+        strings.add(new TGString(6, 38));
       } else if (this.minValue >= 35 && this.maxValue <= 64 + maxFret) {
-        strings.add(TGSongManager.newString(1, 64));
-        strings.add(TGSongManager.newString(2, 59));
-        strings.add(TGSongManager.newString(3, 55));
-        strings.add(TGSongManager.newString(4, 50));
-        strings.add(TGSongManager.newString(5, 45));
-        strings.add(TGSongManager.newString(6, 40));
-        strings.add(TGSongManager.newString(7, 35));
+        strings.add(new TGString(1, 64));
+        strings.add(new TGString(2, 59));
+        strings.add(new TGString(3, 55));
+        strings.add(new TGString(4, 50));
+        strings.add(new TGString(5, 45));
+        strings.add(new TGString(6, 40));
+        strings.add(new TGString(7, 35));
       } else if (this.minValue >= 28 && this.maxValue <= 43 + maxFret) {
-        strings.add(TGSongManager.newString(1, 43));
-        strings.add(TGSongManager.newString(2, 38));
-        strings.add(TGSongManager.newString(3, 33));
-        strings.add(TGSongManager.newString(4, 28));
+        strings.add(new TGString(1, 43));
+        strings.add(new TGString(2, 38));
+        strings.add(new TGString(3, 33));
+        strings.add(new TGString(4, 28));
       } else if (this.minValue >= 23 && this.maxValue <= 43 + maxFret) {
-        strings.add(TGSongManager.newString(1, 43));
-        strings.add(TGSongManager.newString(2, 38));
-        strings.add(TGSongManager.newString(3, 33));
-        strings.add(TGSongManager.newString(4, 28));
-        strings.add(TGSongManager.newString(5, 23));
+        strings.add(new TGString(1, 43));
+        strings.add(new TGString(2, 38));
+        strings.add(new TGString(3, 33));
+        strings.add(new TGString(4, 28));
+        strings.add(new TGString(5, 23));
       } else {
         int stringCount = 6;
         int stringSpacing = ((this.maxValue - (maxFret - 4) - this.minValue) / stringCount);
@@ -214,7 +214,7 @@ public class MidiSongImporter implements TGLocalFileImporter {
         int maxStringValue = (this.minValue + (stringCount * stringSpacing));
         while (strings.size() < stringCount) {
           maxStringValue -= stringSpacing;
-          strings.add(TGSongManager.newString(strings.size() + 1,
+          strings.add(new TGString(strings.size() + 1,
               maxStringValue));
         }
       }

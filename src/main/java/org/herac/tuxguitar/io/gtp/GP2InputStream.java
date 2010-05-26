@@ -355,10 +355,7 @@ public class GP2InputStream extends GTPInputStream {
 
       int strings = readInt();
       for (int j = 0; j < strings; j++) {
-        TGString string = new TGString();
-        string.setNumber(j + 1);
-        string.setValue(readInt());
-        track.getStrings().add(string);
+        track.getStrings().add(new TGString(j+1, readInt()));
       }
       song.addTrack(track);
     }

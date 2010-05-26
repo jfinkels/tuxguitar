@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -55,7 +56,7 @@ public class GP5OutputStream extends GTPOutputStream {
   /** The Logger for this class. */
   public static final transient Logger LOG = Logger
       .getLogger(GP5OutputStream.class);
-  
+
   private static final String[] PAGE_SETUP_LINES = { "%TITLE%", "%SUBTITLE%",
       "%ARTIST%", "%ALBUM%", "Words by %WORDS%", "Music by %MUSIC%",
       "Words & Music by %WORDSMUSIC%", "Copyright %COPYRIGHT%",
@@ -224,7 +225,7 @@ public class GP5OutputStream extends GTPOutputStream {
     if (voice.getIndex() == 0 && beat.isTextBeat()) {
       flags |= 0x04;
     }
-    if (beat.getStroke().getDirection() != TGStroke.STROKE_NONE) {
+    if (!beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
       flags |= 0x08;
     } else if (effect.isTremoloBar() || effect.isTapping()
         || effect.isSlapping() || effect.isPopping() || effect.isFadeIn()) {
@@ -303,7 +304,7 @@ public class GP5OutputStream extends GTPOutputStream {
     if (effect.isTremoloBar()) {
       flags2 |= 0x04;
     }
-    if (beat.getStroke().getDirection() != TGStroke.STROKE_NONE) {
+    if (!beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
       flags1 |= 0x40;
     }
     writeUnsignedByte(flags1);
@@ -322,10 +323,10 @@ public class GP5OutputStream extends GTPOutputStream {
       writeTremoloBar(effect.getTremoloBar());
     }
     if ((flags1 & 0x40) != 0) {
-      writeUnsignedByte((beat.getStroke().getDirection() == TGStroke.STROKE_UP ? toStrokeValue(beat
+      writeUnsignedByte((beat.getStroke().getDirection().equals(StrokeDirection.UP) ? toStrokeValue(beat
           .getStroke())
           : 0));
-      writeUnsignedByte((beat.getStroke().getDirection() == TGStroke.STROKE_DOWN ? toStrokeValue(beat
+      writeUnsignedByte((beat.getStroke().getDirection().equals(StrokeDirection.DOWN) ? toStrokeValue(beat
           .getStroke())
           : 0));
     }

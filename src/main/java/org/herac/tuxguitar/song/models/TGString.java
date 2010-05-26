@@ -12,41 +12,23 @@ package org.herac.tuxguitar.song.models;
  *         TODO To change the template for this generated type comment go to
  *         Window - Preferences - Java - Code Style - Code Templates
  */
-public class TGString {
-  private int number = 0;
-  private int value = 0;
+public class TGString extends IntegerPair {
 
+  public TGString(final int number, final int value) {
+    super(number, value);
+  }
+  
   @Override
   public TGString clone() {
-    TGString string = new TGString();
-    copy(string);
-    return string;
-  }
-
-  public void copy(TGString string) {
-    string.setNumber(getNumber());
-    string.setValue(getValue());
+    return new TGString(this.left, this.right);
   }
 
   public int getNumber() {
-    return this.number;
+    return this.left;
   }
 
   public int getValue() {
-    return this.value;
-  }
-
-  public boolean isEqual(TGString string) {
-    return (this.getNumber() == string.getNumber() && this.getValue() == string
-        .getValue());
-  }
-
-  public void setNumber(int number) {
-    this.number = number;
-  }
-
-  public void setValue(int value) {
-    this.value = value;
+    return this.right;
   }
 
 }

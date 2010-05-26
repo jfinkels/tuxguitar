@@ -147,10 +147,9 @@ public class TESongImporter implements TGLocalFileImporter {
         if (j >= 7) {
           break;
         }
-        TGString string = new TGString();
-        string.setNumber((j + 1));
-        string.setValue((tracks[i].isPercussion() ? 0 : (96 - strings[j])));
-        track.getStrings().add(string);
+        track.getStrings().add(
+            new TGString(j + 1, tracks[i].isPercussion() ? 0
+                : (96 - strings[j])));
       }
     }
   }

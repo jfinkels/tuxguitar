@@ -6,6 +6,7 @@ import java.util.List;
 import org.herac.tuxguitar.gui.TuxGuitar;
 import org.herac.tuxguitar.gui.editors.TGPainter;
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGNoteEffect;
@@ -204,10 +205,8 @@ public class TGBeatImpl extends TGBeat {
         .getEditorCache().isPlaying(getMeasure(), this));
   }
 
-  public void paint(ViewLayout layout, TGPainter painter, int fromX, int fromY/*
-                                                                               * ,boolean
-                                                                               * playMode
-                                                                               */) {
+  public void paint(ViewLayout layout, TGPainter painter, int fromX, int fromY
+  /* ,boolean playMode */) {
     if (!layout.isPlayModeEnabled()
         && (layout.getStyle() & ViewLayout.DISPLAY_SCORE) != 0) {
       paintExtraLines(painter, layout, fromX, fromY);
@@ -220,7 +219,7 @@ public class TGBeatImpl extends TGBeat {
         TGChordImpl chord = (TGChordImpl) getChord();
         chord.paint(layout, painter, fromX, fromY);
       }
-      if (getStroke().getDirection() != TGStroke.STROKE_NONE) {
+      if (!getStroke().getDirection().equals(StrokeDirection.NONE)) {
         paintStroke(layout, painter, fromX, fromY);
       }
     }
@@ -292,7 +291,7 @@ public class TGBeatImpl extends TGBeat {
     } else {
       return;
     }
-    if (getStroke().getDirection() == TGStroke.STROKE_UP) {
+    if (getStroke().getDirection().equals(StrokeDirection.UP)) {
       painter.initPath();
       painter.setAntialias(false);
       painter.moveTo(x, y1);
@@ -301,7 +300,7 @@ public class TGBeatImpl extends TGBeat {
       painter.moveTo(x, y2);
       painter.lineTo(x + (2.0f * scale), y2 - (5.0f * scale));
       painter.closePath();
-    } else if (getStroke().getDirection() == TGStroke.STROKE_DOWN) {
+    } else if (getStroke().getDirection().equals(StrokeDirection.DOWN)) {
       painter.initPath();
       painter.setAntialias(false);
       painter.moveTo(x, y2);

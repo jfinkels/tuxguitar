@@ -36,7 +36,7 @@ public class TGSongManager {
   public static List<TGString> createPercussionStrings(int stringCount) {
     List<TGString> strings = new ArrayList<TGString>();
     for (int i = 1; i <= stringCount; i++) {
-      strings.add(newString(i, 0));
+      strings.add(new TGString(i, 0));
     }
     return strings;
   }
@@ -52,13 +52,6 @@ public class TGSongManager {
       break;
     }
     return defaultLenght;
-  }
-
-  public static TGString newString(int number, int value) {
-    TGString string = new TGString();
-    string.setNumber(number);
-    string.setValue(value);
-    return string;
   }
 
   private TGMeasureManager measureManager;
@@ -278,12 +271,12 @@ public class TGSongManager {
 
   public List<TGString> createDefaultInstrumentStrings() {
     List<TGString> strings = new ArrayList<TGString>();
-    strings.add(newString(1, 64));
-    strings.add(newString(2, 59));
-    strings.add(newString(3, 55));
-    strings.add(newString(4, 50));
-    strings.add(newString(5, 45));
-    strings.add(newString(6, 40));
+    strings.add(new TGString(1, 64));
+    strings.add(new TGString(2, 59));
+    strings.add(new TGString(3, 55));
+    strings.add(new TGString(4, 50));
+    strings.add(new TGString(5, 45));
+    strings.add(new TGString(6, 40));
     return strings;
   }
 

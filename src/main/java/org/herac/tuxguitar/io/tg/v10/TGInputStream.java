@@ -348,14 +348,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGString readInstrumentString(int number) {
-    TGString string = new TGString();
-
-    string.setNumber(number);
-
-    // leo el valor
-    string.setValue(readByte());
-
-    return string;
+    return new TGString(number, readByte());
   }
 
   private String readIntegerString() {

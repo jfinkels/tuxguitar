@@ -15,6 +15,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGTextImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGTrackImpl;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.song.models.Clef;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -198,11 +199,9 @@ public class GP5InputStream extends GTPInputStream {
       int strokeUp = readByte();
       int strokeDown = readByte();
       if (strokeUp > 0) {
-        beat.getStroke().setDirection(TGStroke.STROKE_UP);
-        beat.getStroke().setValue(toStrokeValue(strokeUp));
+        beat.setStroke(new TGStroke(StrokeDirection.UP, toStrokeValue(strokeUp)));
       } else if (strokeDown > 0) {
-        beat.getStroke().setDirection(TGStroke.STROKE_DOWN);
-        beat.getStroke().setValue(toStrokeValue(strokeDown));
+        beat.setStroke(new TGStroke(StrokeDirection.DOWN, toStrokeValue(strokeDown)));
       }
     }
     if ((flags2 & 0x02) != 0) {
@@ -677,10 +676,7 @@ public class GP5InputStream extends GTPInputStream {
     for (int i = 0; i < 7; i++) {
       int tuning = readInt();
       if (stringCount > i) {
-        TGString string = new TGString();
-        string.setNumber(i + 1);
-        string.setValue(tuning);
-        track.getStrings().add(string);
+        track.getStrings().add(new TGString(i + 1, tuning));
       }
     }
     readInt();

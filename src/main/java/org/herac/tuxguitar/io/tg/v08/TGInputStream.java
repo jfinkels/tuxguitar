@@ -273,15 +273,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGString readInstrumentString(int number) {
-    TGString string = new TGString();
-
-    // leo el numero
-    string.setNumber(number);
-
-    // leo el valor
-    string.setValue(readByte());
-
-    return string;
+    return new TGString(number, readByte());
   }
 
   private TGMarker readMarker(int measure) {

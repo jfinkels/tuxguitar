@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -52,7 +53,7 @@ public class GP3OutputStream extends GTPOutputStream {
   /** The Logger for this class. */
   public static final transient Logger LOG = Logger
       .getLogger(GP3OutputStream.class);
-  
+
   public GP3OutputStream(GTPSettings settings) {
     super(settings);
   }
@@ -214,7 +215,7 @@ public class GP3OutputStream extends GTPOutputStream {
       if (effect.isVibrato() || effect.isTremoloBar() || effect.isTapping()
           || effect.isSlapping() || effect.isPopping() || effect.isHarmonic()
           || effect.isFadeIn()
-          || beat.getStroke().getDirection() != TGStroke.STROKE_NONE) {
+          || !beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
         flags |= 0x08;
       }
     }
@@ -268,7 +269,7 @@ public class GP3OutputStream extends GTPOutputStream {
         || noteEffect.isSlapping() || noteEffect.isPopping()) {
       flags += 0x20;
     }
-    if (beat.getStroke().getDirection() != TGStroke.STROKE_NONE) {
+    if (!beat.getStroke().getDirection().equals(StrokeDirection.NONE)) {
       flags |= 0x40;
     }
     if (noteEffect.isHarmonic()) {
@@ -299,10 +300,10 @@ public class GP3OutputStream extends GTPOutputStream {
       }
     }
     if ((flags & 0x40) != 0) {
-      writeUnsignedByte((beat.getStroke().getDirection() == TGStroke.STROKE_DOWN ? toStrokeValue(beat
+      writeUnsignedByte((beat.getStroke().getDirection().equals(StrokeDirection.DOWN) ? toStrokeValue(beat
           .getStroke())
           : 0));
-      writeUnsignedByte((beat.getStroke().getDirection() == TGStroke.STROKE_UP ? toStrokeValue(beat
+      writeUnsignedByte((beat.getStroke().getDirection().equals(StrokeDirection.UP) ? toStrokeValue(beat
           .getStroke())
           : 0));
     }

@@ -16,6 +16,7 @@ import org.herac.tuxguitar.io.ptb.base.PTTrack;
 import org.herac.tuxguitar.io.ptb.base.PTTrackInfo;
 import org.herac.tuxguitar.io.ptb.helper.TrackHelper;
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
@@ -23,7 +24,6 @@ import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGSong;
 import org.herac.tuxguitar.song.models.TGString;
-import org.herac.tuxguitar.song.models.TGStroke;
 import org.herac.tuxguitar.song.models.TGTrack;
 import org.herac.tuxguitar.song.models.TGVoice;
 import org.herac.tuxguitar.song.models.effects.BendingEffect;
@@ -198,7 +198,8 @@ public class PTSongParser {
     tgVoice.getDuration().setValue(beat.getDuration());
     tgVoice.getDuration().setDotted(beat.isDotted());
     tgVoice.getDuration().setDoubleDotted(beat.isDoubleDotted());
-    tgVoice.getDuration().setDivision(new TGDivisionType(beat.getEnters(), beat.getTimes()));
+    tgVoice.getDuration().setDivision(
+        new TGDivisionType(beat.getEnters(), beat.getTimes()));
 
     for (final PTNote ptNote : beat.getNotes()) {
       if (ptNote.getString() <= measure.getTrack().stringCount()
@@ -217,10 +218,10 @@ public class PTSongParser {
     }
 
     if (beat.isArpeggioUp()) {
-      tgBeat.getStroke().setDirection(TGStroke.STROKE_DOWN);
+      tgBeat.getStroke().setDirection(StrokeDirection.DOWN);
       tgBeat.getStroke().setValue(TGDuration.SIXTEENTH);
     } else if (beat.isArpeggioDown()) {
-      tgBeat.getStroke().setDirection(TGStroke.STROKE_UP);
+      tgBeat.getStroke().setDirection(StrokeDirection.UP);
       tgBeat.getStroke().setValue(TGDuration.SIXTEENTH);
     }
 
@@ -382,10 +383,7 @@ public class PTSongParser {
     tgTrack.getChannel().setBalance((short) info.getBalance());
     tgTrack.getStrings().clear();
     for (int i = 0; i < info.getStrings().length; i++) {
-      TGString string = new TGString();
-      string.setNumber((i + 1));
-      string.setValue(info.getStrings()[i]);
-      tgTrack.getStrings().add(string);
+      tgTrack.getStrings().add(new TGString(i + 1, info.getStrings()[i]));
     }
   }
 }

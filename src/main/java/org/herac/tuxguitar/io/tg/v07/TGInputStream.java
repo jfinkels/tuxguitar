@@ -199,15 +199,7 @@ public class TGInputStream implements TGInputStreamBase {
   }
 
   private TGString readInstrumentString() {
-    TGString string = new TGString();
-
-    // leo el numero
-    string.setNumber(readInt());
-
-    // leo el valor
-    string.setValue(readInt());
-
-    return string;
+    return new TGString(readInt(), readInt());
   }
 
   private int readInt() {

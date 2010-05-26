@@ -23,6 +23,7 @@ import org.herac.tuxguitar.io.base.TGFileFormat;
 import org.herac.tuxguitar.io.base.TGFileFormatException;
 import org.herac.tuxguitar.io.base.TGInputStreamBase;
 import org.herac.tuxguitar.song.models.Clef;
+import org.herac.tuxguitar.song.models.StrokeDirection;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChannel;
 import org.herac.tuxguitar.song.models.TGChord;
@@ -151,7 +152,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
 
     // leo el stroke
     if (((header & BEAT_HAS_STROKE) != 0)) {
-      readStroke(beat.getStroke());
+      beat.setStroke(readStroke());
     }
 
     // leo el acorde
@@ -348,14 +349,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
   }
 
   private TGString readInstrumentString(int number) {
-    TGString string = new TGString();
-
-    string.setNumber(number);
-
-    // leo el valor
-    string.setValue(readByte());
-
-    return string;
+    return new TGString(number, readByte());
   }
 
   private String readIntegerString() {
@@ -639,12 +633,21 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     return null;
   }
 
-  private void readStroke(TGStroke stroke) {
-    // leo la direccion
-    stroke.setDirection(readByte());
-
-    // leo el valor
-    stroke.setValue(readByte());
+  private TGStroke readStroke() {
+    final int directionId = readByte();
+    final int value = readByte();
+    StrokeDirection direction = null;
+    if (directionId == StrokeDirection.NONE.getId()) {
+      direction = StrokeDirection.NONE;
+    } else if (directionId == StrokeDirection.UP.getId()) {
+      direction = StrokeDirection.UP;
+    } else if (directionId == StrokeDirection.DOWN.getId()) {
+      direction = StrokeDirection.DOWN;
+    } else {
+      LOG.error("Unknown direction ID: " + directionId);
+    }
+    
+    return new TGStroke(direction, value);
   }
 
   private void readTempo(TGTempo tempo) {
