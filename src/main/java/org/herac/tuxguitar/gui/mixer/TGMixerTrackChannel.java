@@ -106,8 +106,7 @@ public class TGMixerTrackChannel {
           channel.setChannel((short) idx);
           channel.setEffectChannel(channel.getChannel());
         } else {
-          TuxGuitar.instance().getSongManager().getUsedChannel(idx).copy(
-              channel);
+          channel = TuxGuitar.instance().getSongManager().getUsedChannel(idx);
         }
         fireChannelChange(channel);
 

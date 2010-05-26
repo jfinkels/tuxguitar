@@ -72,7 +72,7 @@ public class UndoableTrackChannel implements UndoableEdit {
     for (int i = 0; i < this.redoChannels.size(); i++) {
       TGChannel channel = (TGChannel) this.redoChannels.get(i);
       TGTrack track = song.getTrack(i);
-      channel.copy(track.getChannel());
+      track.setChannel(channel.clone());
     }
     TuxGuitar.instance().getMixer().updateValues();
     TuxGuitar.instance().getTable().fireUpdate(false);
@@ -93,7 +93,7 @@ public class UndoableTrackChannel implements UndoableEdit {
     for (int i = 0; i < this.undoChannels.size(); i++) {
       TGChannel channel = (TGChannel) this.undoChannels.get(i);
       TGTrack track = song.getTrack(i);
-      channel.copy(track.getChannel());
+      track.setChannel(channel.clone());
     }
     TuxGuitar.instance().getMixer().updateValues();
     TuxGuitar.instance().getTable().fireUpdate(false);

@@ -107,7 +107,7 @@ public class TGMixer implements TGUpdateListener, IconLoader, LanguageLoader {
     
     for (final TGMixerTrack mixer : this.tracks) {
       if (mixer.getTrack().getChannel().getChannel() == channel.getChannel()) {
-        channel.copy(mixer.getTrack().getChannel());
+        mixer.getTrack().setChannel(channel.clone());
       }
       mixer.fireChanges(type);
     }

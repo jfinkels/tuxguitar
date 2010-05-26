@@ -1,5 +1,10 @@
 package org.herac.tuxguitar.song.models;
 
+/**
+ * A type of clef, either alto, bass, tenor, or treble.
+ * 
+ * @author Jeffrey Finkelstein
+ */
 public enum Clef {
   ALTO(3), BASS(1), TENOR(2), TREBLE(0);
 

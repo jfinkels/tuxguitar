@@ -61,7 +61,7 @@ public abstract class TGTrack {
     track.setNumber(getNumber());
     track.setName(getName());
     track.setOffset(getOffset());
-    getChannel().copy(track.getChannel());
+    track.setChannel(this.channel.clone());
     this.color = track.getColor();
     getLyrics().copy(track.getLyrics());
 

@@ -40,20 +40,18 @@ public class TGChannel {
   @Override
   public TGChannel clone() {
     TGChannel channel = new TGChannel();
-    copy(channel);
+    
+    channel.setChannel(this.channel);
+    channel.setEffectChannel(this.effectChannel);
+    channel.setInstrument(this.instrument);
+    channel.setVolume(this.volume);
+    channel.setBalance(this.balance);
+    channel.setChorus(this.chorus);
+    channel.setReverb(this.reverb);
+    channel.setPhaser(this.phaser);
+    channel.setTremolo(this.tremolo);
+    
     return channel;
-  }
-
-  public void copy(TGChannel channel) {
-    channel.setChannel(getChannel());
-    channel.setEffectChannel(getEffectChannel());
-    channel.setInstrument(getInstrument());
-    channel.setVolume(getVolume());
-    channel.setBalance(getBalance());
-    channel.setChorus(getChorus());
-    channel.setReverb(getReverb());
-    channel.setPhaser(getPhaser());
-    channel.setTremolo(getTremolo());
   }
 
   public short getBalance() {

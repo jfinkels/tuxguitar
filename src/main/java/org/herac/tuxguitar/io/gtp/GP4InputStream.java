@@ -201,20 +201,25 @@ public class GP4InputStream extends GTPInputStream {
     }
   }
 
-  private void readChannel(TGChannel channel, List<TGChannel> channels)
-      throws IOException {
+
+  private TGChannel readChannel(List<TGChannel> channels) throws IOException {
+    TGChannel result = null;
+
     int index = (readInt() - 1);
     int effectChannel = (readInt() - 1);
     if (index >= 0 && index < channels.size()) {
-      ((TGChannel) channels.get(index)).copy(channel);
-      if (channel.getInstrument() < 0) {
-        channel.setInstrument((short) 0);
+      result = channels.get(index).clone();
+      if (result.getInstrument() < 0) {
+        result.setInstrument((short) 0);
       }
-      if (!channel.isPercussionChannel()) {
-        channel.setEffectChannel((short) effectChannel);
+      if (!result.isPercussionChannel()) {
+        result.setEffectChannel((short) effectChannel);
       }
     }
+
+    return result;
   }
+
 
   private List<TGChannel> readChannels() throws IOException {
     List<TGChannel> channels = new ArrayList<TGChannel>();
@@ -646,7 +651,11 @@ public class GP4InputStream extends GTPInputStream {
       }
     }
     readInt();
-    readChannel(track.getChannel(), channels);
+    final TGChannel newChannel = this.readChannel(channels);
+    if (newChannel != null) {
+      track.setChannel(newChannel);
+    }
+    // readChannel(track.getChannel(), channels);
     readInt();
     track.setOffset(readInt());
     track.setColor(readColor());

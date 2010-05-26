@@ -686,8 +686,7 @@ public class TGSongManager {
       track.addMeasure(measure);
     }
     track.setStrings(createDefaultInstrumentStrings());
-    getFreeChannel(TGChannel.DEFAULT_INSTRUMENT, false)
-        .copy(track.getChannel());
+    track.setChannel(getFreeChannel(TGChannel.DEFAULT_INSTRUMENT, false));
     track.setColor(Color.RED);
     return track;
   }
