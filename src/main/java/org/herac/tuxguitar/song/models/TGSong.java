@@ -9,6 +9,8 @@ package org.herac.tuxguitar.song.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import joptsimple.internal.Strings;
+
 /**
  * @author julian
  * 
@@ -17,31 +19,17 @@ import java.util.List;
  */
 public class TGSong {
 
-  private String album;
-  private String artist;
-  private String author;
-  private String comments;
-  private String copyright;
-  private String date;
-  private List<TGMeasureHeader> measureHeaders;
-  private String name;
-  private List<TGTrack> tracks;
-  private String transcriber;
-  private String writer;
-
-  public TGSong() {
-    this.name = new String();
-    this.artist = new String();
-    this.album = new String();
-    this.author = new String();
-    this.date = new String();
-    this.copyright = new String();
-    this.writer = new String();
-    this.transcriber = new String();
-    this.comments = new String();
-    this.tracks = new ArrayList<TGTrack>();
-    this.measureHeaders = new ArrayList<TGMeasureHeader>();
-  }
+  private String album = Strings.EMPTY;
+  private String artist = Strings.EMPTY;
+  private String author = Strings.EMPTY;
+  private String comments = Strings.EMPTY;
+  private String copyright = Strings.EMPTY;
+  private String date = Strings.EMPTY;
+  private List<TGMeasureHeader> measureHeaders = new ArrayList<TGMeasureHeader>();
+  private String name = Strings.EMPTY;
+  private List<TGTrack> tracks = new ArrayList<TGTrack>();
+  private String transcriber = Strings.EMPTY;
+  private String writer = Strings.EMPTY;
 
   public void addMeasureHeader(int index, TGMeasureHeader measureHeader) {
     measureHeader.setSong(this);
@@ -58,7 +46,7 @@ public class TGSong {
   }
 
   public void addTrack(TGTrack track) {
-    this.addTrack(countTracks(), track);
+    this.tracks.add(track);
   }
 
   public void clear() {
@@ -72,11 +60,7 @@ public class TGSong {
   @Override
   public TGSong clone() {
     TGSong song = new TGSong();
-    copy(song);
-    return song;
-  }
 
-  public void copy(TGSong song) {
     song.clear();
     song.setName(getName());
     song.setArtist(getArtist());
@@ -95,6 +79,8 @@ public class TGSong {
     for (final TGTrack track : this.tracks) {
       song.addTrack(track.clone(song));
     }
+    
+    return song;
   }
 
   public int countMeasureHeaders() {
@@ -142,7 +128,7 @@ public class TGSong {
   }
 
   public TGTrack getTrack(int index) {
-    return (TGTrack) this.tracks.get(index);
+    return this.tracks.get(index);
   }
 
   public List<TGTrack> getTracks() {
@@ -158,7 +144,7 @@ public class TGSong {
   }
 
   public boolean isEmpty() {
-    return (countMeasureHeaders() == 0 || countTracks() == 0);
+    return this.measureHeaders.isEmpty() || this.tracks.isEmpty();
   }
 
   public void moveTrack(int index, TGTrack track) {

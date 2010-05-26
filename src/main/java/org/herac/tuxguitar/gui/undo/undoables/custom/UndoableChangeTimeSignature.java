@@ -66,9 +66,8 @@ public class UndoableChangeTimeSignature implements UndoableEdit {
     }
     // TGFactory factory = TuxGuitar.instance().getTablatureEditor()
     // .getTablature().getSongManager().getFactory();
-    TGSong song = TuxGuitar.instance().getTablatureEditor().getTablature()
-        .getSongManager().getSong();
-    this.song.copy(song);
+    TuxGuitar.instance().getTablatureEditor().getTablature().getSongManager()
+        .setSong(this.song.clone());
     TuxGuitar.instance().fireUpdate();
     this.undoCaret.update();
     this.doAction = REDO_ACTION;
