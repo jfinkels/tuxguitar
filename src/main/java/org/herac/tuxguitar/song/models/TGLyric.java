@@ -1,10 +1,12 @@
 package org.herac.tuxguitar.song.models;
 
+import joptsimple.internal.Strings;
+
 public abstract class TGLyric {
   private static final String SPACE = " ";
 
   private int from = 1;
-  private String lyrics = null;
+  private String lyrics = Strings.EMPTY;
 
   @Override
   public abstract TGLyric clone();
@@ -22,11 +24,11 @@ public abstract class TGLyric {
     return this.lyrics;
   }
 
-  public void setFrom(int from) {
+  public void setFrom(final int from) {
     this.from = from;
   }
 
-  public void setLyrics(String lyrics) {
+  public void setLyrics(final String lyrics) {
     this.lyrics = lyrics;
   }
 
