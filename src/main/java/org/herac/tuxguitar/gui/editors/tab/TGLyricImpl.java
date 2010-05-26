@@ -6,12 +6,8 @@ import org.herac.tuxguitar.song.models.TGLyric;
 
 public class TGLyricImpl extends TGLyric {
 
-  private int height;
+  private int height = 0;
   private int nextIndex = 0;
-
-  public TGLyricImpl() {
-    this.height = 0;
-  }
 
   public int getHeight() {
     return this.height;
@@ -74,5 +70,18 @@ public class TGLyricImpl extends TGLyric {
 
   private void update() {
     this.height = (this.getLyrics().isEmpty() ? 0 : 10);
+  }
+
+  @Override
+  public TGLyric clone() {
+    final TGLyricImpl result = new TGLyricImpl();
+    
+    result.setFrom(this.getFrom());
+    result.setLyrics(this.getLyrics());
+    
+    result.height = this.height;
+    result.nextIndex = this.nextIndex;
+    
+    return result;
   }
 }

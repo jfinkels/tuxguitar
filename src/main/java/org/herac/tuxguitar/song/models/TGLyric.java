@@ -1,34 +1,21 @@
 package org.herac.tuxguitar.song.models;
 
 public abstract class TGLyric {
-  private static final String REGEX = " ";
+  private static final String SPACE = " ";
 
-  private int from;
-  private String lyrics;
+  private int from = 1;
+  private String lyrics = null;
 
-  public TGLyric() {
-    this.from = 1;
-    this.lyrics = new String();
-  }
-
-  /*
-   * public static void copy(TGLyric source, TGLyric destination) {
-   * destination.setFrom(source.from); destination.setLyrics(source.lyrics); }
-   */
-  public void copy(TGLyric lyric) {
-    lyric.setFrom(getFrom());
-    lyric.setLyrics(getLyrics());
-  }
+  @Override
+  public abstract TGLyric clone();
 
   public int getFrom() {
     return this.from;
   }
 
   public String[] getLyricBeats() {
-    String lyrics = getLyrics();
-    lyrics = lyrics.replaceAll("\n", REGEX);
-    lyrics = lyrics.replaceAll("\r", REGEX);
-    return lyrics.split(REGEX);
+    return this.lyrics.replaceAll("\n", SPACE).replaceAll("\r", SPACE).split(
+        SPACE);
   }
 
   public String getLyrics() {

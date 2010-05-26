@@ -63,7 +63,7 @@ public abstract class TGTrack {
     track.setOffset(getOffset());
     track.setChannel(this.channel.clone());
     this.color = track.getColor();
-    getLyrics().copy(track.getLyrics());
+    track.setLyrics(this.lyrics.clone());
 
     for (final TGString string : this.strings) {
       track.getStrings().add(string.clone());
