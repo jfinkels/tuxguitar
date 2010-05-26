@@ -13,8 +13,8 @@ public class TGMarker {
   @Override
   public TGMarker clone() {
     TGMarker marker = new TGMarker();
-    marker.setMeasure(getMeasure());
-    marker.setTitle(getTitle());
+    marker.setMeasure(this.measure);
+    marker.setTitle(this.title);
     marker.setColor(this.color);
     return marker;
   }
