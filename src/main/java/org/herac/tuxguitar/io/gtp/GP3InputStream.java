@@ -426,7 +426,7 @@ public class GP3InputStream extends GTPInputStream {
         track.addMeasure(measure);
         readMeasure(measure, track, tempo);
       }
-      tempo.copy(header.getTempo());
+      header.setTempo(tempo.clone());
       start += header.getLength();
     }
   }

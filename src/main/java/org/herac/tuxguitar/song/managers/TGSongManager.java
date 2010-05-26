@@ -164,7 +164,7 @@ public class TGSongManager {
   }
 
   public void changeTempo(TGMeasureHeader header, TGTempo tempo) {
-    tempo.copy(header.getTempo());
+    header.setTempo(tempo.clone());
   }
 
   public void changeTempos(long start, TGTempo tempo, boolean toEnd) {

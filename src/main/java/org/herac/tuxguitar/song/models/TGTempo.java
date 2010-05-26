@@ -6,7 +6,6 @@
  */
 package org.herac.tuxguitar.song.models;
 
-
 /**
  * @author julian
  * 
@@ -16,34 +15,33 @@ package org.herac.tuxguitar.song.models;
 public class TGTempo {
   private static final int SECOND_IN_MILLIS = 1000;
 
-  public static TGTempo fromUSQ(int usq) {
-    double value = ((60.00 * SECOND_IN_MILLIS) / (usq / 1000.00));
-    TGTempo tempo = new TGTempo();
-    tempo.setValue((int) value);
-    return tempo;
+  public static final int DEFAULT_VALUE = 120;
+
+  public TGTempo() {
+    this(DEFAULT_VALUE);
   }
 
-  private int value = 120;
-  
+  public TGTempo(final int value) {
+    this.value = value;
+  }
+
+  public static TGTempo fromUSQ(int usq) {
+    return new TGTempo((int) ((60.00 * SECOND_IN_MILLIS) / (usq / 1000.00)));
+  }
+
+  private int value = DEFAULT_VALUE;
+
   @Override
   public TGTempo clone() {
-    TGTempo tempo = new TGTempo();
-    copy(tempo);
-    return tempo;
-  }
-
-  public void copy(TGTempo tempo) {
-    tempo.setValue(getValue());
+    return new TGTempo(this.value);
   }
 
   public long getInMillis() {
-    double millis = (60.00 / getValue() * SECOND_IN_MILLIS);
-    return (long) millis;
+    return (long) (60.00 / this.value * SECOND_IN_MILLIS);
   }
 
   public long getInUSQ() {
-    double usq = ((60.00 / getValue() * SECOND_IN_MILLIS) * 1000.00);
-    return (long) usq;
+    return (long) ((60.00 / this.value * SECOND_IN_MILLIS) * 1000.00);
   }
 
   public int getValue() {

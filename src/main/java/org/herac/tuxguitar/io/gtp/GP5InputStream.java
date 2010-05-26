@@ -489,7 +489,7 @@ public class GP5InputStream extends GTPInputStream {
         readMeasure(measure, track, tempo);
         skip(1);
       }
-      tempo.copy(header.getTempo());
+      header.setTempo(tempo.clone());
       start += header.getLength();
     }
   }

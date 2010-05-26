@@ -476,7 +476,7 @@ public class GP4OutputStream extends GTPOutputStream {
         writeMeasure(measure,
             (header.getTempo().getValue() != tempo.getValue()));
       }
-      header.getTempo().copy(tempo);
+      tempo = header.getTempo().clone();
     }
   }
 

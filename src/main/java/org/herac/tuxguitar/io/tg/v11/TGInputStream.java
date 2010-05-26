@@ -432,7 +432,7 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     if (((header & MEASURE_HEADER_TEMPO) != 0)) {
       readTempo(measureHeader.getTempo());
     } else if (lastMeasureHeader != null) {
-      lastMeasureHeader.getTempo().copy(measureHeader.getTempo());
+      measureHeader.setTempo(lastMeasureHeader.getTempo().clone());
     }
 
     // leo el comienzo de la repeticion
