@@ -805,9 +805,9 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
 
         // leo la direccion
         if (((flags & VOICE_DIRECTION_UP) != 0)) {
-          beat.getVoice(i).setDirection(TGVoice.DIRECTION_UP);
+          beat.getVoice(i).setDirection(Direction.UP);
         } else if (((flags & VOICE_DIRECTION_DOWN) != 0)) {
-          beat.getVoice(i).setDirection(TGVoice.DIRECTION_DOWN);
+          beat.getVoice(i).setDirection(Direction.DOWN);
         }
         beat.getVoice(i).setDuration(data.getVoice(i).getDuration().clone());
         data.getVoice(i).setStart(

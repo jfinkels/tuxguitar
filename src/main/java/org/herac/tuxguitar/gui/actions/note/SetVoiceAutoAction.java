@@ -16,6 +16,7 @@ import org.herac.tuxguitar.gui.editors.tab.TGBeatGroup;
 import org.herac.tuxguitar.gui.editors.tab.TGBeatImpl;
 import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
 import org.herac.tuxguitar.gui.undo.undoables.measure.UndoableMeasureGeneric;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGVoice;
 
 /**
@@ -46,7 +47,7 @@ public class SetVoiceAutoAction extends Action {
         while (it.hasNext()) {
           TGVoice current = (TGVoice) it.next();
           getSongManager().getMeasureManager().changeVoiceDirection(current,
-              TGVoice.DIRECTION_NONE);
+              Direction.NONE);
         }
 
         // termia el undoable

@@ -14,6 +14,7 @@ import org.herac.tuxguitar.gui.editors.tab.painters.TGKeySignaturePainter;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGNotePainter;
 import org.herac.tuxguitar.song.models.Accidental;
 import org.herac.tuxguitar.song.models.Clef;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -317,7 +318,7 @@ public class TGNoteImpl extends TGNote {
       int fromY, int spacing) {
     if ((layout.getStyle() & ViewLayout.DISPLAY_SCORE) != 0) {
       float scale = layout.getScoreLineSpacing();
-      int direction = getVoiceImpl().getBeatGroup().getDirection();
+      Direction direction = getVoiceImpl().getBeatGroup().getDirection();
       int key = getMeasureImpl().getKeySignature();
       Clef clef = getMeasureImpl().getClef();
 
@@ -411,7 +412,7 @@ public class TGNoteImpl extends TGNote {
         // dibujo el pie
         if (getVoice().getDuration().getValue() >= TGDuration.HALF) {
           layout.setScoreNoteFooterStyle(painter);
-          int xMove = (direction == TGBeatGroup.DIRECTION_UP ? layout
+          int xMove = (direction == Direction.UP ? layout
               .getResources().getScoreNoteWidth() : 0);
           int y2 = fromY
               + getVoiceImpl().getBeatGroup().getY2(layout,
@@ -421,7 +422,7 @@ public class TGNoteImpl extends TGNote {
           if (getEffect().isStaccato()) {
             int size = 3;
             int sX = x + xMove;
-            int sY = (y2 + (4 * ((direction == TGBeatGroup.DIRECTION_UP) ? -1
+            int sY = (y2 + (4 * ((direction == Direction.UP) ? -1
                 : 1)));
             layout.setScoreEffectStyle(painter);
             painter.initPath(TGPainter.PATH_FILL);
@@ -434,7 +435,7 @@ public class TGNoteImpl extends TGNote {
             layout.setScoreEffectStyle(painter);
             painter.initPath();
             int tpY = fromY;
-            if ((direction == TGBeatGroup.DIRECTION_UP)) {
+            if ((direction == Direction.UP)) {
               tpY += (getVoiceImpl().getBeatGroup().getMaxNote().getScorePosY()
                   - layout.getScoreLineSpacing() - 4);
             } else {

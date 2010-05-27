@@ -18,13 +18,13 @@ import org.herac.tuxguitar.gui.editors.tab.TGVoiceImpl;
  *         Window - Preferences - Java - Code Style - Code Templates
  */
 public abstract class TGVoice {
-
+/*
   public static final int DIRECTION_DOWN = 2;
   public static final int DIRECTION_NONE = 0;
-  public static final int DIRECTION_UP = 1;
+  public static final int DIRECTION_UP = 1;*/
 
   private TGBeat beat = null;
-  private int direction = DIRECTION_NONE;
+  private Direction direction = Direction.NONE;
   private TGDuration duration = new TGDuration();
   private boolean empty = true;
   private int index = 0;
@@ -59,7 +59,7 @@ public abstract class TGVoice {
     return this.beat;
   }
 
-  public int getDirection() {
+  public Direction getDirection() {
     return this.direction;
   }
 
@@ -103,7 +103,7 @@ public abstract class TGVoice {
     this.beat = beat;
   }
 
-  public void setDirection(int direction) {
+  public void setDirection(final Direction direction) {
     this.direction = direction;
   }
 

@@ -23,6 +23,7 @@ import org.herac.tuxguitar.gui.editors.tab.painters.TGTripletFeelPainter;
 import org.herac.tuxguitar.gui.helper.SyncThread;
 import org.herac.tuxguitar.player.base.MidiPlayerMode;
 import org.herac.tuxguitar.song.managers.TGSongManager;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGBeat;
 import org.herac.tuxguitar.song.models.TGChord;
 import org.herac.tuxguitar.song.models.TGDivisionType;
@@ -407,21 +408,21 @@ public class TGMeasureImpl extends TGMeasure {
     this.compactMode = compactMode;
   }
 
-  private void checkValue(ViewLayout layout, TGNoteImpl note, int direction) {
+  private void checkValue(ViewLayout layout, TGNoteImpl note, Direction direction) {
     int y = note.getScorePosY();
     float upOffset = TGBeatGroup.getUpOffset(layout);
     float downOffset = TGBeatGroup.getDownOffset(layout);
 
-    if (direction == TGBeatGroup.DIRECTION_UP && y > this.maxY) {
+    if (direction == Direction.UP && y > this.maxY) {
       this.maxY = y;
-    } else if (direction == TGBeatGroup.DIRECTION_DOWN
+    } else if (direction == Direction.DOWN
         && (y + downOffset) > this.maxY) {
       this.maxY = (int) (y + downOffset + 2);
     }
 
-    if (direction == TGBeatGroup.DIRECTION_UP && (y - upOffset) < this.minY) {
+    if (direction == Direction.UP && (y - upOffset) < this.minY) {
       this.minY = (int) (y - upOffset - 2);
-    } else if (direction == TGBeatGroup.DIRECTION_DOWN && y < this.minY) {
+    } else if (direction == Direction.DOWN && y < this.minY) {
       this.minY = y;
     }
   }

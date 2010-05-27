@@ -637,7 +637,7 @@ public class TGMeasureManager {
     }
   }
 
-  public void changeVoiceDirection(TGVoice voice, int direction) {
+  public void changeVoiceDirection(TGVoice voice, Direction direction) {
     voice.setDirection(direction);
   }
 

@@ -17,19 +17,19 @@ public class TGBeatImpl extends TGBeat {
   /**
    * Union a la izquierda
    */
-  public static final int JOINED_TYPE_LEFT = 3;
+//  public static final int JOINED_TYPE_LEFT = 3;
   /**
    * desviacion a la izquierda
    */
-  public static final int JOINED_TYPE_NONE_LEFT = 1;
+//  public static final int JOINED_TYPE_NONE_LEFT = 1;
   /**
    * desviacion a la derecha
    */
-  public static final int JOINED_TYPE_NONE_RIGHT = 2;
+//  public static final int JOINED_TYPE_NONE_RIGHT = 2;
   /**
    * Union a la derecha
    */
-  public static final int JOINED_TYPE_RIGHT = 4;
+//  public static final int JOINED_TYPE_RIGHT = 4;
 
   private boolean accentuated;
   private TGBeatSpacing bs;

@@ -126,10 +126,10 @@ public class TGOutputStream extends TGStream implements TGOutputStreamBase {
           flags |= VOICE_NEXT_DURATION;
           data.getVoice(i).setDuration(beat.getVoice(i).getDuration());
         }
-        if (beat.getVoice(i).getDirection() != TGVoice.DIRECTION_NONE) {
-          if (beat.getVoice(i).getDirection() == TGVoice.DIRECTION_UP) {
+        if (!beat.getVoice(i).getDirection().equals(Direction.NONE)) {
+          if (beat.getVoice(i).getDirection().equals(Direction.UP)) {
             flags |= VOICE_DIRECTION_UP;
-          } else if (beat.getVoice(i).getDirection() == TGVoice.DIRECTION_DOWN) {
+          } else if (beat.getVoice(i).getDirection().equals(Direction.DOWN)) {
             flags |= VOICE_DIRECTION_DOWN;
           }
         }

@@ -6,6 +6,7 @@ import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGNotePainter;
 import org.herac.tuxguitar.gui.editors.tab.painters.TGSilencePainter;
 import org.herac.tuxguitar.song.models.Clef;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGDivisionType;
 import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
@@ -227,19 +228,18 @@ public class TGVoiceImpl extends TGVoice {
 
       float scale = layout.getScale();
       float lineSpacing = layout.getScoreLineSpacing();
-      int direction = this.group.getDirection();
+      Direction direction = this.group.getDirection();
       int key = getBeat().getMeasure().getKeySignature();
       Clef clef = getBeat().getMeasure().getClef();
 
-      int xMove = (direction == TGBeatGroup.DIRECTION_UP ? layout
-          .getResources().getScoreNoteWidth() : 0);
-      int yMove = (direction == TGBeatGroup.DIRECTION_UP ? ((layout
-          .getScoreLineSpacing() / 3) + 1)
+      int xMove = (direction == Direction.UP ? layout.getResources()
+          .getScoreNoteWidth() : 0);
+      int yMove = (direction == Direction.UP ? ((layout.getScoreLineSpacing() / 3) + 1)
           : ((layout.getScoreLineSpacing() / 3) * 2));
 
       int vY1 = fromY
-          + (direction == TGBeatGroup.DIRECTION_DOWN ? this.maxNote
-              .getScorePosY() : this.minNote.getScorePosY());
+          + (direction == Direction.DOWN ? this.maxNote.getScorePosY()
+              : this.minNote.getScorePosY());
       int vY2 = fromY
           + this.group.getY2(layout, getPosX() + spacing, key, clef);
 
@@ -252,7 +252,7 @@ public class TGVoiceImpl extends TGVoice {
       if (getDuration().getValue() >= TGDuration.EIGHTH) {
         int index = (getDuration().getIndex() - 3);
         if (index >= 0) {
-          int dir = (direction == TGBeatGroup.DIRECTION_DOWN) ? 1 : -1;
+          int dir = (direction == Direction.DOWN) ? 1 : -1;
           int joinedType = getJoinedType();
           boolean joinedGreaterThanQuarter = isJoinedGreaterThanQuarter();
 
@@ -381,7 +381,7 @@ public class TGVoiceImpl extends TGVoice {
       float verticalLineWidth = scale;
       float horizontalLineWidth = (2 * scale);
       int stringSpacing = layout.getStringSpacing();
-      if (getBeatGroup().getDirection() == TGBeatGroup.DIRECTION_DOWN) {
+      if (getBeatGroup().getDirection() == Direction.DOWN) {
         y1 = (fromY + getMeasureImpl().getTrackImpl().getTabHeight() + (stringSpacing / 2));
         y2 = (fromY + getMeasureImpl().getTrackImpl().getTabHeight() + ((stringSpacing / 2) * 5));
       } else {
@@ -415,7 +415,7 @@ public class TGVoiceImpl extends TGVoice {
           int index = (getDuration().getIndex() - 2);
           if (index > 0) {
             int height = (layout.getStringSpacing() / 2);
-            int direction = (getBeatGroup().getDirection() == TGBeatGroup.DIRECTION_DOWN ? 1
+            int direction = (getBeatGroup().getDirection() == Direction.DOWN ? 1
                 : -1);
             painter.setLineWidth((int) horizontalLineWidth);
             painter.initPath();
@@ -585,7 +585,7 @@ public class TGVoiceImpl extends TGVoice {
         && (layout.getStyle() & ViewLayout.DISPLAY_SCORE) == 0) {
       this.minY = 0;
       this.maxY = getBeatImpl().getMeasureImpl().getTrackImpl().getTabHeight();
-      if (getBeatGroup().getDirection() == TGBeatGroup.DIRECTION_DOWN) {
+      if (getBeatGroup().getDirection() == Direction.DOWN) {
         this.maxY += (((layout.getStringSpacing() / 2) * 5) + 1);
       } else {
         this.minY -= (((layout.getStringSpacing() / 2) * 5) + 1);
@@ -654,7 +654,7 @@ public class TGVoiceImpl extends TGVoice {
                 this.silenceY = (firstPosition + (maxSilenceHeight * getIndex()));
               }
             } else if ((layout.getStyle() & ViewLayout.DISPLAY_SCORE) != 0) {
-              int direction = voice.getBeatGroup().getDirection();
+              Direction direction = voice.getBeatGroup().getDirection();
               int y1 = voice.getBeatGroup().getY1(layout, voice.getMinNote(),
                   getMeasureImpl().getKeySignature(),
                   getMeasureImpl().getClef());
@@ -662,25 +662,25 @@ public class TGVoiceImpl extends TGVoice {
                   getMeasureImpl().getKeySignature(),
                   getMeasureImpl().getClef());
 
-              if (direction == TGBeatGroup.DIRECTION_UP) {
+              if (direction == Direction.UP) {
                 float position = (y1 + (lineSpacing * 2));
                 if (position > this.silenceY) {
                   this.silenceY = position;
                 }
-              } else if (direction == TGBeatGroup.DIRECTION_DOWN) {
+              } else if (direction == Direction.DOWN) {
                 float position = (y2 - (this.silenceHeight + lineSpacing));
                 if (position < this.silenceY) {
                   this.silenceY = position;
                 }
               }
             } else if ((layout.getStyle() & ViewLayout.DISPLAY_TABLATURE) != 0) {
-              int direction = voice.getBeatGroup().getDirection();
-              if (direction == TGBeatGroup.DIRECTION_UP) {
+              Direction direction = voice.getBeatGroup().getDirection();
+              if (direction == Direction.UP) {
                 float position = (lineSpacing * voice.getMaxString());
                 if (position > this.silenceY) {
                   this.silenceY = position;
                 }
-              } else if (direction == TGBeatGroup.DIRECTION_DOWN) {
+              } else if (direction == Direction.DOWN) {
                 float position = ((lineSpacing * (voice.getMinString() - 1)) - (this.silenceHeight + lineSpacing));
                 if (position < this.silenceY) {
                   this.silenceY = position;

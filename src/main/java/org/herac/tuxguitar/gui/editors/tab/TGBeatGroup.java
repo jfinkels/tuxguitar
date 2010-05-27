@@ -5,12 +5,10 @@ import java.util.List;
 
 import org.herac.tuxguitar.gui.editors.tab.layout.ViewLayout;
 import org.herac.tuxguitar.song.models.Clef;
+import org.herac.tuxguitar.song.models.Direction;
 import org.herac.tuxguitar.song.models.TGVoice;
 
 public class TGBeatGroup {
-  public static final int DIRECTION_DOWN = 2;
-  public static final int DIRECTION_NOT_SETTED = 0;
-  public static final int DIRECTION_UP = 1;
 
   private static final int DOWN_OFFSET = 35;
   private static final int SCORE_FLAT_POSITIONS[] = new int[] { 7, 6, 6, 5, 5,
@@ -31,28 +29,20 @@ public class TGBeatGroup {
     return (UP_OFFSET * scale);
   }
 
-  private int direction;
-  private TGNoteImpl firstMaxNote;
-  private TGNoteImpl firstMinNote;
-  private TGNoteImpl lastMaxNote;
-  private TGNoteImpl lastMinNote;
-  private TGNoteImpl maxNote;
-  private TGNoteImpl minNote;
+  private Direction direction=Direction.NONE;
+  private TGNoteImpl firstMaxNote=null;
+  private TGNoteImpl firstMinNote=null;
+  private TGNoteImpl lastMaxNote=null;
+  private TGNoteImpl lastMinNote=null;
+  private TGNoteImpl maxNote=null;
+  private TGNoteImpl minNote=null;
 
   private int voice;
 
-  private List<TGVoice> voices;
+  private List<TGVoice> voices=new ArrayList<TGVoice>();
 
   public TGBeatGroup(int voice) {
     this.voice = voice;
-    this.voices = new ArrayList<TGVoice>();
-    this.direction = DIRECTION_NOT_SETTED;
-    this.firstMinNote = null;
-    this.firstMaxNote = null;
-    this.lastMinNote = null;
-    this.lastMaxNote = null;
-    this.maxNote = null;
-    this.minNote = null;
   }
 
   private void check(TGNoteImpl note) {
@@ -116,21 +106,21 @@ public class TGBeatGroup {
     this.check(voice.getMaxNote());
     this.check(voice.getMinNote());
     this.voices.add(voice);
-    if (voice.getDirection() != TGVoice.DIRECTION_NONE) {
-      if (voice.getDirection() == TGVoice.DIRECTION_UP) {
-        this.direction = DIRECTION_UP;
-      } else if (voice.getDirection() == TGVoice.DIRECTION_DOWN) {
-        this.direction = DIRECTION_DOWN;
+    if (voice.getDirection() != Direction.NONE) {
+      if (voice.getDirection() == Direction.UP) {
+        this.direction = Direction.UP;
+      } else if (voice.getDirection() == Direction.DOWN) {
+        this.direction = Direction.DOWN;
       }
     }
   }
 
   public void finish(ViewLayout layout, TGMeasureImpl measure) {
-    if (this.direction == DIRECTION_NOT_SETTED) {
+    if (this.direction == Direction.NONE) {
       if (measure.getNotEmptyVoices() > 1) {
-        this.direction = this.voice == 0 ? DIRECTION_UP : DIRECTION_DOWN;
+        this.direction = this.voice == 0 ? Direction.UP : Direction.DOWN;
       } else if ((layout.getStyle() & ViewLayout.DISPLAY_SCORE) == 0) {
-        this.direction = DIRECTION_DOWN;
+        this.direction = Direction.DOWN;
       } else {
         int selection = 0;
         switch (measure.getClef()) {
@@ -152,15 +142,15 @@ public class TGBeatGroup {
         int min = Math.abs(this.maxNote.getRealValue()
             - (SCORE_MIDDLE_KEYS[selection] - 100));
         if (max > min) {
-          this.direction = DIRECTION_UP;
+          this.direction = Direction.UP;
         } else {
-          this.direction = DIRECTION_DOWN;
+          this.direction = Direction.DOWN;
         }
       }
     }
   }
 
-  public int getDirection() {
+  public Direction getDirection() {
     return this.direction;
   }
 
@@ -214,7 +204,7 @@ public class TGBeatGroup {
     int maxDistance = 10;
     float upOffset = TGBeatGroup.getUpOffset(layout);
     float downOffset = TGBeatGroup.getDownOffset(layout);
-    if (this.direction == DIRECTION_DOWN) {
+    if (this.direction == Direction.NONE) {
       if (this.minNote != this.firstMinNote && this.minNote != this.lastMinNote) {
         return (int) (getY1(layout, this.minNote, key, clef) + downOffset);
       }
