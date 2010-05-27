@@ -1,26 +1,14 @@
 package org.herac.tuxguitar.song.models.effects;
 
-import org.herac.tuxguitar.song.models.TGDuration;
-
-public class TGEffectTremoloPicking {
-
-  private TGDuration duration = new TGDuration();
+public class TGEffectTremoloPicking extends DurationEffect {
 
   @Override
   public TGEffectTremoloPicking clone() {
-    TGEffectTremoloPicking effect = new TGEffectTremoloPicking();
-    
-    effect.setDuration(this.duration.clone());
+    final TGEffectTremoloPicking effect = new TGEffectTremoloPicking();
+
+    effect.setDuration(this.getDuration().clone());
 
     return effect;
-  }
-
-  public TGDuration getDuration() {
-    return this.duration;
-  }
-
-  public void setDuration(TGDuration duration) {
-    this.duration = duration;
   }
 
 }

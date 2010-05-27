@@ -7,10 +7,6 @@ public class TGTrayPlugin extends TGPluginAdapter {
   private boolean loaded;
   private TGTray tray;
 
-  public TGTrayPlugin() {
-    super();
-  }
-
   protected void addPlugin() {
     if (!this.loaded) {
       this.tray.addTray();

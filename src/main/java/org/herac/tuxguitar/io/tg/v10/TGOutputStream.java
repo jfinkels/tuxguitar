@@ -406,7 +406,7 @@ public class TGOutputStream extends TGStream implements TGLocalFileExporter {
     writeByte(effect.getDynamic());
 
     // excribo la transicion
-    writeByte(effect.getTransition());
+    writeByte(effect.getTransition().getId());
   }
 
   private void writeHarmonicEffect(HarmonicEffect effect) {

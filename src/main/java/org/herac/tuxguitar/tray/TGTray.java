@@ -13,17 +13,13 @@ import org.herac.tuxguitar.gui.system.language.LanguageLoader;
 
 public class TGTray implements IconLoader, LanguageLoader {
 
-  private Display display;
-  private TGTrayIcon icon;
-  private TGTrayMenu menu;
-  private Tray tray;
+  private Display display = TuxGuitar.instance().getDisplay();
+  private TGTrayIcon icon = null;
+  private TGTrayMenu menu = new TGTrayMenu();
+  private Tray tray = TuxGuitar.instance().getDisplay().getSystemTray();
   private boolean visible;
 
   public TGTray() {
-    this.display = TuxGuitar.instance().getDisplay();
-    this.tray = this.display.getSystemTray();
-    this.icon = new TGTrayIcon();
-    this.menu = new TGTrayMenu();
     TuxGuitar.instance().getIconManager().addLoader(this);
     TuxGuitar.instance().getLanguageManager().addLoader(this);
   }
@@ -44,7 +40,7 @@ public class TGTray implements IconLoader, LanguageLoader {
           showMenu();
         }
       });
-      this.icon.setItem(item);
+      this.icon = new TGTrayIcon(item);
       this.loadIcons();
     }
   }

@@ -5,20 +5,11 @@ import org.herac.tuxguitar.song.models.TGVelocities;
 
 public class TGEffectGrace extends ExtraNoteEffect {
 
-  public static final int TRANSITION_BEND = 2;
-
-  public static final int TRANSITION_HAMMER = 3;
-
-  public static final int TRANSITION_NONE = 0;
-
-  public static final int TRANSITION_SLIDE = 1;
-
   private boolean dead = false;
   private int duration = 1;
   private int dynamic = TGVelocities.DEFAULT;
   private boolean onBeat = false;
-  // private Transition transition = Transition.NONE;
-  private int transition = 0;
+  private Transition transition = Transition.NONE;
 
   @Override
   public TGEffectGrace clone() {
@@ -46,7 +37,7 @@ public class TGEffectGrace extends ExtraNoteEffect {
     return this.dynamic;
   }
 
-  public int getTransition() {
+  public Transition getTransition() {
     return this.transition;
   }
 
@@ -74,7 +65,7 @@ public class TGEffectGrace extends ExtraNoteEffect {
     this.onBeat = onBeat;
   }
 
-  public void setTransition(int transition) {
+  public void setTransition(final Transition transition) {
     this.transition = transition;
   }
 

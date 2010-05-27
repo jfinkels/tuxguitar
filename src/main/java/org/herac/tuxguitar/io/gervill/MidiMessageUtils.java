@@ -6,10 +6,12 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 
 import org.apache.log4j.Logger;
-import org.herac.tuxguitar.gui.editors.chord.ChordSelector;
 import org.herac.tuxguitar.song.models.TGTimeSignature;
 
 public class MidiMessageUtils {
+  /** The Logger for this class. */
+  public static final transient Logger LOG = Logger
+      .getLogger(MidiMessageUtils.class);
 
   public static final byte TICK_MOVE = 0x01;
 
@@ -24,11 +26,6 @@ public class MidiMessageUtils {
     }
     return null;
   }
-
-  /** The Logger for this class. */
-  public static final transient Logger LOG = Logger
-      .getLogger(MidiMessageUtils.class);
-  
 
   private static int fixChannel(int channel) {
     int fixedChannel = channel;

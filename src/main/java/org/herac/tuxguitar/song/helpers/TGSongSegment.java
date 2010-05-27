@@ -7,8 +7,8 @@ import org.herac.tuxguitar.song.models.TGMeasure;
 import org.herac.tuxguitar.song.models.TGMeasureHeader;
 
 public class TGSongSegment {
-  private List<TGMeasureHeader> headers = new ArrayList<TGMeasureHeader>();
-  private List<TGTrackSegment> tracks = new ArrayList<TGTrackSegment>();
+  private final List<TGMeasureHeader> headers = new ArrayList<TGMeasureHeader>();
+  private final List<TGTrackSegment> tracks = new ArrayList<TGTrackSegment>();
 
   public void addTrack(int track, List<TGMeasure> measures) {
     this.tracks.add(new TGTrackSegment(track, measures));
@@ -38,6 +38,6 @@ public class TGSongSegment {
   }
 
   public boolean isEmpty() {
-    return (this.headers.isEmpty() || this.tracks.isEmpty());
+    return this.headers.isEmpty() || this.tracks.isEmpty();
   }
 }

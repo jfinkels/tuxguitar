@@ -6,12 +6,12 @@ import org.herac.tuxguitar.gui.util.TGFileUtils;
 
 public class TGTrayIcon {
 
-  private Image image;
-  private TrayItem item;
-
-  public TGTrayIcon() {
-    super();
+  public TGTrayIcon(final TrayItem item) {
+    this.item = item;
   }
+  
+  private Image image;
+  private final TrayItem item;
 
   public void dispose() {
     if (this.image != null && !this.image.isDisposed()) {
@@ -27,7 +27,4 @@ public class TGTrayIcon {
     }
   }
 
-  public void setItem(TrayItem item) {
-    this.item = item;
-  }
 }

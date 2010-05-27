@@ -49,6 +49,7 @@ import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
+import org.herac.tuxguitar.song.models.effects.Transition;
 
 /**
  * @author julian
@@ -298,7 +299,21 @@ public class TGInputStream extends TGStream implements TGInputStreamBase {
     effect.setDynamic(readByte());
 
     // leo la transicion
-    effect.setTransition(readByte());
+    final int transitionId = readByte();
+    
+    Transition transition = null;
+    
+    if (transitionId == Transition.NONE.getId()) {
+      transition = Transition.NONE;
+    } else if (transitionId == Transition.BEND.getId()) {
+      transition = Transition.BEND;
+    } else if (transitionId == Transition.HAMMER.getId()) {
+      transition = Transition.HAMMER;
+    } else if (transitionId == Transition.SLIDE.getId()) {
+      transition = Transition.SLIDE;
+    }
+    
+    effect.setTransition(transition);
 
     return effect;
   }

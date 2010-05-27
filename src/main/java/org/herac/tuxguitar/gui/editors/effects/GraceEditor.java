@@ -17,6 +17,7 @@ import org.herac.tuxguitar.song.models.TGDuration;
 import org.herac.tuxguitar.song.models.TGNote;
 import org.herac.tuxguitar.song.models.TGVelocities;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
+import org.herac.tuxguitar.song.models.effects.Transition;
 
 public class GraceEditor extends SelectionAdapter {
 
@@ -95,13 +96,13 @@ public class GraceEditor extends SelectionAdapter {
 
     // transition
     if (this.noneButton.getSelection()) {
-      effect.setTransition(TGEffectGrace.TRANSITION_NONE);
+      effect.setTransition(Transition.NONE);
     } else if (this.slideButton.getSelection()) {
-      effect.setTransition(TGEffectGrace.TRANSITION_SLIDE);
+      effect.setTransition(Transition.SLIDE);
     } else if (this.bendButton.getSelection()) {
-      effect.setTransition(TGEffectGrace.TRANSITION_BEND);
+      effect.setTransition(Transition.BEND);
     } else if (this.hammerButton.getSelection()) {
-      effect.setTransition(TGEffectGrace.TRANSITION_HAMMER);
+      effect.setTransition(Transition.HAMMER);
     }
 
     return effect;
@@ -141,7 +142,7 @@ public class GraceEditor extends SelectionAdapter {
     int fret = note.getValue();
     int duration = 1;
     int dynamic = TGVelocities.DEFAULT;
-    int transition = TGEffectGrace.TRANSITION_NONE;
+    Transition transition = Transition.NONE;
     if (note.getEffect().isGrace()) {
       dead = note.getEffect().getGrace().isDead();
       fret = note.getEffect().getGrace().getFret();
@@ -275,26 +276,26 @@ public class GraceEditor extends SelectionAdapter {
     this.noneButton.setText(TuxGuitar
         .getProperty("effects.grace.transition-none"));
     this.noneButton.setLayoutData(makeGridData(1));
-    this.noneButton.setSelection(transition == TGEffectGrace.TRANSITION_NONE);
+    this.noneButton.setSelection(transition == Transition.NONE);
 
     this.bendButton = new Button(transitionGroup, SWT.RADIO);
     this.bendButton.setText(TuxGuitar
         .getProperty("effects.grace.transition-bend"));
     this.bendButton.setLayoutData(makeGridData(1));
-    this.bendButton.setSelection(transition == TGEffectGrace.TRANSITION_BEND);
+    this.bendButton.setSelection(transition == Transition.BEND);
 
     this.slideButton = new Button(transitionGroup, SWT.RADIO);
     this.slideButton.setText(TuxGuitar
         .getProperty("effects.grace.transition-slide"));
     this.slideButton.setLayoutData(makeGridData(1));
-    this.slideButton.setSelection(transition == TGEffectGrace.TRANSITION_SLIDE);
+    this.slideButton.setSelection(transition == Transition.SLIDE);
 
     this.hammerButton = new Button(transitionGroup, SWT.RADIO);
     this.hammerButton.setText(TuxGuitar
         .getProperty("effects.grace.transition-hammer"));
     this.hammerButton.setLayoutData(makeGridData(1));
     this.hammerButton
-        .setSelection(transition == TGEffectGrace.TRANSITION_HAMMER);
+        .setSelection(transition == Transition.HAMMER);
     // ---------------------------------------------------
     // ------------------BUTTONS--------------------------
     // ---------------------------------------------------

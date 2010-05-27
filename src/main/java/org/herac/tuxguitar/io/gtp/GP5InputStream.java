@@ -42,6 +42,7 @@ import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
 import org.herac.tuxguitar.song.models.effects.TGEffectTremoloPicking;
 import org.herac.tuxguitar.song.models.effects.TGEffectTrill;
+import org.herac.tuxguitar.song.models.effects.Transition;
 
 public class GP5InputStream extends GTPInputStream {
   private static final float GP_BEND_POSITION = 60f;
@@ -343,13 +344,13 @@ public class GP5InputStream extends GTPInputStream {
     grace.setDead((flags & 0x01) != 0);
     grace.setOnBeat((flags & 0x02) != 0);
     if (transition == 0) {
-      grace.setTransition(TGEffectGrace.TRANSITION_NONE);
+      grace.setTransition(Transition.NONE);
     } else if (transition == 1) {
-      grace.setTransition(TGEffectGrace.TRANSITION_SLIDE);
+      grace.setTransition(Transition.SLIDE);
     } else if (transition == 2) {
-      grace.setTransition(TGEffectGrace.TRANSITION_BEND);
+      grace.setTransition(Transition.BEND);
     } else if (transition == 3) {
-      grace.setTransition(TGEffectGrace.TRANSITION_HAMMER);
+      grace.setTransition(Transition.HAMMER);
     }
     effect.setGrace(grace);
   }

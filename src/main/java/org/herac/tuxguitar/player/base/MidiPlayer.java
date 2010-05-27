@@ -97,7 +97,7 @@ public class MidiPlayer {
   /**
    * Agrega la Secuencia
    * 
-   * @throws MidiUnavailableException
+   * 
    */
   public void addSequence() {
     try {
@@ -161,7 +161,7 @@ public class MidiPlayer {
   /**
    * Cierra el Secuenciador y Sintetizador
    * 
-   * @throws MidiUnavailableException
+   * 
    */
   public void close() {
     try {
@@ -292,7 +292,7 @@ public class MidiPlayer {
   /**
    * Inicia el Secuenciador y Sintetizador
    * 
-   * @throws MidiUnavailableException
+   * 
    */
 
   public void init(TGSongManager songManager) {

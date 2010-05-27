@@ -37,6 +37,7 @@ import org.herac.tuxguitar.song.models.effects.BendingEffect;
 import org.herac.tuxguitar.song.models.effects.EffectPoint;
 import org.herac.tuxguitar.song.models.effects.HarmonicEffect;
 import org.herac.tuxguitar.song.models.effects.TGEffectGrace;
+import org.herac.tuxguitar.song.models.effects.Transition;
 
 /**
  * @author julian
@@ -349,13 +350,13 @@ public class GP3OutputStream extends GTPOutputStream {
       writeUnsignedByte(grace.getFret());
     }
     writeUnsignedByte(((grace.getDynamic() - TGVelocities.MIN_VELOCITY) / TGVelocities.VELOCITY_INCREMENT) + 1);
-    if (grace.getTransition() == TGEffectGrace.TRANSITION_NONE) {
+    if (grace.getTransition() == Transition.NONE) {
       writeUnsignedByte(0);
-    } else if (grace.getTransition() == TGEffectGrace.TRANSITION_SLIDE) {
+    } else if (grace.getTransition() == Transition.SLIDE) {
       writeUnsignedByte(1);
-    } else if (grace.getTransition() == TGEffectGrace.TRANSITION_BEND) {
+    } else if (grace.getTransition() == Transition.BEND) {
       writeUnsignedByte(2);
-    } else if (grace.getTransition() == TGEffectGrace.TRANSITION_HAMMER) {
+    } else if (grace.getTransition() == Transition.HAMMER) {
       writeUnsignedByte(3);
     }
     writeUnsignedByte(grace.getDuration());
